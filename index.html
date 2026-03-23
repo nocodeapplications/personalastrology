@@ -214,6 +214,20 @@
       gap: 10px;
     }
 
+    .privacy-row {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #d0d9ff;
+      font-size: 0.92rem;
+    }
+
+    .privacy-row input {
+      width: auto;
+      accent-color: #a995ff;
+    }
+
     .status {
       margin-top: 10px;
       color: #b8c7ff;
@@ -246,6 +260,10 @@
         <button id="saveProfileBtn" class="ghost">Save Profile</button>
         <button id="deleteProfileBtn" class="ghost">Delete Profile</button>
       </div>
+      <label class="privacy-row">
+        <input id="privacyMode" type="checkbox" />
+        Privacy Mode (hide sensitive details in summary)
+      </label>
       <p id="statusText" class="status"></p>
       <hr class="divider" />
 
@@ -339,6 +357,7 @@
     const deleteProfileBtn = document.getElementById("deleteProfileBtn");
     const newProfileBtn = document.getElementById("newProfileBtn");
     const statusTextEl = document.getElementById("statusText");
+    const privacyModeEl = document.getElementById("privacyMode");
 
     const setStatus = (m) => { statusTextEl.textContent = m; };
     const toIntHash = (text) => { let h = 0; for (let i = 0; i < text.length; i += 1) h = ((h << 5) - h + text.charCodeAt(i)) | 0; return Math.abs(h); };
@@ -364,7 +383,7 @@
       if (hour < 18) return "Afternoon birth: practical drive, social confidence, and outward progress.";
       return "Evening birth: emotional wisdom, strategic patience, and strong self-awareness.";
     }
-    const getPlaceTone = (p) => p ? ("Your place of birth (" + p.trim().split(",")[0] + ") shapes your social rhythm and opportunity style.") : null;
+    const getPlaceTone = (p) => p ? "Location energy suggests your environment strongly influences opportunity timing and social momentum." : null;
     function getLifePath(dob) {
       let sum = dob.replace(/-/g, "").split("").reduce((a, b) => a + safeNum(b), 0);
       while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) sum = String(sum).split("").reduce((a, b) => a + safeNum(b), 0);
@@ -401,7 +420,11 @@
       ];
       return [pool[seed % pool.length], pool[(seed + 2) % pool.length], pool[(seed + 4) % pool.length]];
     }
-    function generateReading(payload) {
+    function getDominantElement(elementStrength) {
+      const entries = Object.entries(elementStrength).sort((a, b) => b[1] - a[1]);
+      return entries[0][0];
+    }
+    function generateReading(payload, privacyMode) {
       const sign = getZodiacSign(new Date(payload.dob + "T00:00:00"));
       const timeVibe = getTimeVibe(payload.birthTime);
       const placeTone = getPlaceTone(payload.place);
@@ -409,19 +432,23 @@
       const lifePath = getLifePath(payload.dob);
       const birthDay = getBirthDayName(payload.dob);
       const elementStrength = getElementStrength(sign, payload.birthTime);
+      const dominantElement = getDominantElement(elementStrength);
+      const signatureLines = privacyMode
+        ? "- Signature profile: personalized and privacy-filtered\n- Dominant energetic mode: " + dominantElement
+        : "- Birth weekday influence: " + birthDay + "\n- Life path number: " + lifePath + "\n- Dominant energetic mode: " + dominantElement;
       return {
         sign,
         element: elementBySign[sign] || "Air",
         lifePath,
         birthDay,
+        dominantElement,
         elementStrength,
         text:
           person + " are aligned with " + sign + " energy.\n\n" +
           (signThemes[sign] || "Your chart points to adaptive strengths and growth.") +
           "\n\nIndividual Signature:\n" +
-          "- Birth weekday: " + birthDay + "\n" +
-          "- Life path number: " + lifePath + "\n" +
-          "- Element strength: Fire " + elementStrength.Fire + ", Earth " + elementStrength.Earth + ", Air " + elementStrength.Air + ", Water " + elementStrength.Water +
+          signatureLines + "\n" +
+          "- Element balance: Fire " + elementStrength.Fire + ", Earth " + elementStrength.Earth + ", Air " + elementStrength.Air + ", Water " + elementStrength.Water +
           (timeVibe ? ("\n\nBirth Time Insight:\n" + timeVibe) : "") +
           (placeTone ? ("\n\nBirth Place Insight:\n" + placeTone) : "")
       };
@@ -432,20 +459,83 @@
       const horizon = horizonLabels[rangeValue];
       const scores = scoreAreas(payload, reading.sign);
       const events = getEventList(payload, rangeValue);
+      const bestArea =
+        scores.personal >= scores.financial && scores.personal >= scores.career
+          ? "Personal development"
+          : scores.financial >= scores.career
+            ? "Financial planning"
+            : "Career growth";
+      const riskArea =
+        scores.personal <= scores.financial && scores.personal <= scores.career
+          ? "emotional overreaction"
+          : scores.financial <= scores.career
+            ? "impulsive financial decisions"
+            : "work overload and burnout";
+      const intensity =
+        rangeValue === "day" ? "micro-adjustments" :
+          rangeValue === "week" ? "short-cycle execution" :
+            rangeValue === "month" ? "habit consolidation" :
+              rangeValue === "year" ? "major life direction" :
+                "legacy-level positioning";
       if (tabName === "events") {
-        return "Upcoming Astro Events (" + horizon + "):\n- Core element trigger: " + (eventByElement[reading.element] || eventByElement.Air) + "\n- " + events[0] + "\n- " + events[1] + "\n- " + events[2] + "\n\nImpact on " + who + ":\n- " + timelineTone(rangeValue) + "\n- Personal " + scores.personal + "/100, Financial " + scores.financial + "/100, Career " + scores.career + "/100.";
+        return (
+          "Upcoming Astro Events (" + horizon + "):\n" +
+          "- Core trigger: " + (eventByElement[reading.element] || eventByElement.Air) + "\n" +
+          "- " + events[0] + "\n" +
+          "- " + events[1] + "\n" +
+          "- " + events[2] + "\n\n" +
+          "Interpretation for " + who + ":\n" +
+          "- Primary opportunity zone: " + bestArea + ".\n" +
+          "- Main caution: " + riskArea + ".\n" +
+          "- Timeline intensity: " + intensity + ".\n" +
+          "- Strategic note: " + timelineTone(rangeValue) + "\n\n" +
+          "Astro Performance Index:\n" +
+          "- Personal " + scores.personal + "/100\n" +
+          "- Financial " + scores.financial + "/100\n" +
+          "- Career " + scores.career + "/100"
+        );
       }
       if (tabName === "personal") {
-        return "Personal Outlook (" + horizon + "):\n- Emotional pattern: " + (reading.elementStrength.Water > 70 ? "deep and intuitive; ground emotions before major choices." : "balanced; use logic and intuition together.") + "\n- Relationships: " + ((reading.lifePath === 2 || reading.lifePath === 6) ? "partnership-oriented; ask directly for reciprocity." : "independent and growth-driven; protect healthy boundaries.") + "\n- Wellbeing priority: " + (payload.birthTime ? "align key tasks with your birth-time energy rhythm." : "set fixed morning and evening routines.") + "\n\nPersonal impact for " + who + ":\n- " + timelineTone(rangeValue) + "\n- Personalized score: " + scores.personal + "/100.";
+        return (
+          "Personal Outlook (" + horizon + "):\n" +
+          "- Emotional baseline: " + (reading.elementStrength.Water > 70 ? "high sensitivity and strong intuition; pause before reacting." : "measured expression; blend emotion with logic.") + "\n" +
+          "- Relationship style: " + ((reading.lifePath === 2 || reading.lifePath === 6) ? "connection-centered; clarity and reciprocity are essential." : "independent-growth centered; protect boundaries while staying open.") + "\n" +
+          "- Confidence pattern: " + (reading.dominantElement === "Fire" ? "rises with visible progress and bold action." : reading.dominantElement === "Earth" ? "rises through consistency and practical wins." : reading.dominantElement === "Air" ? "rises through ideas, dialogue, and learning." : "rises through emotional alignment and reflection.") + "\n\n" +
+          "Action Plan:\n" +
+          "- Keep one personal priority for this " + horizon + ".\n" +
+          "- Use a weekly reflection checkpoint to review emotional triggers.\n" +
+          "- Build one supportive routine for sleep, movement, or journaling.\n\n" +
+          "Personalized score: " + scores.personal + "/100."
+        );
       }
       if (tabName === "financial") {
-        return "Financial Outlook (" + horizon + "):\n- Income pattern: " + (reading.element === "Earth" ? "steady compounding and low-risk planning favor you." : "growth comes through skill and communication.") + "\n- Risk watch: " + (scores.financial < 63 ? "avoid speculative decisions this cycle." : "moderate risk can work if backed by data.") + "\n- Action: use a 50/30/20 split and review expense leaks weekly.\n\nMoney impact for " + who + ":\n- Focus on budget discipline and incremental growth.\n- Personalized score: " + scores.financial + "/100.";
+        return (
+          "Financial Outlook (" + horizon + "):\n" +
+          "- Earning style: " + (reading.element === "Earth" ? "long-term and compounding driven." : reading.element === "Air" ? "network and communication driven." : reading.element === "Fire" ? "initiative and performance driven." : "trust and relationship driven.") + "\n" +
+          "- Cash-flow watchpoint: " + (scores.financial < 63 ? "high volatility risk; avoid emotional purchases and short-term speculation." : "stable cycle; use disciplined risk with hard limits.") + "\n" +
+          "- Wealth lever: skill upgrades and predictable saving systems outperform one-time bets.\n\n" +
+          "Action Plan:\n" +
+          "- Follow a fixed allocation model (ex: 50/30/20 or 60/20/20).\n" +
+          "- Set a weekly money review and a monthly re-balance.\n" +
+          "- Define a spending cap for non-essential categories.\n\n" +
+          "Personalized score: " + scores.financial + "/100."
+        );
       }
-      return "Career Outlook (" + horizon + "):\n- Role momentum: " + (reading.element === "Fire" ? "leadership and visibility are highlighted." : reading.element === "Air" ? "communication-heavy and strategic roles are favored." : "structured execution and reliability are rewarded.") + "\n- Networking: " + (payload.place ? ("leverage contacts near " + payload.place + ".") : "expand online professional circles deliberately.") + "\n- Best tactic: one flagship project with measurable milestones.\n\nCareer impact for " + who + ":\n- Use " + reading.sign + " strengths to lead with consistency.\n- Personalized score: " + scores.career + "/100.";
+      return (
+        "Career Outlook (" + horizon + "):\n" +
+        "- Role momentum: " + (reading.element === "Fire" ? "leadership, visibility, and decision-making are emphasized." : reading.element === "Air" ? "strategy, communication, and collaboration are emphasized." : reading.element === "Earth" ? "execution reliability and long-horizon projects are emphasized." : "people-centered roles and advisory influence are emphasized.") + "\n" +
+        "- Advancement trigger: produce measurable outcomes from one flagship project.\n" +
+        "- Risk factor: overcommitting before priorities are clear.\n\n" +
+        "Action Plan:\n" +
+        "- Define 1 flagship objective + 3 measurable milestones.\n" +
+        "- Reserve focused deep-work blocks every week.\n" +
+        "- Build influence through concise updates and visible results.\n\n" +
+        "Personalized score: " + scores.career + "/100."
+      );
     }
-    function renderChips({ sign, dob, birthTime, place, lifePath }) {
+    function renderChips({ sign, lifePath, dominantElement }) {
       chipsEl.innerHTML = "";
-      ["Zodiac Sign: " + sign, "DOB: " + dob, "Life Path: " + lifePath].concat(birthTime ? ["Time: " + birthTime] : [], place ? ["Place: " + place] : []).forEach((item) => {
+      ["Zodiac Sign: " + sign, "Life Path: " + lifePath, "Dominant Element: " + dominantElement].forEach((item) => {
         const chip = document.createElement("span");
         chip.className = "chip";
         chip.textContent = item;
@@ -456,10 +546,10 @@
       const payload = getFormPayload();
       if (!payload.dob) { errorEl.style.display = "block"; resultEl.style.display = "none"; return; }
       errorEl.style.display = "none";
-      const reading = generateReading(payload);
+      const reading = generateReading(payload, privacyModeEl.checked);
       activeTabState.payload = payload;
       activeTabState.reading = reading;
-      renderChips({ sign: reading.sign, dob: payload.dob, birthTime: payload.birthTime, place: payload.place, lifePath: reading.lifePath });
+      renderChips({ sign: reading.sign, lifePath: reading.lifePath, dominantElement: reading.dominantElement });
       readingEl.textContent = reading.text;
       tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, payload, reading);
       resultEl.style.display = "block";
@@ -478,7 +568,7 @@
       profiles.forEach((profile) => {
         const option = document.createElement("option");
         option.value = profile.id;
-        option.textContent = profile.name + " (" + profile.dob + ")";
+        option.textContent = profile.name;
         if (profile.id === selectedId) option.selected = true;
         profileSelectEl.appendChild(option);
       });
@@ -527,6 +617,10 @@
     rangeSelectEl.addEventListener("change", () => {
       if (!activeTabState.payload || !activeTabState.reading) return;
       tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading);
+    });
+    privacyModeEl.addEventListener("change", () => {
+      if (!activeTabState.payload) return;
+      onGenerate();
     });
     tabButtons.forEach((button) => {
       button.addEventListener("click", () => {
