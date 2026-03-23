@@ -389,6 +389,37 @@
       while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) sum = String(sum).split("").reduce((a, b) => a + safeNum(b), 0);
       return sum;
     }
+    function reduceToCoreNumber(value) {
+      let n = value;
+      while (n > 9 && n !== 11 && n !== 22 && n !== 33) {
+        n = String(n).split("").reduce((a, b) => a + safeNum(b), 0);
+      }
+      return n;
+    }
+    function getPersonalYear(dob) {
+      const now = new Date();
+      const yearDigits = String(now.getFullYear()).split("").reduce((a, b) => a + safeNum(b), 0);
+      const [year, month, day] = dob.split("-").map((n) => safeNum(n));
+      const base = day + month + yearDigits + (year % 9);
+      return reduceToCoreNumber(base);
+    }
+    function getSeason(month) {
+      if (month === 12 || month <= 2) return "Winter";
+      if (month <= 5) return "Spring";
+      if (month <= 8) return "Summer";
+      return "Autumn";
+    }
+    function getPowerDates(dob, rangeValue) {
+      const [_, month, day] = dob.split("-").map((n) => safeNum(n));
+      const seedA = reduceToCoreNumber(day + month);
+      const seedB = reduceToCoreNumber(day + month + 7);
+      const seedC = reduceToCoreNumber(day + month + 14);
+      const shift = rangeValue === "day" ? 0 : rangeValue === "week" ? 1 : rangeValue === "month" ? 2 : rangeValue === "year" ? 3 : 4;
+      const d1 = ((seedA * 3 + shift) % 28) + 1;
+      const d2 = ((seedB * 5 + shift) % 28) + 1;
+      const d3 = ((seedC * 7 + shift) % 28) + 1;
+      return [d1, d2, d3].sort((a, b) => a - b);
+    }
     const getBirthDayName = (dob) => new Date(dob + "T00:00:00").toLocaleDateString(undefined, { weekday: "long" });
     function getElementStrength(sign, birthTime) {
       const s = { Fire: 55, Earth: 55, Air: 55, Water: 55 };
@@ -430,16 +461,21 @@
       const placeTone = getPlaceTone(payload.place);
       const person = payload.name || "You";
       const lifePath = getLifePath(payload.dob);
+      const personalYear = getPersonalYear(payload.dob);
       const birthDay = getBirthDayName(payload.dob);
+      const birthMonth = safeNum(payload.dob.split("-")[1]);
+      const season = getSeason(birthMonth);
       const elementStrength = getElementStrength(sign, payload.birthTime);
       const dominantElement = getDominantElement(elementStrength);
       const signatureLines = privacyMode
         ? "- Signature profile: personalized and privacy-filtered\n- Dominant energetic mode: " + dominantElement
-        : "- Birth weekday influence: " + birthDay + "\n- Life path number: " + lifePath + "\n- Dominant energetic mode: " + dominantElement;
+        : "- Birth weekday influence: " + birthDay + "\n- Life path number: " + lifePath + "\n- Personal year cycle: " + personalYear + "\n- Birth season pattern: " + season + "\n- Dominant energetic mode: " + dominantElement;
       return {
         sign,
         element: elementBySign[sign] || "Air",
         lifePath,
+        personalYear,
+        season,
         birthDay,
         dominantElement,
         elementStrength,
@@ -459,6 +495,7 @@
       const horizon = horizonLabels[rangeValue];
       const scores = scoreAreas(payload, reading.sign);
       const events = getEventList(payload, rangeValue);
+      const powerDates = getPowerDates(payload.dob, rangeValue);
       const bestArea =
         scores.personal >= scores.financial && scores.personal >= scores.career
           ? "Personal development"
@@ -488,6 +525,7 @@
           "- Primary opportunity zone: " + bestArea + ".\n" +
           "- Main caution: " + riskArea + ".\n" +
           "- Timeline intensity: " + intensity + ".\n" +
+          "- Birthday-derived power dates: " + powerDates.join(", ") + ".\n" +
           "- Strategic note: " + timelineTone(rangeValue) + "\n\n" +
           "Astro Performance Index:\n" +
           "- Personal " + scores.personal + "/100\n" +
@@ -500,9 +538,11 @@
           "Personal Outlook (" + horizon + "):\n" +
           "- Emotional baseline: " + (reading.elementStrength.Water > 70 ? "high sensitivity and strong intuition; pause before reacting." : "measured expression; blend emotion with logic.") + "\n" +
           "- Relationship style: " + ((reading.lifePath === 2 || reading.lifePath === 6) ? "connection-centered; clarity and reciprocity are essential." : "independent-growth centered; protect boundaries while staying open.") + "\n" +
+          "- Personal year " + reading.personalYear + " focus: " + (reading.personalYear <= 3 ? "identity reset, learning, and fresh starts." : reading.personalYear <= 6 ? "building commitments and emotional stability." : "completion, healing, and long-view clarity.") + "\n" +
           "- Confidence pattern: " + (reading.dominantElement === "Fire" ? "rises with visible progress and bold action." : reading.dominantElement === "Earth" ? "rises through consistency and practical wins." : reading.dominantElement === "Air" ? "rises through ideas, dialogue, and learning." : "rises through emotional alignment and reflection.") + "\n\n" +
           "Action Plan:\n" +
           "- Keep one personal priority for this " + horizon + ".\n" +
+          "- Use your power dates (" + powerDates.join(", ") + ") for important conversations and decisions.\n" +
           "- Use a weekly reflection checkpoint to review emotional triggers.\n" +
           "- Build one supportive routine for sleep, movement, or journaling.\n\n" +
           "Personalized score: " + scores.personal + "/100."
@@ -513,6 +553,7 @@
           "Financial Outlook (" + horizon + "):\n" +
           "- Earning style: " + (reading.element === "Earth" ? "long-term and compounding driven." : reading.element === "Air" ? "network and communication driven." : reading.element === "Fire" ? "initiative and performance driven." : "trust and relationship driven.") + "\n" +
           "- Cash-flow watchpoint: " + (scores.financial < 63 ? "high volatility risk; avoid emotional purchases and short-term speculation." : "stable cycle; use disciplined risk with hard limits.") + "\n" +
+          "- Birthday timing edge: prioritize budget reviews near dates " + powerDates[0] + " and " + powerDates[1] + ".\n" +
           "- Wealth lever: skill upgrades and predictable saving systems outperform one-time bets.\n\n" +
           "Action Plan:\n" +
           "- Follow a fixed allocation model (ex: 50/30/20 or 60/20/20).\n" +
@@ -524,10 +565,12 @@
       return (
         "Career Outlook (" + horizon + "):\n" +
         "- Role momentum: " + (reading.element === "Fire" ? "leadership, visibility, and decision-making are emphasized." : reading.element === "Air" ? "strategy, communication, and collaboration are emphasized." : reading.element === "Earth" ? "execution reliability and long-horizon projects are emphasized." : "people-centered roles and advisory influence are emphasized.") + "\n" +
+        "- Seasonal signature: born in " + reading.season + " pattern, you perform best with phased planning and milestone tracking.\n" +
         "- Advancement trigger: produce measurable outcomes from one flagship project.\n" +
         "- Risk factor: overcommitting before priorities are clear.\n\n" +
         "Action Plan:\n" +
         "- Define 1 flagship objective + 3 measurable milestones.\n" +
+        "- Target launches/interviews around date " + powerDates[2] + " for stronger momentum.\n" +
         "- Reserve focused deep-work blocks every week.\n" +
         "- Build influence through concise updates and visible results.\n\n" +
         "Personalized score: " + scores.career + "/100."
