@@ -651,8 +651,6 @@
       const weakestScore = Math.min(scores.personal, scores.financial, scores.career);
       const momentumBand = dominantScore >= 74 ? "high momentum" : dominantScore >= 66 ? "steady momentum" : "rebuild momentum";
       const pressureBand = weakestScore <= 61 ? "requires active risk management" : "manageable with consistent routines";
-      const realWindows = getRealDateWindows(rangeValue, powerDates);
-      const scenarios = getScenarioLines(scores, bestArea, riskArea);
       const bestArea =
         scores.personal >= scores.financial && scores.personal >= scores.career
           ? "Personal development"
@@ -665,6 +663,8 @@
           : scores.financial <= scores.career
             ? "impulsive financial decisions"
             : "work overload and burnout";
+      const realWindows = getRealDateWindows(rangeValue, powerDates);
+      const scenarios = getScenarioLines(scores, bestArea, riskArea);
       const intensity =
         rangeValue === "day" ? "micro-adjustments" :
           rangeValue === "week" ? "short-cycle execution" :
