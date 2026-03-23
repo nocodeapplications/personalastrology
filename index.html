@@ -228,6 +228,14 @@
       accent-color: #a995ff;
     }
 
+    .sensitive-toolbar {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     .status {
       margin-top: 10px;
       color: #b8c7ff;
@@ -274,19 +282,22 @@
         </div>
 
         <div>
-          <label for="dob">Date of Birth</label>
-          <input id="dob" type="date" />
+          <label for="dob">Date of Birth (private)</label>
+          <input id="dob" type="password" placeholder="YYYY-MM-DD or MM/DD/YYYY" />
         </div>
 
         <div>
-          <label for="birthTime">Birth Time (optional)</label>
-          <input id="birthTime" type="time" />
+          <label for="birthTime">Birth Time (private, optional)</label>
+          <input id="birthTime" type="password" placeholder="HH:MM" />
         </div>
 
         <div>
-          <label for="place">Birth Place (optional)</label>
-          <input id="place" type="text" placeholder="e.g. Delhi, India" />
+          <label for="place">Birth Place (private, optional)</label>
+          <input id="place" type="password" placeholder="e.g. Delhi, India" />
         </div>
+      </div>
+      <div class="sensitive-toolbar">
+        <button id="toggleSensitiveBtn" class="ghost" type="button">Show Sensitive Inputs</button>
       </div>
 
       <div class="actions">
@@ -358,11 +369,38 @@
     const newProfileBtn = document.getElementById("newProfileBtn");
     const statusTextEl = document.getElementById("statusText");
     const privacyModeEl = document.getElementById("privacyMode");
+    const toggleSensitiveBtn = document.getElementById("toggleSensitiveBtn");
+    let showSensitiveInputs = false;
 
     const setStatus = (m) => { statusTextEl.textContent = m; };
     const toIntHash = (text) => { let h = 0; for (let i = 0; i < text.length; i += 1) h = ((h << 5) - h + text.charCodeAt(i)) | 0; return Math.abs(h); };
     const safeNum = (v) => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
-    const getFormPayload = () => ({ name: nameEl.value.trim(), dob: dobEl.value, birthTime: birthTimeEl.value, place: placeEl.value.trim() });
+    function normalizeDob(rawDob) {
+      const value = (rawDob || "").trim();
+      if (!value) return "";
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+      const slash = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (!slash) return "";
+      const mm = String(Number(slash[1])).padStart(2, "0");
+      const dd = String(Number(slash[2])).padStart(2, "0");
+      return slash[3] + "-" + mm + "-" + dd;
+    }
+    function normalizeTime(rawTime) {
+      const value = (rawTime || "").trim();
+      if (!value) return "";
+      const match = value.match(/^(\d{1,2}):(\d{2})$/);
+      if (!match) return "";
+      const hh = Number(match[1]);
+      const mm = Number(match[2]);
+      if (hh < 0 || hh > 23 || mm < 0 || mm > 59) return "";
+      return String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
+    }
+    const getFormPayload = () => ({
+      name: nameEl.value.trim(),
+      dob: normalizeDob(dobEl.value),
+      birthTime: normalizeTime(birthTimeEl.value),
+      place: placeEl.value.trim()
+    });
     const setFormPayload = (p) => { nameEl.value = p.name || ""; dobEl.value = p.dob || ""; birthTimeEl.value = p.birthTime || ""; placeEl.value = p.place || ""; };
     const loadProfilesLocal = () => { try { const raw = localStorage.getItem(PROFILE_STORE_KEY); const parsed = raw ? JSON.parse(raw) : []; return Array.isArray(parsed) ? parsed : []; } catch { return []; } };
     const persistProfilesLocal = (profiles) => localStorage.setItem(PROFILE_STORE_KEY, JSON.stringify(profiles));
@@ -587,8 +625,14 @@
     }
     function onGenerate() {
       const payload = getFormPayload();
-      if (!payload.dob) { errorEl.style.display = "block"; resultEl.style.display = "none"; return; }
+      if (!payload.dob) {
+        errorEl.style.display = "block";
+        errorEl.textContent = "Please enter DOB in YYYY-MM-DD or MM/DD/YYYY format.";
+        resultEl.style.display = "none";
+        return;
+      }
       errorEl.style.display = "none";
+      errorEl.textContent = "Please enter at least the Date of Birth.";
       const reading = generateReading(payload, privacyModeEl.checked);
       activeTabState.payload = payload;
       activeTabState.reading = reading;
@@ -664,6 +708,14 @@
     privacyModeEl.addEventListener("change", () => {
       if (!activeTabState.payload) return;
       onGenerate();
+    });
+    toggleSensitiveBtn.addEventListener("click", () => {
+      showSensitiveInputs = !showSensitiveInputs;
+      const mode = showSensitiveInputs ? "text" : "password";
+      dobEl.type = mode;
+      birthTimeEl.type = mode;
+      placeEl.type = mode;
+      toggleSensitiveBtn.textContent = showSensitiveInputs ? "Hide Sensitive Inputs" : "Show Sensitive Inputs";
     });
     tabButtons.forEach((button) => {
       button.addEventListener("click", () => {
