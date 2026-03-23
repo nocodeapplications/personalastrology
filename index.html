@@ -771,6 +771,19 @@
         "Personalized score: " + scores.career + "/100."
       );
     }
+    function safeBuildTabContent(tabName, rangeValue, payload, reading, privacyMode) {
+      try {
+        return buildTabContent(tabName, rangeValue, payload, reading, privacyMode);
+      } catch (error) {
+        return (
+          "Detailed forecast is temporarily unavailable.\n\n" +
+          "Fallback Guidance:\n" +
+          "- Focus on one clear priority for this cycle.\n" +
+          "- Keep communication direct and simple.\n" +
+          "- Review routines and avoid rushed decisions."
+        );
+      }
+    }
     function renderChips({ sign, lifePath, dominantElement }, privacyMode) {
       chipsEl.innerHTML = "";
       const chips = privacyMode
@@ -793,22 +806,33 @@
           setStatus("Generate failed: invalid DOB format.");
           return;
         }
+        if (!isValidIsoDate(payload.dob)) {
+          errorEl.style.display = "block";
+          errorEl.textContent = "DOB looks invalid. Please check day/month values and try again.";
+          resultEl.style.display = "none";
+          setStatus("Generate failed: invalid calendar date.");
+          return;
+        }
 
         errorEl.style.display = "none";
         errorEl.textContent = "Please enter at least the Date of Birth.";
         const reading = generateReading(payload, privacyModeEl.checked);
+        if (!reading || !reading.sign) {
+          throw new Error("Reading engine returned incomplete profile.");
+        }
         activeTabState.payload = payload;
         activeTabState.reading = reading;
         renderChips({ sign: reading.sign, lifePath: reading.lifePath, dominantElement: reading.dominantElement }, privacyModeEl.checked);
         readingEl.textContent = reading.text;
-        tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, payload, reading, privacyModeEl.checked);
+        tabContentEl.textContent = safeBuildTabContent(activeTabState.tab, rangeSelectEl.value, payload, reading, privacyModeEl.checked);
         resultEl.style.display = "block";
         setStatus("Reading generated.");
       } catch (error) {
         resultEl.style.display = "none";
         errorEl.style.display = "block";
-        errorEl.textContent = "Something went wrong while generating. Please check DOB/time format and try again.";
-        setStatus("Generate failed. Please retry.");
+        const detail = error && error.message ? error.message : "unknown error";
+        errorEl.textContent = "Generate failed: " + detail;
+        setStatus("Generate failed. " + detail);
       }
     }
     function fillSample() {
