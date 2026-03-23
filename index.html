@@ -528,7 +528,7 @@
       };
     }
     const timelineTone = (r) => r === "day" ? "move with clarity and keep tasks simple." : r === "week" ? "balance momentum with intentional rest." : r === "month" ? "focus on one core priority and build consistency." : r === "year" ? "align habits with long-term purpose." : "invest in patience, skill-building, and strategic relationships.";
-    function buildTabContent(tabName, rangeValue, payload, reading) {
+    function buildTabContent(tabName, rangeValue, payload, reading, privacyMode) {
       const who = payload.name || "You";
       const horizon = horizonLabels[rangeValue];
       const scores = scoreAreas(payload, reading.sign);
@@ -563,7 +563,7 @@
           "- Primary opportunity zone: " + bestArea + ".\n" +
           "- Main caution: " + riskArea + ".\n" +
           "- Timeline intensity: " + intensity + ".\n" +
-          "- Birthday-derived power dates: " + powerDates.join(", ") + ".\n" +
+          (privacyMode ? "" : "- Birthday-derived power dates: " + powerDates.join(", ") + ".\n") +
           "- Strategic note: " + timelineTone(rangeValue) + "\n\n" +
           "Astro Performance Index:\n" +
           "- Personal " + scores.personal + "/100\n" +
@@ -576,11 +576,12 @@
           "Personal Outlook (" + horizon + "):\n" +
           "- Emotional baseline: " + (reading.elementStrength.Water > 70 ? "high sensitivity and strong intuition; pause before reacting." : "measured expression; blend emotion with logic.") + "\n" +
           "- Relationship style: " + ((reading.lifePath === 2 || reading.lifePath === 6) ? "connection-centered; clarity and reciprocity are essential." : "independent-growth centered; protect boundaries while staying open.") + "\n" +
-          "- Personal year " + reading.personalYear + " focus: " + (reading.personalYear <= 3 ? "identity reset, learning, and fresh starts." : reading.personalYear <= 6 ? "building commitments and emotional stability." : "completion, healing, and long-view clarity.") + "\n" +
+          (privacyMode ? "- Personal cycle focus: " : "- Personal year " + reading.personalYear + " focus: ") +
+          (reading.personalYear <= 3 ? "identity reset, learning, and fresh starts." : reading.personalYear <= 6 ? "building commitments and emotional stability." : "completion, healing, and long-view clarity.") + "\n" +
           "- Confidence pattern: " + (reading.dominantElement === "Fire" ? "rises with visible progress and bold action." : reading.dominantElement === "Earth" ? "rises through consistency and practical wins." : reading.dominantElement === "Air" ? "rises through ideas, dialogue, and learning." : "rises through emotional alignment and reflection.") + "\n\n" +
           "Action Plan:\n" +
           "- Keep one personal priority for this " + horizon + ".\n" +
-          "- Use your power dates (" + powerDates.join(", ") + ") for important conversations and decisions.\n" +
+          (privacyMode ? "- Schedule key actions at consistent intervals.\n" : "- Use your power dates (" + powerDates.join(", ") + ") for important conversations and decisions.\n") +
           "- Use a weekly reflection checkpoint to review emotional triggers.\n" +
           "- Build one supportive routine for sleep, movement, or journaling.\n\n" +
           "Personalized score: " + scores.personal + "/100."
@@ -591,7 +592,7 @@
           "Financial Outlook (" + horizon + "):\n" +
           "- Earning style: " + (reading.element === "Earth" ? "long-term and compounding driven." : reading.element === "Air" ? "network and communication driven." : reading.element === "Fire" ? "initiative and performance driven." : "trust and relationship driven.") + "\n" +
           "- Cash-flow watchpoint: " + (scores.financial < 63 ? "high volatility risk; avoid emotional purchases and short-term speculation." : "stable cycle; use disciplined risk with hard limits.") + "\n" +
-          "- Birthday timing edge: prioritize budget reviews near dates " + powerDates[0] + " and " + powerDates[1] + ".\n" +
+          (privacyMode ? "- Timing edge: run budget reviews at fixed mid-cycle and end-cycle checkpoints.\n" : "- Birthday timing edge: prioritize budget reviews near dates " + powerDates[0] + " and " + powerDates[1] + ".\n") +
           "- Wealth lever: skill upgrades and predictable saving systems outperform one-time bets.\n\n" +
           "Action Plan:\n" +
           "- Follow a fixed allocation model (ex: 50/30/20 or 60/20/20).\n" +
@@ -603,20 +604,23 @@
       return (
         "Career Outlook (" + horizon + "):\n" +
         "- Role momentum: " + (reading.element === "Fire" ? "leadership, visibility, and decision-making are emphasized." : reading.element === "Air" ? "strategy, communication, and collaboration are emphasized." : reading.element === "Earth" ? "execution reliability and long-horizon projects are emphasized." : "people-centered roles and advisory influence are emphasized.") + "\n" +
-        "- Seasonal signature: born in " + reading.season + " pattern, you perform best with phased planning and milestone tracking.\n" +
+        (privacyMode ? "- Seasonal signature: you perform best with phased planning and milestone tracking.\n" : "- Seasonal signature: born in " + reading.season + " pattern, you perform best with phased planning and milestone tracking.\n") +
         "- Advancement trigger: produce measurable outcomes from one flagship project.\n" +
         "- Risk factor: overcommitting before priorities are clear.\n\n" +
         "Action Plan:\n" +
         "- Define 1 flagship objective + 3 measurable milestones.\n" +
-        "- Target launches/interviews around date " + powerDates[2] + " for stronger momentum.\n" +
+        (privacyMode ? "- Target launches/interviews during your strongest weekly momentum window.\n" : "- Target launches/interviews around date " + powerDates[2] + " for stronger momentum.\n") +
         "- Reserve focused deep-work blocks every week.\n" +
         "- Build influence through concise updates and visible results.\n\n" +
         "Personalized score: " + scores.career + "/100."
       );
     }
-    function renderChips({ sign, lifePath, dominantElement }) {
+    function renderChips({ sign, lifePath, dominantElement }, privacyMode) {
       chipsEl.innerHTML = "";
-      ["Zodiac Sign: " + sign, "Life Path: " + lifePath, "Dominant Element: " + dominantElement].forEach((item) => {
+      const chips = privacyMode
+        ? ["Zodiac Sign: " + sign, "Profile: Privacy Mode Enabled"]
+        : ["Zodiac Sign: " + sign, "Life Path: " + lifePath, "Dominant Element: " + dominantElement];
+      chips.forEach((item) => {
         const chip = document.createElement("span");
         chip.className = "chip";
         chip.textContent = item;
@@ -636,9 +640,9 @@
       const reading = generateReading(payload, privacyModeEl.checked);
       activeTabState.payload = payload;
       activeTabState.reading = reading;
-      renderChips({ sign: reading.sign, lifePath: reading.lifePath, dominantElement: reading.dominantElement });
+      renderChips({ sign: reading.sign, lifePath: reading.lifePath, dominantElement: reading.dominantElement }, privacyModeEl.checked);
       readingEl.textContent = reading.text;
-      tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, payload, reading);
+      tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, payload, reading, privacyModeEl.checked);
       resultEl.style.display = "block";
     }
     function fillSample() {
@@ -703,7 +707,7 @@
     profileSelectEl.addEventListener("change", () => { onProfileChange(); });
     rangeSelectEl.addEventListener("change", () => {
       if (!activeTabState.payload || !activeTabState.reading) return;
-      tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading);
+      tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
     });
     privacyModeEl.addEventListener("change", () => {
       if (!activeTabState.payload) return;
@@ -723,7 +727,7 @@
         tabButtons.forEach((item) => item.classList.remove("active"));
         button.classList.add("active");
         if (!activeTabState.payload || !activeTabState.reading) return;
-        tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading);
+        tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
       });
     });
     renderProfileOptions();
