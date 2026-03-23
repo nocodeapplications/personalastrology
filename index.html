@@ -588,6 +588,40 @@
       if (rangeValue === "year") return "Quarter windows: Q" + (((powerDates[0] % 4) || 4)) + ", Q" + (((powerDates[1] % 4) || 4)) + ", Q" + (((powerDates[2] % 4) || 4)) + ".";
       return "Decade windows: years 1-3 foundation, 4-7 expansion, 8-10 mastery.";
     }
+    function getUpcomingEventDates(powerDates, rangeValue) {
+      const now = new Date();
+      const base = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const monthDates = powerDates
+        .map((day) => new Date(base.getFullYear(), base.getMonth(), Math.min(28, Math.max(1, day))))
+        .map((date) => (date < base ? new Date(base.getFullYear(), base.getMonth() + 1, date.getDate()) : date))
+        .sort((a, b) => a - b);
+
+      if (rangeValue === "day") {
+        return [2, 5, 9].map((hours) => new Date(now.getTime() + hours * 60 * 60 * 1000));
+      }
+      if (rangeValue === "week") {
+        return [1, 3, 6].map((days) => new Date(base.getFullYear(), base.getMonth(), base.getDate() + days));
+      }
+      if (rangeValue === "year") {
+        return powerDates.map((n) => new Date(base.getFullYear(), ((n % 12) || 12) - 1, Math.min(28, base.getDate())));
+      }
+      if (rangeValue === "decade") {
+        return [1, 4, 8].map((y) => new Date(base.getFullYear() + y, base.getMonth(), base.getDate()));
+      }
+      return monthDates;
+    }
+    function formatEventDate(date, rangeValue) {
+      if (rangeValue === "day") return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      if (rangeValue === "decade") return date.toLocaleDateString(undefined, { year: "numeric", month: "short" });
+      return date.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+    }
+    function getEventImpactLines(dates, reading, scores, rangeValue) {
+      const impactA = reading.element === "Fire" ? "high-action decisions get better outcomes." : reading.element === "Earth" ? "practical planning and execution perform best." : reading.element === "Air" ? "communication and networking bring results." : "intuition-led choices are strongest.";
+      const impactB = scores.personal >= 68 ? "personal confidence rises; good time for visibility." : "keep emotional pacing steady and avoid overcommitment.";
+      const impactC = scores.financial >= 68 ? "money conversations and planning are favorable." : "use caution with spending and avoid impulsive risk.";
+      const impacts = [impactA, impactB, impactC];
+      return dates.map((date, idx) => "- " + formatEventDate(date, rangeValue) + ": " + impacts[idx % impacts.length]);
+    }
     function getScenarioLines(scores, bestArea, riskArea) {
       const avg = Math.round((scores.personal + scores.financial + scores.career) / 3);
       const bestCase = avg >= 72
@@ -664,6 +698,8 @@
             ? "impulsive financial decisions"
             : "work overload and burnout";
       const realWindows = getRealDateWindows(rangeValue, powerDates);
+      const eventDates = getUpcomingEventDates(powerDates, rangeValue);
+      const eventImpactLines = getEventImpactLines(eventDates, reading, scores, rangeValue).join("\n");
       const scenarios = getScenarioLines(scores, bestArea, riskArea);
       const intensity =
         rangeValue === "day" ? "micro-adjustments" :
@@ -686,6 +722,8 @@
           "- Timeline intensity: " + intensity + " (" + pressureBand + ").\n" +
           (privacyMode ? "- Timing window: aligned checkpoints based on your private birth rhythm.\n" : "- Timing window: " + timingWindow + "\n") +
           "- Calendar window: " + realWindows + "\n" +
+          "Upcoming Event Dates & DOB Impact:\n" +
+          eventImpactLines + "\n\n" +
           "- Strategic note: " + timelineTone(rangeValue) + "\n\n" +
           "Scenario Forecast:\n" +
           "- " + scenarios.bestCase + "\n" +
