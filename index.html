@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Personal Astrology Page</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #111936;
+      --soft: #1a2550;
+      --text: #e8ecff;
+      --muted: #9eb0ff;
+      --accent: #8aa2ff;
+      --accent-2: #c5a4ff;
+      --danger: #ff7b9c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: radial-gradient(circle at top, #17224d 0%, var(--bg) 55%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 32px 18px 48px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      letter-spacing: 0.2px;
+    }
+
+    .subtitle {
+      margin: 0 0 24px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .card {
+      background: linear-gradient(165deg, var(--card) 0%, #0f1630 100%);
+      border: 1px solid #2a3a7e;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 14px 28px rgba(2, 6, 23, 0.35);
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: 0.9rem;
+      color: #d0d9ff;
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid #344a96;
+      background: var(--soft);
+      color: var(--text);
+      padding: 11px 12px;
+      border-radius: 9px;
+      outline: none;
+      transition: border-color 120ms ease, box-shadow 120ms ease;
+    }
+
+    input:focus {
+      border-color: var(--accent-2);
+      box-shadow: 0 0 0 3px rgba(197, 164, 255, 0.2);
+    }
+
+    .actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 80ms ease, opacity 120ms ease;
+    }
+
+    button:active {
+      transform: translateY(1px);
+    }
+
+    .primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: #12183a;
+    }
+
+    .ghost {
+      background: #2a3874;
+      color: var(--text);
+    }
+
+    .hint {
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .error {
+      margin-top: 10px;
+      color: var(--danger);
+      display: none;
+      font-size: 0.93rem;
+    }
+
+    .result {
+      margin-top: 22px;
+      display: none;
+    }
+
+    .section-title {
+      margin-top: 0;
+      margin-bottom: 8px;
+      font-size: 1.15rem;
+      color: #d8c7ff;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0 14px;
+    }
+
+    .chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #243266;
+      border: 1px solid #374b95;
+      color: #cdd8ff;
+      font-size: 0.83rem;
+    }
+
+    .content {
+      color: #e5eaff;
+      line-height: 1.7;
+      white-space: pre-line;
+    }
+
+    .toolbar {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .tabs {
+      margin-top: 14px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tab-btn {
+      background: #223063;
+      color: #dfe6ff;
+      border: 1px solid #3a4f97;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #8aa2ff, #c5a4ff);
+      color: #141a3d;
+      border-color: transparent;
+    }
+
+    select {
+      border: 1px solid #344a96;
+      background: var(--soft);
+      color: var(--text);
+      padding: 9px 10px;
+      border-radius: 9px;
+      min-width: 150px;
+      outline: none;
+    }
+
+    .divider {
+      border: 0;
+      border-top: 1px solid #30417f;
+      margin: 16px 0;
+    }
+
+    .profile-actions {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .status {
+      margin-top: 10px;
+      color: #b8c7ff;
+      font-size: 0.9rem;
+      min-height: 1.2em;
+    }
+
+  </style>
+</head>
+<body>
+  <main class="container">
+    <h1>Personal Astrology Page</h1>
+    <p class="subtitle">
+      Enter full or partial birth details. This page creates a personalized
+      astrology-style profile even when only some details are available.
+    </p>
+
+    <section class="card">
+      <h2 class="section-title">Create or Select Profile</h2>
+      <div class="grid">
+        <div>
+          <label for="profileSelect">Saved Profiles</label>
+          <select id="profileSelect">
+            <option value="">New profile</option>
+          </select>
+        </div>
+      </div>
+      <div class="profile-actions">
+        <button id="newProfileBtn" class="ghost">New Profile</button>
+        <button id="saveProfileBtn" class="ghost">Save Profile</button>
+        <button id="deleteProfileBtn" class="ghost">Delete Profile</button>
+      </div>
+      <p id="statusText" class="status"></p>
+      <hr class="divider" />
+
+      <div class="grid">
+        <div>
+          <label for="name">Name</label>
+          <input id="name" type="text" placeholder="e.g. Aisha" />
+        </div>
+
+        <div>
+          <label for="dob">Date of Birth</label>
+          <input id="dob" type="date" />
+        </div>
+
+        <div>
+          <label for="birthTime">Birth Time (optional)</label>
+          <input id="birthTime" type="time" />
+        </div>
+
+        <div>
+          <label for="place">Birth Place (optional)</label>
+          <input id="place" type="text" placeholder="e.g. Delhi, India" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button id="generateBtn" class="primary">Generate Astrology Page</button>
+        <button id="sampleBtn" class="ghost">Try Sample Details</button>
+      </div>
+
+      <p class="hint">
+        Required minimum: Date of Birth. Place and time unlock more detailed guidance.
+      </p>
+      <p id="errorText" class="error">Please enter at least the Date of Birth.</p>
+    </section>
+
+    <section id="result" class="card result">
+      <h2 class="section-title">Your Cosmic Profile</h2>
+      <div id="detailChips" class="chips"></div>
+      <p id="reading" class="content"></p>
+
+      <div class="toolbar">
+        <label for="rangeSelect">Forecast Range</label>
+        <select id="rangeSelect">
+          <option value="day">Day</option>
+          <option value="week">Week</option>
+          <option value="month" selected>Month</option>
+          <option value="year">Year</option>
+          <option value="decade">Next Decade</option>
+        </select>
+      </div>
+
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="events">Upcoming Astro Events</button>
+        <button class="tab-btn" data-tab="personal">Personal</button>
+        <button class="tab-btn" data-tab="financial">Financial</button>
+        <button class="tab-btn" data-tab="career">Career</button>
+      </div>
+
+      <p id="tabContent" class="content"></p>
+    </section>
+  </main>
+
+  <script>
+
+    const zodiacRanges = [["Capricorn",[1,1],[1,19]],["Aquarius",[1,20],[2,18]],["Pisces",[2,19],[3,20]],["Aries",[3,21],[4,19]],["Taurus",[4,20],[5,20]],["Gemini",[5,21],[6,20]],["Cancer",[6,21],[7,22]],["Leo",[7,23],[8,22]],["Virgo",[8,23],[9,22]],["Libra",[9,23],[10,22]],["Scorpio",[10,23],[11,21]],["Sagittarius",[11,22],[12,21]],["Capricorn",[12,22],[12,31]]];
+    const signThemes = {Aries:"You radiate bold initiative and natural leadership. Action clears your doubts.",Taurus:"You carry grounded strength, loyalty, and a calm presence that builds lasting results.",Gemini:"Your mind is quick, curious, and expressive. You thrive through conversation and learning.",Cancer:"You are intuitive and deeply caring. Emotional intelligence is one of your strongest gifts.",Leo:"You shine through confidence, creativity, and heartfelt generosity when you feel seen.",Virgo:"You bring precision, service, and thoughtful improvement to everything you care about.",Libra:"You are guided by harmony, beauty, and fairness, with a natural gift for connection.",Scorpio:"You hold depth, resilience, and transformative power. You grow strongest through truth.",Sagittarius:"You seek meaning, growth, and adventure. Your optimism opens new pathways.",Capricorn:"You are disciplined, strategic, and reliable. Consistency is your superpower.",Aquarius:"You think independently and futuristically. Your originality inspires others.",Pisces:"You are imaginative, compassionate, and spiritually receptive to subtle patterns."};
+    const horizonLabels = { day: "today", week: "this week", month: "this month", year: "this year", decade: "in the next decade" };
+    const eventByElement = { Fire: "Mars transit boosts confidence and bold decisions.", Earth: "Saturn alignment supports structure and practical progress.", Air: "Mercury movement improves networking and communication.", Water: "Moon cycle deepens intuition and emotional healing." };
+    const elementBySign = { Aries:"Fire",Leo:"Fire",Sagittarius:"Fire",Taurus:"Earth",Virgo:"Earth",Capricorn:"Earth",Gemini:"Air",Libra:"Air",Aquarius:"Air",Cancer:"Water",Scorpio:"Water",Pisces:"Water" };
+
+    const activeTabState = { tab: "events", payload: null, reading: null };
+    const PROFILE_STORE_KEY = "astroProfilesV1";
+    let activeProfileId = "";
+
+    const nameEl = document.getElementById("name");
+    const dobEl = document.getElementById("dob");
+    const birthTimeEl = document.getElementById("birthTime");
+    const placeEl = document.getElementById("place");
+    const generateBtn = document.getElementById("generateBtn");
+    const sampleBtn = document.getElementById("sampleBtn");
+    const resultEl = document.getElementById("result");
+    const chipsEl = document.getElementById("detailChips");
+    const readingEl = document.getElementById("reading");
+    const errorEl = document.getElementById("errorText");
+    const rangeSelectEl = document.getElementById("rangeSelect");
+    const tabContentEl = document.getElementById("tabContent");
+    const tabButtons = [...document.querySelectorAll(".tab-btn")];
+    const profileSelectEl = document.getElementById("profileSelect");
+    const saveProfileBtn = document.getElementById("saveProfileBtn");
+    const deleteProfileBtn = document.getElementById("deleteProfileBtn");
+    const newProfileBtn = document.getElementById("newProfileBtn");
+    const statusTextEl = document.getElementById("statusText");
+
+    const setStatus = (m) => { statusTextEl.textContent = m; };
+    const toIntHash = (text) => { let h = 0; for (let i = 0; i < text.length; i += 1) h = ((h << 5) - h + text.charCodeAt(i)) | 0; return Math.abs(h); };
+    const safeNum = (v) => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
+    const getFormPayload = () => ({ name: nameEl.value.trim(), dob: dobEl.value, birthTime: birthTimeEl.value, place: placeEl.value.trim() });
+    const setFormPayload = (p) => { nameEl.value = p.name || ""; dobEl.value = p.dob || ""; birthTimeEl.value = p.birthTime || ""; placeEl.value = p.place || ""; };
+    const loadProfilesLocal = () => { try { const raw = localStorage.getItem(PROFILE_STORE_KEY); const parsed = raw ? JSON.parse(raw) : []; return Array.isArray(parsed) ? parsed : []; } catch { return []; } };
+    const persistProfilesLocal = (profiles) => localStorage.setItem(PROFILE_STORE_KEY, JSON.stringify(profiles));
+
+    function getZodiacSign(dateObj) {
+      const month = dateObj.getMonth() + 1;
+      const day = dateObj.getDate();
+      for (const [sign, [sm, sd], [em, ed]] of zodiacRanges) {
+        if ((month > sm || (month === sm && day >= sd)) && (month < em || (month === em && day <= ed))) return sign;
+      }
+      return "Unknown";
+    }
+    function getTimeVibe(timeValue) {
+      if (!timeValue) return null;
+      const hour = Number(timeValue.split(":")[0]);
+      if (hour < 6) return "Pre-dawn birth: sensitive intuition and reflective inner depth.";
+      if (hour < 12) return "Morning birth: mentally alert, fresh momentum, and expressive growth energy.";
+      if (hour < 18) return "Afternoon birth: practical drive, social confidence, and outward progress.";
+      return "Evening birth: emotional wisdom, strategic patience, and strong self-awareness.";
+    }
+    const getPlaceTone = (p) => p ? ("Your place of birth (" + p.trim().split(",")[0] + ") shapes your social rhythm and opportunity style.") : null;
+    function getLifePath(dob) {
+      let sum = dob.replace(/-/g, "").split("").reduce((a, b) => a + safeNum(b), 0);
+      while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) sum = String(sum).split("").reduce((a, b) => a + safeNum(b), 0);
+      return sum;
+    }
+    const getBirthDayName = (dob) => new Date(dob + "T00:00:00").toLocaleDateString(undefined, { weekday: "long" });
+    function getElementStrength(sign, birthTime) {
+      const s = { Fire: 55, Earth: 55, Air: 55, Water: 55 };
+      s[elementBySign[sign] || "Air"] += 25;
+      if (birthTime) {
+        const hour = Number(birthTime.split(":")[0]);
+        if (hour < 6) s.Water += 10; else if (hour < 12) s.Air += 10; else if (hour < 18) s.Fire += 10; else s.Earth += 10;
+      }
+      return s;
+    }
+    function scoreAreas(payload, sign) {
+      const seed = toIntHash([payload.name, payload.dob, payload.birthTime, payload.place, sign].join("|"));
+      const d = new Date(payload.dob + "T00:00:00");
+      return {
+        personal: 60 + ((seed % 14) + (d.getDate() % 10) - 4),
+        financial: 58 + (((seed >> 2) % 14) + ((d.getMonth() + 1) % 10) - 4),
+        career: 59 + (((seed >> 4) % 14) + (payload.birthTime ? Number(payload.birthTime.split(":")[0]) % 10 : 4) + (payload.place ? payload.place.length % 10 : 5) - 8)
+      };
+    }
+    function getEventList(payload, rangeValue) {
+      const seed = toIntHash(payload.dob + "|" + (payload.birthTime || "NA") + "|" + rangeValue);
+      const pool = [
+        "Mercury clarity window for decisions and paperwork",
+        "Venus harmony phase for relationships and agreements",
+        "Mars drive surge for action and fitness momentum",
+        "Jupiter expansion wave for studies and networking",
+        "Saturn discipline checkpoint for structure and commitments",
+        "Moon emotional reset cycle for healing and intuition"
+      ];
+      return [pool[seed % pool.length], pool[(seed + 2) % pool.length], pool[(seed + 4) % pool.length]];
+    }
+    function generateReading(payload) {
+      const sign = getZodiacSign(new Date(payload.dob + "T00:00:00"));
+      const timeVibe = getTimeVibe(payload.birthTime);
+      const placeTone = getPlaceTone(payload.place);
+      const person = payload.name || "You";
+      const lifePath = getLifePath(payload.dob);
+      const birthDay = getBirthDayName(payload.dob);
+      const elementStrength = getElementStrength(sign, payload.birthTime);
+      return {
+        sign,
+        element: elementBySign[sign] || "Air",
+        lifePath,
+        birthDay,
+        elementStrength,
+        text:
+          person + " are aligned with " + sign + " energy.\n\n" +
+          (signThemes[sign] || "Your chart points to adaptive strengths and growth.") +
+          "\n\nIndividual Signature:\n" +
+          "- Birth weekday: " + birthDay + "\n" +
+          "- Life path number: " + lifePath + "\n" +
+          "- Element strength: Fire " + elementStrength.Fire + ", Earth " + elementStrength.Earth + ", Air " + elementStrength.Air + ", Water " + elementStrength.Water +
+          (timeVibe ? ("\n\nBirth Time Insight:\n" + timeVibe) : "") +
+          (placeTone ? ("\n\nBirth Place Insight:\n" + placeTone) : "")
+      };
+    }
+    const timelineTone = (r) => r === "day" ? "move with clarity and keep tasks simple." : r === "week" ? "balance momentum with intentional rest." : r === "month" ? "focus on one core priority and build consistency." : r === "year" ? "align habits with long-term purpose." : "invest in patience, skill-building, and strategic relationships.";
+    function buildTabContent(tabName, rangeValue, payload, reading) {
+      const who = payload.name || "You";
+      const horizon = horizonLabels[rangeValue];
+      const scores = scoreAreas(payload, reading.sign);
+      const events = getEventList(payload, rangeValue);
+      if (tabName === "events") {
+        return "Upcoming Astro Events (" + horizon + "):\n- Core element trigger: " + (eventByElement[reading.element] || eventByElement.Air) + "\n- " + events[0] + "\n- " + events[1] + "\n- " + events[2] + "\n\nImpact on " + who + ":\n- " + timelineTone(rangeValue) + "\n- Personal " + scores.personal + "/100, Financial " + scores.financial + "/100, Career " + scores.career + "/100.";
+      }
+      if (tabName === "personal") {
+        return "Personal Outlook (" + horizon + "):\n- Emotional pattern: " + (reading.elementStrength.Water > 70 ? "deep and intuitive; ground emotions before major choices." : "balanced; use logic and intuition together.") + "\n- Relationships: " + ((reading.lifePath === 2 || reading.lifePath === 6) ? "partnership-oriented; ask directly for reciprocity." : "independent and growth-driven; protect healthy boundaries.") + "\n- Wellbeing priority: " + (payload.birthTime ? "align key tasks with your birth-time energy rhythm." : "set fixed morning and evening routines.") + "\n\nPersonal impact for " + who + ":\n- " + timelineTone(rangeValue) + "\n- Personalized score: " + scores.personal + "/100.";
+      }
+      if (tabName === "financial") {
+        return "Financial Outlook (" + horizon + "):\n- Income pattern: " + (reading.element === "Earth" ? "steady compounding and low-risk planning favor you." : "growth comes through skill and communication.") + "\n- Risk watch: " + (scores.financial < 63 ? "avoid speculative decisions this cycle." : "moderate risk can work if backed by data.") + "\n- Action: use a 50/30/20 split and review expense leaks weekly.\n\nMoney impact for " + who + ":\n- Focus on budget discipline and incremental growth.\n- Personalized score: " + scores.financial + "/100.";
+      }
+      return "Career Outlook (" + horizon + "):\n- Role momentum: " + (reading.element === "Fire" ? "leadership and visibility are highlighted." : reading.element === "Air" ? "communication-heavy and strategic roles are favored." : "structured execution and reliability are rewarded.") + "\n- Networking: " + (payload.place ? ("leverage contacts near " + payload.place + ".") : "expand online professional circles deliberately.") + "\n- Best tactic: one flagship project with measurable milestones.\n\nCareer impact for " + who + ":\n- Use " + reading.sign + " strengths to lead with consistency.\n- Personalized score: " + scores.career + "/100.";
+    }
+    function renderChips({ sign, dob, birthTime, place, lifePath }) {
+      chipsEl.innerHTML = "";
+      ["Zodiac Sign: " + sign, "DOB: " + dob, "Life Path: " + lifePath].concat(birthTime ? ["Time: " + birthTime] : [], place ? ["Place: " + place] : []).forEach((item) => {
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = item;
+        chipsEl.appendChild(chip);
+      });
+    }
+    function onGenerate() {
+      const payload = getFormPayload();
+      if (!payload.dob) { errorEl.style.display = "block"; resultEl.style.display = "none"; return; }
+      errorEl.style.display = "none";
+      const reading = generateReading(payload);
+      activeTabState.payload = payload;
+      activeTabState.reading = reading;
+      renderChips({ sign: reading.sign, dob: payload.dob, birthTime: payload.birthTime, place: payload.place, lifePath: reading.lifePath });
+      readingEl.textContent = reading.text;
+      tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, payload, reading);
+      resultEl.style.display = "block";
+    }
+    function fillSample() {
+      setFormPayload({ name: "Riya", dob: "1996-08-17", birthTime: "06:40", place: "Mumbai, India" });
+      onGenerate();
+    }
+
+    function loadProfiles() {
+      return loadProfilesLocal();
+    }
+    function renderProfileOptions(selectedId = "") {
+      const profiles = loadProfiles();
+      profileSelectEl.innerHTML = '<option value="">New profile</option>';
+      profiles.forEach((profile) => {
+        const option = document.createElement("option");
+        option.value = profile.id;
+        option.textContent = profile.name + " (" + profile.dob + ")";
+        if (profile.id === selectedId) option.selected = true;
+        profileSelectEl.appendChild(option);
+      });
+    }
+    function saveCurrentProfile() {
+      const payload = getFormPayload();
+      if (!payload.name || !payload.dob) return setStatus("Name and DOB are required to save a profile.");
+
+      const profiles = loadProfilesLocal();
+      if (activeProfileId) {
+        const i = profiles.findIndex((item) => item.id === activeProfileId);
+        if (i >= 0) profiles[i] = { ...profiles[i], ...payload };
+      } else {
+        activeProfileId = "p_" + Date.now();
+        profiles.push({ id: activeProfileId, ...payload });
+      }
+      persistProfilesLocal(profiles);
+      renderProfileOptions(activeProfileId);
+      setStatus("Profile saved.");
+    }
+    function deleteCurrentProfile() {
+      if (!activeProfileId) return setStatus("Select a saved profile to delete.");
+      persistProfilesLocal(loadProfilesLocal().filter((item) => item.id !== activeProfileId));
+      activeProfileId = "";
+      profileSelectEl.value = "";
+      setFormPayload({ name: "", dob: "", birthTime: "", place: "" });
+      resultEl.style.display = "none";
+      renderProfileOptions("");
+      setStatus("Profile deleted.");
+    }
+    function onProfileChange() {
+      activeProfileId = profileSelectEl.value;
+      if (!activeProfileId) return setStatus("Switched to new profile mode.");
+      const found = loadProfiles().find((item) => item.id === activeProfileId);
+      if (!found) return setStatus("Profile not found.");
+      setFormPayload(found);
+      setStatus("Profile loaded. Click Generate Astrology Page.");
+    }
+
+    generateBtn.addEventListener("click", onGenerate);
+    sampleBtn.addEventListener("click", fillSample);
+    saveProfileBtn.addEventListener("click", () => { saveCurrentProfile(); });
+    deleteProfileBtn.addEventListener("click", () => { deleteCurrentProfile(); });
+    newProfileBtn.addEventListener("click", () => { activeProfileId = ""; profileSelectEl.value = ""; setFormPayload({ name: "", dob: "", birthTime: "", place: "" }); resultEl.style.display = "none"; setStatus("Ready to create a new profile."); });
+    profileSelectEl.addEventListener("change", () => { onProfileChange(); });
+    rangeSelectEl.addEventListener("change", () => {
+      if (!activeTabState.payload || !activeTabState.reading) return;
+      tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading);
+    });
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        activeTabState.tab = button.dataset.tab;
+        tabButtons.forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
+        if (!activeTabState.payload || !activeTabState.reading) return;
+        tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading);
+      });
+    });
+    renderProfileOptions();
+    setStatus("Create a profile or select an existing one.");
+  </script>
+</body>
+</html>
