@@ -375,10 +375,20 @@
     const setStatus = (m) => { statusTextEl.textContent = m; };
     const toIntHash = (text) => { let h = 0; for (let i = 0; i < text.length; i += 1) h = ((h << 5) - h + text.charCodeAt(i)) | 0; return Math.abs(h); };
     const safeNum = (v) => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
+    function isValidIsoDate(isoDate) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) return false;
+      const [y, m, d] = isoDate.split("-").map((n) => Number(n));
+      if (m < 1 || m > 12 || d < 1 || d > 31) return false;
+      const test = new Date(isoDate + "T00:00:00");
+      return !Number.isNaN(test.getTime()) &&
+        test.getFullYear() === y &&
+        (test.getMonth() + 1) === m &&
+        test.getDate() === d;
+    }
     function normalizeDob(rawDob) {
       const value = (rawDob || "").trim();
       if (!value) return "";
-      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return isValidIsoDate(value) ? value : "";
 
       const ymdSlash = value.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
       if (ymdSlash) {
@@ -390,16 +400,31 @@
 
       const mdySlash = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
       if (mdySlash) {
-        const mm = String(Number(mdySlash[1])).padStart(2, "0");
-        const dd = String(Number(mdySlash[2])).padStart(2, "0");
-        return mdySlash[3] + "-" + mm + "-" + dd;
+        const a = Number(mdySlash[1]);
+        const b = Number(mdySlash[2]);
+        const yyyy = mdySlash[3];
+        // Accept both MM/DD/YYYY and DD/MM/YYYY intelligently.
+        const asMdy = yyyy + "-" + String(a).padStart(2, "0") + "-" + String(b).padStart(2, "0");
+        const asDmy = yyyy + "-" + String(b).padStart(2, "0") + "-" + String(a).padStart(2, "0");
+        if (a > 12 && b <= 12) return isValidIsoDate(asDmy) ? asDmy : "";
+        if (b > 12 && a <= 12) return isValidIsoDate(asMdy) ? asMdy : "";
+        if (isValidIsoDate(asMdy)) return asMdy;
+        if (isValidIsoDate(asDmy)) return asDmy;
+        return "";
       }
 
       const mdyDash = value.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
       if (mdyDash) {
-        const mm = String(Number(mdyDash[1])).padStart(2, "0");
-        const dd = String(Number(mdyDash[2])).padStart(2, "0");
-        return mdyDash[3] + "-" + mm + "-" + dd;
+        const a = Number(mdyDash[1]);
+        const b = Number(mdyDash[2]);
+        const yyyy = mdyDash[3];
+        const asMdy = yyyy + "-" + String(a).padStart(2, "0") + "-" + String(b).padStart(2, "0");
+        const asDmy = yyyy + "-" + String(b).padStart(2, "0") + "-" + String(a).padStart(2, "0");
+        if (a > 12 && b <= 12) return isValidIsoDate(asDmy) ? asDmy : "";
+        if (b > 12 && a <= 12) return isValidIsoDate(asMdy) ? asMdy : "";
+        if (isValidIsoDate(asMdy)) return asMdy;
+        if (isValidIsoDate(asDmy)) return asDmy;
+        return "";
       }
 
       return "";
@@ -763,7 +788,7 @@
         const payload = getFormPayload();
         if (!payload.dob) {
           errorEl.style.display = "block";
-          errorEl.textContent = "Please enter DOB in YYYY-MM-DD, YYYY/MM/DD, MM/DD/YYYY, or MM-DD-YYYY format.";
+          errorEl.textContent = "Please enter a valid DOB. Supported: YYYY-MM-DD, YYYY/MM/DD, MM/DD/YYYY, DD/MM/YYYY, MM-DD-YYYY.";
           resultEl.style.display = "none";
           setStatus("Generate failed: invalid DOB format.");
           return;
