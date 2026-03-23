@@ -16,6 +16,28 @@
       --danger: #ff7b9c;
     }
 
+    body[data-theme="light"] {
+      --bg: #f4f7ff;
+      --card: #ffffff;
+      --soft: #eef2ff;
+      --text: #162042;
+      --muted: #4d5f99;
+      --accent: #5f7dff;
+      --accent-2: #9f7dff;
+      --danger: #c2185b;
+    }
+
+    body[data-theme="warm"] {
+      --bg: #faf4ec;
+      --card: #fffaf3;
+      --soft: #f4e8d8;
+      --text: #3f2c1d;
+      --muted: #7a5f46;
+      --accent: #c48340;
+      --accent-2: #cf9a5a;
+      --danger: #b93a3a;
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -243,6 +265,25 @@
       min-height: 1.2em;
     }
 
+    .view-controls {
+      margin: 8px 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .dates-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px dashed #4d62ad;
+      background: rgba(45, 61, 120, 0.16);
+      color: var(--text);
+      white-space: pre-line;
+      line-height: 1.6;
+    }
+
   </style>
 </head>
 <body>
@@ -252,6 +293,14 @@
       Enter full or partial birth details. This page creates a personalized
       astrology-style profile even when only some details are available.
     </p>
+    <div class="view-controls">
+      <label for="themeSelect">View Theme</label>
+      <select id="themeSelect">
+        <option value="dark" selected>Dark Blue</option>
+        <option value="light">Light</option>
+        <option value="warm">Warm</option>
+      </select>
+    </div>
 
     <section class="card">
       <h2 class="section-title">Create or Select Profile</h2>
@@ -334,6 +383,7 @@
         <button class="tab-btn" data-tab="career">Career</button>
       </div>
 
+      <div id="upcomingDatesBox" class="dates-box"></div>
       <p id="tabContent" class="content"></p>
     </section>
   </main>
@@ -363,6 +413,8 @@
     const rangeSelectEl = document.getElementById("rangeSelect");
     const tabContentEl = document.getElementById("tabContent");
     const tabButtons = [...document.querySelectorAll(".tab-btn")];
+    const themeSelectEl = document.getElementById("themeSelect");
+    const upcomingDatesBoxEl = document.getElementById("upcomingDatesBox");
     const profileSelectEl = document.getElementById("profileSelect");
     const saveProfileBtn = document.getElementById("saveProfileBtn");
     const deleteProfileBtn = document.getElementById("deleteProfileBtn");
@@ -622,6 +674,13 @@
       const impacts = [impactA, impactB, impactC];
       return dates.map((date, idx) => "- " + formatEventDate(date, rangeValue) + ": " + impacts[idx % impacts.length]);
     }
+    function buildUpcomingDatesBox(rangeValue, payload, reading) {
+      const powerDates = getPowerDates(payload.dob, rangeValue);
+      const dates = getUpcomingEventDates(powerDates, rangeValue);
+      const scores = scoreAreas(payload, reading.sign);
+      const lines = getEventImpactLines(dates, reading, scores, rangeValue);
+      return "Upcoming Event Dates (DOB-linked)\n" + lines.join("\n");
+    }
     function getScenarioLines(scores, bestArea, riskArea) {
       const avg = Math.round((scores.personal + scores.financial + scores.career) / 3);
       const bestCase = avg >= 72
@@ -651,6 +710,9 @@
       const signatureLines = privacyMode
         ? "- Signature profile: personalized and privacy-filtered\n- Archetype: " + archetype + "\n- Dominant energetic mode: " + dominantElement
         : "- Birth signature code: " + signatureCode + "\n- Birth weekday influence: " + birthDay + "\n- Life path number: " + lifePath + "\n- Personal year cycle: " + personalYear + "\n- Birth season pattern: " + season + "\n- Archetype: " + archetype + "\n- Dominant energetic mode: " + dominantElement;
+      const signatureMeaning = privacyMode
+        ? ""
+        : "\n\nBirth Signature Code Meaning:\n- The code is a deterministic profile fingerprint from your birth inputs.\n- It helps keep forecasting logic consistent for your chart pattern.\n- It is not a government ID, not reversible, and only used inside this page.";
       return {
         sign,
         element: elementBySign[sign] || "Air",
@@ -669,7 +731,8 @@
           signatureLines + "\n" +
           "- Element balance: Fire " + elementStrength.Fire + ", Earth " + elementStrength.Earth + ", Air " + elementStrength.Air + ", Water " + elementStrength.Water +
           (timeVibe ? ("\n\nBirth Time Insight:\n" + timeVibe) : "") +
-          (placeTone ? ("\n\nBirth Place Insight:\n" + placeTone) : "")
+          (placeTone ? ("\n\nBirth Place Insight:\n" + placeTone) : "") +
+          signatureMeaning
       };
     }
     const timelineTone = (r) => r === "day" ? "move with clarity and keep tasks simple." : r === "week" ? "balance momentum with intentional rest." : r === "month" ? "focus on one core priority and build consistency." : r === "year" ? "align habits with long-term purpose." : "invest in patience, skill-building, and strategic relationships.";
@@ -862,6 +925,7 @@
         activeTabState.reading = reading;
         renderChips({ sign: reading.sign, lifePath: reading.lifePath, dominantElement: reading.dominantElement }, privacyModeEl.checked);
         readingEl.textContent = reading.text;
+        upcomingDatesBoxEl.textContent = buildUpcomingDatesBox(rangeSelectEl.value, payload, reading);
         tabContentEl.textContent = safeBuildTabContent(activeTabState.tab, rangeSelectEl.value, payload, reading, privacyModeEl.checked);
         resultEl.style.display = "block";
         setStatus("Reading generated.");
@@ -935,6 +999,7 @@
     profileSelectEl.addEventListener("change", () => { onProfileChange(); });
     rangeSelectEl.addEventListener("change", () => {
       if (!activeTabState.payload || !activeTabState.reading) return;
+      upcomingDatesBoxEl.textContent = buildUpcomingDatesBox(rangeSelectEl.value, activeTabState.payload, activeTabState.reading);
       tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
     });
     privacyModeEl.addEventListener("change", () => {
@@ -955,9 +1020,23 @@
         tabButtons.forEach((item) => item.classList.remove("active"));
         button.classList.add("active");
         if (!activeTabState.payload || !activeTabState.reading) return;
+        upcomingDatesBoxEl.textContent = buildUpcomingDatesBox(rangeSelectEl.value, activeTabState.payload, activeTabState.reading);
         tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
       });
     });
+    themeSelectEl.addEventListener("change", () => {
+      if (themeSelectEl.value === "dark") {
+        document.body.removeAttribute("data-theme");
+      } else {
+        document.body.setAttribute("data-theme", themeSelectEl.value);
+      }
+      localStorage.setItem("astroTheme", themeSelectEl.value);
+    });
+    const savedTheme = localStorage.getItem("astroTheme") || "dark";
+    themeSelectEl.value = savedTheme;
+    if (savedTheme !== "dark") {
+      document.body.setAttribute("data-theme", savedTheme);
+    }
     renderProfileOptions();
     setStatus("Create a profile or select an existing one.");
   </script>
