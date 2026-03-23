@@ -379,11 +379,30 @@
       const value = (rawDob || "").trim();
       if (!value) return "";
       if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
-      const slash = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-      if (!slash) return "";
-      const mm = String(Number(slash[1])).padStart(2, "0");
-      const dd = String(Number(slash[2])).padStart(2, "0");
-      return slash[3] + "-" + mm + "-" + dd;
+
+      const ymdSlash = value.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+      if (ymdSlash) {
+        const yy = ymdSlash[1];
+        const mm = String(Number(ymdSlash[2])).padStart(2, "0");
+        const dd = String(Number(ymdSlash[3])).padStart(2, "0");
+        return yy + "-" + mm + "-" + dd;
+      }
+
+      const mdySlash = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (mdySlash) {
+        const mm = String(Number(mdySlash[1])).padStart(2, "0");
+        const dd = String(Number(mdySlash[2])).padStart(2, "0");
+        return mdySlash[3] + "-" + mm + "-" + dd;
+      }
+
+      const mdyDash = value.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+      if (mdyDash) {
+        const mm = String(Number(mdyDash[1])).padStart(2, "0");
+        const dd = String(Number(mdyDash[2])).padStart(2, "0");
+        return mdyDash[3] + "-" + mm + "-" + dd;
+      }
+
+      return "";
     }
     function normalizeTime(rawTime) {
       const value = (rawTime || "").trim();
@@ -740,22 +759,32 @@
       });
     }
     function onGenerate() {
-      const payload = getFormPayload();
-      if (!payload.dob) {
-        errorEl.style.display = "block";
-        errorEl.textContent = "Please enter DOB in YYYY-MM-DD or MM/DD/YYYY format.";
+      try {
+        const payload = getFormPayload();
+        if (!payload.dob) {
+          errorEl.style.display = "block";
+          errorEl.textContent = "Please enter DOB in YYYY-MM-DD, YYYY/MM/DD, MM/DD/YYYY, or MM-DD-YYYY format.";
+          resultEl.style.display = "none";
+          setStatus("Generate failed: invalid DOB format.");
+          return;
+        }
+
+        errorEl.style.display = "none";
+        errorEl.textContent = "Please enter at least the Date of Birth.";
+        const reading = generateReading(payload, privacyModeEl.checked);
+        activeTabState.payload = payload;
+        activeTabState.reading = reading;
+        renderChips({ sign: reading.sign, lifePath: reading.lifePath, dominantElement: reading.dominantElement }, privacyModeEl.checked);
+        readingEl.textContent = reading.text;
+        tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, payload, reading, privacyModeEl.checked);
+        resultEl.style.display = "block";
+        setStatus("Reading generated.");
+      } catch (error) {
         resultEl.style.display = "none";
-        return;
+        errorEl.style.display = "block";
+        errorEl.textContent = "Something went wrong while generating. Please check DOB/time format and try again.";
+        setStatus("Generate failed. Please retry.");
       }
-      errorEl.style.display = "none";
-      errorEl.textContent = "Please enter at least the Date of Birth.";
-      const reading = generateReading(payload, privacyModeEl.checked);
-      activeTabState.payload = payload;
-      activeTabState.reading = reading;
-      renderChips({ sign: reading.sign, lifePath: reading.lifePath, dominantElement: reading.dominantElement }, privacyModeEl.checked);
-      readingEl.textContent = reading.text;
-      tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, payload, reading, privacyModeEl.checked);
-      resultEl.style.display = "block";
     }
     function fillSample() {
       setFormPayload({ name: "Riya", dob: "1996-08-17", birthTime: "06:40", place: "Mumbai, India" });
