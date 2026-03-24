@@ -535,8 +535,8 @@
       <div class="qa-section" id="qaSection">
         <p class="qa-title">Ask a question about your <span id="qaTabLabel">reading</span></p>
         <div class="apikey-banner">
-          <label for="apiKeyInput">🔑 Anthropic API Key</label>
-          <input id="apiKeyInput" type="password" placeholder="sk-ant-..." autocomplete="off" />
+          <label for="AIzaSyB01s40J9upDKCoMoYlZuOxzTBkCqkKMWY">🔑 Gemini API Key</label>
+          <input id="apiKeyInput" type="password" placeholder="AIza..." autocomplete="off" />
           <button class="ghost" id="apiKeySaveBtn">Save</button>
           <span class="apikey-saved" id="apiKeySavedMsg" style="display:none">✓ Saved</span>
         </div>
@@ -1277,7 +1277,7 @@
 
       const apiKey = (localStorage.getItem(API_KEY_STORE) || apiKeyInput.value || "").trim();
       if (!apiKey) {
-        appendBubble("assistant", "⚠ Please enter and save your Anthropic API key above to use the Q&A feature.");
+        appendBubble("assistant", "⚠ Please enter and save your Gemini API key above to use the Q&A feature. Get a free key at aistudio.google.com");
         return;
       }
 
@@ -1297,23 +1297,34 @@
 
       try {
         const sysPrompt = buildSystemPrompt(tab, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
-        const response = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": apiKey,
-            "anthropic-version": "2023-06-01",
-            "anthropic-dangerous-direct-browser-access": "true"
-          },
-          body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 1000, system: sysPrompt, messages: history })
-        });
+
+        // Build Gemini contents array from history (exclude the latest user msg we just pushed)
+        const geminiContents = history.slice(0, -1).map(m => ({
+          role: m.role === "assistant" ? "model" : "user",
+          parts: [{ text: m.content }]
+        }));
+        // Add current question
+        geminiContents.push({ role: "user", parts: [{ text: question }] });
+
+        const response = await fetch(
+          "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              system_instruction: { parts: [{ text: sysPrompt }] },
+              contents: geminiContents,
+              generationConfig: { maxOutputTokens: 1000 }
+            })
+          }
+        );
         const data = await response.json();
         loadingDiv.remove();
         if (data.error) {
           appendBubble("assistant", "\u26a0 API error: " + (data.error.message || "Something went wrong. Check your API key and try again."));
           history.pop();
         } else {
-          const answer = (data.content || []).map(b => b.text || "").join("");
+          const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
           history.push({ role: "assistant", content: answer });
           appendBubble("assistant", answer);
         }
