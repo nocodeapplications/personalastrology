@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Personal Astrology Page</title>
   <style>
+    /* ── CSS Variables (theme-aware) ───────────────────────────────────── */
     :root {
       --bg: #0b1020;
       --card: #111936;
@@ -14,6 +15,33 @@
       --accent: #8aa2ff;
       --accent-2: #c5a4ff;
       --danger: #ff7b9c;
+      --border: #2a3a7e;
+      --ghost-bg: #2a3874;
+      --ghost-text: #e8ecff;
+      --tab-bg: #223063;
+      --tab-text: #dfe6ff;
+      --tab-border: #3a4f97;
+      --chip-bg: #243266;
+      --chip-border: #374b95;
+      --chip-text: #cdd8ff;
+      --card-grad-end: #0f1630;
+      --input-border: #344a96;
+      --primary-text: #12183a;
+      --section-title: #d8c7ff;
+      --content-text: #e5eaff;
+      --label-text: #d0d9ff;
+      --status-text: #b8c7ff;
+      --dates-border: #4d62ad;
+      --qa-border: #2a3a7e;
+      --qa-title: #c5a4ff;
+      --apikey-bg: rgba(138,162,255,0.07);
+      --apikey-border: #2f4190;
+      --divider: #30417f;
+      --bubble-user-bg: rgba(138,162,255,0.13);
+      --bubble-user-border: rgba(138,162,255,0.25);
+      --bubble-ai-bg: rgba(197,164,255,0.1);
+      --bubble-ai-border: rgba(197,164,255,0.2);
+      --bubble-ai-text: #e5eaff;
     }
 
     body[data-theme="light"] {
@@ -23,8 +51,35 @@
       --text: #162042;
       --muted: #4d5f99;
       --accent: #5f7dff;
-      --accent-2: #9f7dff;
+      --accent-2: #7b5fc9;
       --danger: #c2185b;
+      --border: #c5cef5;
+      --ghost-bg: #e0e7ff;
+      --ghost-text: #2a3874;
+      --tab-bg: #e0e7ff;
+      --tab-text: #2a3874;
+      --tab-border: #b0bcee;
+      --chip-bg: #e8eeff;
+      --chip-border: #b0bcee;
+      --chip-text: #2a3874;
+      --card-grad-end: #f4f7ff;
+      --input-border: #b0bcee;
+      --primary-text: #ffffff;
+      --section-title: #4a3a8a;
+      --content-text: #1e2a55;
+      --label-text: #3a4880;
+      --status-text: #5a6aa0;
+      --dates-border: #a0aad8;
+      --qa-border: #c5cef5;
+      --qa-title: #7b5fc9;
+      --apikey-bg: rgba(95,125,255,0.06);
+      --apikey-border: #c5cef5;
+      --divider: #d0d8f5;
+      --bubble-user-bg: rgba(95,125,255,0.1);
+      --bubble-user-border: rgba(95,125,255,0.25);
+      --bubble-ai-bg: rgba(123,95,201,0.08);
+      --bubble-ai-border: rgba(123,95,201,0.2);
+      --bubble-ai-text: #1e2a55;
     }
 
     body[data-theme="warm"] {
@@ -34,83 +89,83 @@
       --text: #3f2c1d;
       --muted: #7a5f46;
       --accent: #c48340;
-      --accent-2: #cf9a5a;
+      --accent-2: #b06820;
       --danger: #b93a3a;
+      --border: #d4b896;
+      --ghost-bg: #f0e0cc;
+      --ghost-text: #5a3e28;
+      --tab-bg: #f0e0cc;
+      --tab-text: #5a3e28;
+      --tab-border: #c8a880;
+      --chip-bg: #f5e8d5;
+      --chip-border: #c8a880;
+      --chip-text: #5a3e28;
+      --card-grad-end: #faf4ec;
+      --input-border: #c8a880;
+      --primary-text: #ffffff;
+      --section-title: #7a3a10;
+      --content-text: #3a2510;
+      --label-text: #5a3e28;
+      --status-text: #8a6040;
+      --dates-border: #c8a880;
+      --qa-border: #d4b896;
+      --qa-title: #b06820;
+      --apikey-bg: rgba(196,131,64,0.07);
+      --apikey-border: #d4b896;
+      --divider: #dbc4a8;
+      --bubble-user-bg: rgba(196,131,64,0.1);
+      --bubble-user-border: rgba(196,131,64,0.25);
+      --bubble-ai-bg: rgba(176,104,32,0.08);
+      --bubble-ai-border: rgba(176,104,32,0.2);
+      --bubble-ai-text: #3a2510;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background: radial-gradient(circle at top, #17224d 0%, var(--bg) 55%);
+      background: var(--bg);
       color: var(--text);
       min-height: 100vh;
     }
-
-    .container {
-      max-width: 920px;
-      margin: 0 auto;
-      padding: 32px 18px 48px;
+    body:not([data-theme]) {
+      background: radial-gradient(circle at top, #17224d 0%, var(--bg) 55%);
     }
 
-    h1 {
-      margin: 0 0 10px;
-      font-size: 2rem;
-      letter-spacing: 0.2px;
-    }
-
-    .subtitle {
-      margin: 0 0 24px;
-      color: var(--muted);
-      line-height: 1.5;
-    }
+    .container { max-width: 920px; margin: 0 auto; padding: 32px 18px 48px; }
+    h1 { margin: 0 0 10px; font-size: 2rem; letter-spacing: 0.2px; }
+    .subtitle { margin: 0 0 24px; color: var(--muted); line-height: 1.5; }
 
     .card {
-      background: linear-gradient(165deg, var(--card) 0%, #0f1630 100%);
-      border: 1px solid #2a3a7e;
+      background: linear-gradient(165deg, var(--card) 0%, var(--card-grad-end) 100%);
+      border: 1px solid var(--border);
       border-radius: 14px;
       padding: 18px;
-      box-shadow: 0 14px 28px rgba(2, 6, 23, 0.35);
+      box-shadow: 0 14px 28px rgba(2,6,23,0.18);
     }
+    .grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
 
-    .grid {
-      display: grid;
-      gap: 14px;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    }
+    label { display: block; margin-bottom: 7px; font-size: 0.9rem; color: var(--label-text); }
 
-    label {
-      display: block;
-      margin-bottom: 7px;
-      font-size: 0.9rem;
-      color: #d0d9ff;
-    }
-
-    input {
+    input, select {
       width: 100%;
-      border: 1px solid #344a96;
+      border: 1px solid var(--input-border);
       background: var(--soft);
       color: var(--text);
       padding: 11px 12px;
       border-radius: 9px;
       outline: none;
       transition: border-color 120ms ease, box-shadow 120ms ease;
+      font-family: inherit;
     }
-
-    input:focus {
+    input:focus, select:focus {
       border-color: var(--accent-2);
-      box-shadow: 0 0 0 3px rgba(197, 164, 255, 0.2);
+      box-shadow: 0 0 0 3px rgba(197,164,255,0.2);
     }
+    select { padding: 9px 10px; min-width: 150px; cursor: pointer; }
 
-    .actions {
-      margin-top: 16px;
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .actions { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
 
     button {
       border: 0;
@@ -119,201 +174,168 @@
       font-weight: 600;
       cursor: pointer;
       transition: transform 80ms ease, opacity 120ms ease;
+      font-family: inherit;
     }
-
-    button:active {
-      transform: translateY(1px);
-    }
+    button:active { transform: translateY(1px); }
 
     .primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #12183a;
+      color: var(--primary-text);
     }
-
     .ghost {
-      background: #2a3874;
-      color: var(--text);
+      background: var(--ghost-bg);
+      color: var(--ghost-text);
+      border: 1px solid var(--border);
     }
+    .ghost:hover { opacity: 0.85; }
 
-    .hint {
-      margin: 12px 0 0;
-      color: var(--muted);
-      font-size: 0.9rem;
-    }
+    .hint { margin: 12px 0 0; color: var(--muted); font-size: 0.9rem; }
+    .error { margin-top: 10px; color: var(--danger); display: none; font-size: 0.93rem; }
+    .result { margin-top: 22px; display: none; }
 
-    .error {
-      margin-top: 10px;
-      color: var(--danger);
-      display: none;
-      font-size: 0.93rem;
-    }
+    .section-title { margin-top: 0; margin-bottom: 8px; font-size: 1.15rem; color: var(--section-title); }
 
-    .result {
-      margin-top: 22px;
-      display: none;
-    }
-
-    .section-title {
-      margin-top: 0;
-      margin-bottom: 8px;
-      font-size: 1.15rem;
-      color: #d8c7ff;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin: 10px 0 14px;
-    }
-
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
     .chip {
       padding: 6px 10px;
       border-radius: 999px;
-      background: #243266;
-      border: 1px solid #374b95;
-      color: #cdd8ff;
+      background: var(--chip-bg);
+      border: 1px solid var(--chip-border);
+      color: var(--chip-text);
       font-size: 0.83rem;
     }
 
-    .content {
-      color: #e5eaff;
-      line-height: 1.7;
-      white-space: pre-line;
-    }
+    .content { color: var(--content-text); line-height: 1.7; white-space: pre-line; }
 
-    .toolbar {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
+    .toolbar { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 
-    .tabs {
-      margin-top: 14px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
+    .tabs { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px; }
     .tab-btn {
-      background: #223063;
-      color: #dfe6ff;
-      border: 1px solid #3a4f97;
+      background: var(--tab-bg);
+      color: var(--tab-text);
+      border: 1px solid var(--tab-border);
       border-radius: 999px;
       padding: 8px 12px;
       font-size: 0.88rem;
       font-weight: 600;
     }
-
     .tab-btn.active {
-      background: linear-gradient(135deg, #8aa2ff, #c5a4ff);
-      color: #141a3d;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: var(--primary-text);
       border-color: transparent;
     }
 
-    select {
-      border: 1px solid #344a96;
-      background: var(--soft);
-      color: var(--text);
-      padding: 9px 10px;
-      border-radius: 9px;
-      min-width: 150px;
-      outline: none;
-    }
+    .divider { border: 0; border-top: 1px solid var(--divider); margin: 16px 0; }
 
-    .divider {
-      border: 0;
-      border-top: 1px solid #30417f;
-      margin: 16px 0;
-    }
-
-    .profile-actions {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
+    .profile-actions { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 10px; }
 
     .privacy-row {
       margin-top: 10px;
       display: flex;
       align-items: center;
       gap: 8px;
-      color: #d0d9ff;
+      color: var(--label-text);
       font-size: 0.92rem;
     }
+    .privacy-row input { width: auto; accent-color: var(--accent-2); }
 
-    .privacy-row input {
-      width: auto;
-      accent-color: #a995ff;
-    }
+    .sensitive-toolbar { margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
-    .sensitive-toolbar {
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .status { margin-top: 10px; color: var(--status-text); font-size: 0.9rem; min-height: 1.2em; }
 
-    .status {
-      margin-top: 10px;
-      color: #b8c7ff;
-      font-size: 0.9rem;
-      min-height: 1.2em;
-    }
-
-    .view-controls {
-      margin: 8px 0 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
+    .view-controls { margin: 8px 0 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
     .dates-box {
       margin-top: 10px;
       padding: 10px 12px;
       border-radius: 10px;
-      border: 1px dashed #4d62ad;
-      background: rgba(45, 61, 120, 0.16);
+      border: 1px dashed var(--dates-border);
+      background: rgba(45,61,120,0.1);
       color: var(--text);
       white-space: pre-line;
       line-height: 1.6;
     }
 
-    .qa-section {
-      margin-top: 22px;
-      border-top: 1px solid #2a3a7e;
-      padding-top: 18px;
-    }
-
-    .qa-title {
-      margin: 0 0 10px;
-      font-size: 1rem;
-      color: var(--accent-2);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .qa-title::before {
-      content: "✦";
+    /* ── API Enrichment section ─────────────── */
+    .api-status-bar {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 8px;
       font-size: 0.85rem;
-      opacity: 0.8;
+      background: var(--apikey-bg);
+      border: 1px solid var(--apikey-border);
+      color: var(--muted);
+      display: none;
     }
+    .api-status-bar.visible { display: block; }
+    .api-status-bar.success { color: #7ddfb0; border-color: rgba(125,223,176,0.3); }
+    .api-status-bar.error { color: var(--danger); border-color: rgba(255,123,156,0.3); }
 
-    .qa-input-row {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
+    /* ── Event cards ─────────────────────────── */
+    .event-cards { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+    .event-card {
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--soft);
+      line-height: 1.55;
     }
+    .event-card .ev-date {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: 4px;
+      letter-spacing: 0.4px;
+    }
+    .event-card .ev-type {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+    .ev-type.new-moon    { background: #1a2a4a; color: #8aa2ff; border: 1px solid #3a5090; }
+    .ev-type.full-moon   { background: #2a1a4a; color: #c5a4ff; border: 1px solid #6a3a90; }
+    .ev-type.eclipse     { background: #3a1a1a; color: #ff9080; border: 1px solid #8a3030; }
+    .ev-type.retrograde  { background: #1a3a2a; color: #7dffa0; border: 1px solid #2a8060; }
+    .ev-type.conjunction { background: #1a2a1a; color: #a0ffa0; border: 1px solid #3a6040; }
+    .ev-type.transit     { background: #2a2a1a; color: #ffe0a0; border: 1px solid #806040; }
+    .ev-type.nakshatra   { background: #2a1a3a; color: #e0a0ff; border: 1px solid #704090; }
+    .ev-type.dasa        { background: #1a1a3a; color: #a0c0ff; border: 1px solid #304090; }
+    .ev-type.power-day   { background: #3a2a1a; color: #ffc080; border: 1px solid #906040; }
 
+    body[data-theme="light"] .ev-type.new-moon    { background: #e8f0ff; color: #3a5aaa; border-color: #b0c0f0; }
+    body[data-theme="light"] .ev-type.full-moon   { background: #f0e8ff; color: #6a3a9a; border-color: #c0a0e0; }
+    body[data-theme="light"] .ev-type.eclipse     { background: #ffeeee; color: #9a3020; border-color: #e0a090; }
+    body[data-theme="light"] .ev-type.retrograde  { background: #e8fff0; color: #2a7a40; border-color: #90d0a0; }
+    body[data-theme="light"] .ev-type.transit     { background: #fffbe8; color: #7a6020; border-color: #d0b080; }
+    body[data-theme="light"] .ev-type.nakshatra   { background: #f5eaff; color: #6a2a9a; border-color: #c080e0; }
+    body[data-theme="light"] .ev-type.dasa        { background: #eaf0ff; color: #2a4a8a; border-color: #90b0e0; }
+    body[data-theme="light"] .ev-type.power-day   { background: #fff5e8; color: #8a5020; border-color: #d0a070; }
+
+    body[data-theme="warm"] .ev-type.new-moon    { background: #f5eedd; color: #6a4020; border-color: #c8a060; }
+    body[data-theme="warm"] .ev-type.full-moon   { background: #faf0e0; color: #8a5010; border-color: #d8b070; }
+    body[data-theme="warm"] .ev-type.eclipse     { background: #fde8e0; color: #8a2010; border-color: #d08060; }
+    body[data-theme="warm"] .ev-type.retrograde  { background: #edf5e8; color: #3a5a20; border-color: #90c070; }
+    body[data-theme="warm"] .ev-type.transit     { background: #fdf5e8; color: #7a5010; border-color: #d0a040; }
+    body[data-theme="warm"] .ev-type.nakshatra   { background: #f5ece0; color: #7a3a10; border-color: #c89060; }
+    body[data-theme="warm"] .ev-type.dasa        { background: #eef3e8; color: #3a4a20; border-color: #a0b870; }
+    body[data-theme="warm"] .ev-type.power-day   { background: #fef2e0; color: #8a4a10; border-color: #d09050; }
+
+    .event-card .ev-title { font-weight: 600; font-size: 0.95rem; color: var(--text); }
+    .event-card .ev-desc  { font-size: 0.88rem; color: var(--muted); margin-top: 3px; }
+
+    /* ── Q&A Section ────────────────────────── */
+    .qa-section { margin-top: 22px; border-top: 1px solid var(--qa-border); padding-top: 18px; }
+    .qa-title { margin: 0 0 10px; font-size: 1rem; color: var(--qa-title); display: flex; align-items: center; gap: 8px; }
+    .qa-title::before { content: "✦"; font-size: 0.85rem; opacity: 0.8; }
+
+    .qa-input-row { display: flex; gap: 8px; align-items: flex-start; }
     .qa-input-row textarea {
       flex: 1;
-      border: 1px solid #344a96;
+      border: 1px solid var(--input-border);
       background: var(--soft);
       color: var(--text);
       padding: 11px 12px;
@@ -326,15 +348,11 @@
       line-height: 1.5;
       transition: border-color 120ms ease, box-shadow 120ms ease;
     }
-
-    .qa-input-row textarea:focus {
-      border-color: var(--accent-2);
-      box-shadow: 0 0 0 3px rgba(197, 164, 255, 0.2);
-    }
+    .qa-input-row textarea:focus { border-color: var(--accent-2); box-shadow: 0 0 0 3px rgba(197,164,255,0.2); }
 
     .qa-ask-btn {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      color: #12183a;
+      color: var(--primary-text);
       border: 0;
       border-radius: 10px;
       padding: 11px 16px;
@@ -344,61 +362,37 @@
       transition: opacity 120ms ease, transform 80ms ease;
       align-self: flex-start;
     }
+    .qa-ask-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .qa-ask-btn:active:not(:disabled) { transform: translateY(1px); }
 
-    .qa-ask-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    .qa-history { margin-top: 14px; display: flex; flex-direction: column; gap: 12px; }
 
-    .qa-ask-btn:active:not(:disabled) {
-      transform: translateY(1px);
-    }
-
-    .qa-history {
-      margin-top: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .qa-bubble {
-      padding: 12px 14px;
-      border-radius: 10px;
-      line-height: 1.65;
-      font-size: 0.93rem;
-    }
-
+    .qa-bubble { padding: 12px 14px; border-radius: 10px; line-height: 1.65; font-size: 0.93rem; }
     .qa-bubble.user {
-      background: rgba(138, 162, 255, 0.13);
-      border: 1px solid rgba(138, 162, 255, 0.25);
+      background: var(--bubble-user-bg);
+      border: 1px solid var(--bubble-user-border);
       color: var(--text);
       align-self: flex-end;
       max-width: 90%;
     }
-
     .qa-bubble.assistant {
-      background: rgba(197, 164, 255, 0.1);
-      border: 1px solid rgba(197, 164, 255, 0.2);
-      color: #e5eaff;
+      background: var(--bubble-ai-bg);
+      border: 1px solid var(--bubble-ai-border);
+      color: var(--bubble-ai-text);
       white-space: pre-line;
     }
-
     .qa-bubble.loading {
-      background: rgba(197, 164, 255, 0.07);
-      border: 1px dashed rgba(197, 164, 255, 0.2);
+      background: var(--bubble-ai-bg);
+      border: 1px dashed var(--bubble-ai-border);
       color: var(--muted);
       font-style: italic;
       animation: pulse 1.4s ease-in-out infinite;
     }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
     .qa-clear-btn {
       background: transparent;
-      border: 1px solid #344a96;
+      border: 1px solid var(--input-border);
       color: var(--muted);
       border-radius: 8px;
       padding: 5px 11px;
@@ -407,19 +401,15 @@
       margin-top: 6px;
       transition: border-color 120ms ease;
     }
-
-    .qa-clear-btn:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
+    .qa-clear-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     .apikey-banner {
       display: flex;
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
-      background: rgba(138, 162, 255, 0.07);
-      border: 1px solid #2f4190;
+      background: var(--apikey-bg);
+      border: 1px solid var(--apikey-border);
       border-radius: 10px;
       padding: 10px 14px;
       margin-bottom: 14px;
@@ -429,22 +419,61 @@
     .apikey-banner .ghost { padding: 7px 13px; font-size: 0.85rem; }
     .apikey-saved { font-size: 0.82rem; color: #7ddfb0; }
 
+    /* ── FreeAstrologyAPI banner ─────────────── */
+    .faa-banner {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      background: var(--apikey-bg);
+      border: 1px solid var(--apikey-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+    .faa-banner label { margin: 0; font-size: 0.88rem; color: var(--muted); white-space: nowrap; }
+    .faa-banner input { flex: 1; min-width: 200px; font-size: 0.88rem; padding: 7px 10px; }
+    .faa-banner .ghost { padding: 7px 13px; font-size: 0.85rem; }
+    .faa-saved { font-size: 0.82rem; color: #7ddfb0; }
+
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid var(--muted);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
   <main class="container">
-    <h1>Personal Astrology Page</h1>
+    <h1>✦ Personal Astrology Page</h1>
     <p class="subtitle">
       Enter full or partial birth details. This page creates a personalized
       astrology-style profile even when only some details are available.
+      Add your Free Astrology API key for real planetary data and live upcoming events.
     </p>
+
     <div class="view-controls">
-      <label for="themeSelect">View Theme</label>
+      <label for="themeSelect" style="margin-bottom:0">View Theme</label>
       <select id="themeSelect">
         <option value="dark" selected>Dark Blue</option>
         <option value="light">Light</option>
         <option value="warm">Warm</option>
       </select>
+    </div>
+
+    <!-- Free Astrology API Key -->
+    <div class="faa-banner" id="faaKeyBanner">
+      <label for="faaKeyInput">🔑 Free Astrology API Key</label>
+      <input id="faaKeyInput" type="password" placeholder="Enter your key from freeastrologyapi.com" autocomplete="off" />
+      <button class="ghost" id="faaKeySaveBtn">Save Key</button>
+      <span class="faa-saved" id="faaKeySavedMsg" style="display:none">✓ Saved</span>
+      <a href="https://freeastrologyapi.com/signup" target="_blank" style="font-size:0.8rem;color:var(--muted);text-decoration:none;white-space:nowrap">Get free key ↗</a>
     </div>
 
     <section class="card">
@@ -474,20 +503,17 @@
           <label for="name">Name</label>
           <input id="name" type="text" placeholder="e.g. Aisha" />
         </div>
-
         <div>
           <label for="dob">Date of Birth (private)</label>
           <input id="dob" type="password" placeholder="YYYY-MM-DD or MM/DD/YYYY" />
         </div>
-
         <div>
           <label for="birthTime">Birth Time (private, optional)</label>
-          <input id="birthTime" type="password" placeholder="HH:MM" />
+          <input id="birthTime" type="password" placeholder="HH:MM (24h)" />
         </div>
-
         <div>
           <label for="place">Birth Place (private, optional)</label>
-          <input id="place" type="password" placeholder="e.g. Delhi, India" />
+          <input id="place" type="password" placeholder="e.g. Mumbai, India" />
         </div>
       </div>
       <div class="sensitive-toolbar">
@@ -499,10 +525,9 @@
         <button id="sampleBtn" class="ghost">Try Sample Details</button>
       </div>
 
-      <p class="hint">
-        Required minimum: Date of Birth. Place and time unlock more detailed guidance.
-      </p>
+      <p class="hint">Required minimum: Date of Birth. Place and time unlock real planetary calculations.</p>
       <p id="errorText" class="error">Please enter at least the Date of Birth.</p>
+      <div id="apiStatusBar" class="api-status-bar"></div>
     </section>
 
     <section id="result" class="card result">
@@ -528,14 +553,16 @@
         <button class="tab-btn" data-tab="career">Career</button>
       </div>
 
-      <div id="upcomingDatesBox" class="dates-box"></div>
+      <!-- Upcoming Events (card-based for events tab, text for others) -->
+      <div id="eventCardsContainer" class="event-cards" style="display:none"></div>
+      <div id="upcomingDatesBox" class="dates-box" style="display:none"></div>
       <p id="tabContent" class="content"></p>
 
       <!-- Q&A Section -->
       <div class="qa-section" id="qaSection">
         <p class="qa-title">Ask a question about your <span id="qaTabLabel">reading</span></p>
         <div class="apikey-banner">
-          <label for="apiKeyInput">🔑 OpenRouter API Key</label>
+          <label for="apiKeyInput">💬 OpenRouter API Key (for Q&A chat)</label>
           <input id="apiKeyInput" type="password" placeholder="sk-or-..." autocomplete="off" />
           <button class="ghost" id="apiKeySaveBtn">Save</button>
           <span class="apikey-saved" id="apiKeySavedMsg" style="display:none">✓ Saved</span>
@@ -551,1062 +578,1110 @@
   </main>
 
   <script>
+  // ─────────────────────────────────────────────────────────────────────────────
+  // CONSTANTS & LOOKUP TABLES
+  // ─────────────────────────────────────────────────────────────────────────────
+  const zodiacRanges = [["Capricorn",[1,1],[1,19]],["Aquarius",[1,20],[2,18]],["Pisces",[2,19],[3,20]],["Aries",[3,21],[4,19]],["Taurus",[4,20],[5,20]],["Gemini",[5,21],[6,20]],["Cancer",[6,21],[7,22]],["Leo",[7,23],[8,22]],["Virgo",[8,23],[9,22]],["Libra",[9,23],[10,22]],["Scorpio",[10,23],[11,21]],["Sagittarius",[11,22],[12,21]],["Capricorn",[12,22],[12,31]]];
+  const elementBySign = { Aries:"Fire",Leo:"Fire",Sagittarius:"Fire",Taurus:"Earth",Virgo:"Earth",Capricorn:"Earth",Gemini:"Air",Libra:"Air",Aquarius:"Air",Cancer:"Water",Scorpio:"Water",Pisces:"Water" };
+  const signNames = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
+  const horizonLabels = { day:"today", week:"this week", month:"this month", year:"this year", decade:"in the next decade" };
 
-    const zodiacRanges = [["Capricorn",[1,1],[1,19]],["Aquarius",[1,20],[2,18]],["Pisces",[2,19],[3,20]],["Aries",[3,21],[4,19]],["Taurus",[4,20],[5,20]],["Gemini",[5,21],[6,20]],["Cancer",[6,21],[7,22]],["Leo",[7,23],[8,22]],["Virgo",[8,23],[9,22]],["Libra",[9,23],[10,22]],["Scorpio",[10,23],[11,21]],["Sagittarius",[11,22],[12,21]],["Capricorn",[12,22],[12,31]]];
-    const elementBySign = { Aries:"Fire",Leo:"Fire",Sagittarius:"Fire",Taurus:"Earth",Virgo:"Earth",Capricorn:"Earth",Gemini:"Air",Libra:"Air",Aquarius:"Air",Cancer:"Water",Scorpio:"Water",Pisces:"Water" };
-    const horizonLabels = { day: "today", week: "this week", month: "this month", year: "this year", decade: "in the next decade" };
+  const signData = {
+    Aries:       { ruler:"Mars",         quality:"Cardinal", polarity:"Positive", body:"Head & face",             gem:"Diamond",   color:"Red",          day:"Tuesday",
+                   theme:"You are a pioneer and initiator. Aries energy drives you to act first and reflect later — your courage opens doors others won't even knock on.",
+                   strengths:"Bold decision-making, infectious enthusiasm, natural leadership, raw courage",
+                   challenges:"Impatience, impulsiveness, difficulty finishing what you start",
+                   shadow:"Aggression when blocked; learn to channel Mars fire into discipline, not explosions",
+                   love:"You need a partner who matches your energy and won't try to tame you — chemistry must be electric.",
+                   career:"Best in roles with autonomy, urgency, and visible impact: entrepreneur, athlete, surgeon, military, emergency services.",
+                   finance:"You earn boldly but spend impulsively — build a forced savings structure so future-you benefits from present-you's drive." },
+    Taurus:      { ruler:"Venus",        quality:"Fixed",    polarity:"Negative", body:"Throat & neck",           gem:"Emerald",   color:"Green",        day:"Friday",
+                   theme:"You are the builder and sustainer. Taurus energy gives you unmatched patience and a deep appreciation for beauty, comfort, and lasting quality.",
+                   strengths:"Reliability, sensory intelligence, financial instinct, loyalty, endurance",
+                   challenges:"Stubbornness, resistance to necessary change, materialism as emotional compensation",
+                   shadow:"Fear of loss creates hoarding or stagnation; true security is internal, not material",
+                   love:"You love deeply and need physical affection and consistency — betrayal is unforgivable to you.",
+                   career:"Best in roles requiring precision, aesthetics, or financial stewardship: chef, architect, banker, artist, land developer.",
+                   finance:"Natural wealth-builder — you thrive with long-term investments, real estate, and compound growth strategies." },
+    Gemini:      { ruler:"Mercury",      quality:"Mutable",  polarity:"Positive", body:"Lungs & hands",           gem:"Agate",     color:"Yellow",       day:"Wednesday",
+                   theme:"You are the connector and communicator. Gemini energy makes you a natural bridge between ideas and people — your mind is your superpower.",
+                   strengths:"Adaptability, wit, intellectual curiosity, multi-tasking, social intelligence",
+                   challenges:"Scattered focus, inconsistency, anxiety from over-stimulation, surface-level relationships",
+                   shadow:"Avoidance of depth; the twin energy must eventually choose a path and commit",
+                   love:"You need mental stimulation above all — a partner who can surprise and challenge you intellectually.",
+                   career:"Best in fast-paced, varied environments: journalist, teacher, sales, marketing, programmer, social media strategist.",
+                   finance:"Income peaks when you leverage communication and networking; guard against impulse purchases during Mercury retrograde." },
+    Cancer:      { ruler:"Moon",         quality:"Cardinal", polarity:"Negative", body:"Chest & stomach",         gem:"Pearl",     color:"Silver",       day:"Monday",
+                   theme:"You are the nurturer and guardian. Cancer energy gives you profound emotional intelligence and the ability to make others feel genuinely at home.",
+                   strengths:"Empathy, intuition, memory, loyalty, ability to create safe spaces for others",
+                   challenges:"Moodiness linked to lunar cycles, over-attachment, difficulty letting go of the past",
+                   shadow:"Emotional manipulation when hurt; healing the inner child unlocks tremendous power",
+                   love:"Home, family, and emotional safety define love for you — you need a partner who values roots.",
+                   career:"Best in care-centered, creative, or legacy-building roles: therapist, chef, real estate, historian, social work.",
+                   finance:"Security-driven; you save instinctively but must avoid hoarding or fear-based financial paralysis." },
+    Leo:         { ruler:"Sun",          quality:"Fixed",    polarity:"Positive", body:"Heart & spine",           gem:"Ruby",      color:"Gold",         day:"Sunday",
+                   theme:"You are the sovereign and creative force. Leo energy radiates warmth, magnetism, and an innate desire to inspire others through authentic self-expression.",
+                   strengths:"Confidence, generosity, creative brilliance, natural charisma, loyalty to loved ones",
+                   challenges:"Pride that blocks vulnerability, need for external validation, drama when unappreciated",
+                   shadow:"Ego protection hides a tender heart — true Leo strength is leading without needing applause",
+                   love:"You love passionately and need a partner who celebrates you — you give everything and expect devotion in return.",
+                   career:"Best in high-visibility roles: performer, CEO, creative director, politician, teacher, luxury brand specialist.",
+                   finance:"Generous spender; wealth grows when you align financial goals with your identity — invest in quality, not status." },
+    Virgo:       { ruler:"Mercury",      quality:"Mutable",  polarity:"Negative", body:"Digestive system",        gem:"Sapphire",  color:"Navy",         day:"Wednesday",
+                   theme:"You are the analyst and craftsperson. Virgo energy gives you an extraordinary eye for detail, a service orientation, and a drive for continuous improvement.",
+                   strengths:"Precision, reliability, critical thinking, health awareness, practical problem-solving",
+                   challenges:"Perfectionism that delays action, over-criticism of self and others, difficulty trusting process",
+                   shadow:"Anxiety masked as productivity; the body keeps score — build rituals that calm the nervous system",
+                   love:"You show love through acts of service — you need a partner who notices the effort in your details.",
+                   career:"Best in analytical, health, or process-driven fields: analyst, doctor, nutritionist, editor, programmer, researcher.",
+                   finance:"Meticulous with money; build detailed budgets but avoid analysis paralysis when investing." },
+    Libra:       { ruler:"Venus",        quality:"Cardinal", polarity:"Positive", body:"Kidneys & lower back",    gem:"Opal",      color:"Pink",         day:"Friday",
+                   theme:"You are the diplomat and aesthete. Libra energy gives you a refined sense of beauty, a gift for fairness, and the ability to see all sides of any situation.",
+                   strengths:"Charm, objectivity, aesthetic intelligence, partnership skills, conflict mediation",
+                   challenges:"Indecisiveness, people-pleasing, difficulty asserting personal needs, relationship dependency",
+                   shadow:"Suppressed anger from chronic compromise; boundaries are an act of love, not selfishness",
+                   love:"Partnership is your life force — you thrive when fully committed to someone who mirrors your values.",
+                   career:"Best in roles requiring balance, beauty, or negotiation: lawyer, diplomat, designer, counselor, HR.",
+                   finance:"You may overspend on aesthetics — budgeting for beauty keeps Venusian impulses sustainable." },
+    Scorpio:     { ruler:"Pluto/Mars",   quality:"Fixed",    polarity:"Negative", body:"Reproductive system",     gem:"Topaz",     color:"Crimson",      day:"Tuesday",
+                   theme:"You are the transformer and truth-seeker. Scorpio energy gives you extraordinary depth, psychological insight, and the power to regenerate after any collapse.",
+                   strengths:"Intensity, resilience, perceptiveness, loyalty when trusted, investigative brilliance",
+                   challenges:"Jealousy, control issues, difficulty forgiving, intensity that overwhelms others",
+                   shadow:"Power used manipulatively; Pluto's true gift is using your own pain as fuel for others' healing",
+                   love:"You love with totality — you need complete honesty and emotional transparency, or you close off entirely.",
+                   career:"Best in high-stakes, research, or healing fields: investigator, surgeon, psychologist, strategist, forensics.",
+                   finance:"You have an instinct for hidden value — investments in transformation industries suit you." },
+    Sagittarius: { ruler:"Jupiter",      quality:"Mutable",  polarity:"Positive", body:"Hips & thighs",          gem:"Turquoise", color:"Purple",       day:"Thursday",
+                   theme:"You are the philosopher and explorer. Sagittarius energy drives you toward truth, adventure, and the continuous expansion of your mental and physical horizons.",
+                   strengths:"Optimism, wisdom, adventurousness, honesty, ability to inspire with big-picture thinking",
+                   challenges:"Overconfidence, tactless honesty, commitment avoidance, scattered goals",
+                   shadow:"Freedom as avoidance of depth; the archer must eventually aim at one target with full intention",
+                   love:"You need a partner who is also your travel companion and intellectual equal — freedom within commitment is essential.",
+                   career:"Best in roles involving travel, teaching, publishing, or law: professor, travel writer, spiritual teacher, attorney.",
+                   finance:"Abundant but unpredictable income; Jupiter expands what you focus on — invest in education and knowledge assets." },
+    Capricorn:   { ruler:"Saturn",       quality:"Cardinal", polarity:"Negative", body:"Bones & knees",          gem:"Garnet",    color:"Brown",        day:"Saturday",
+                   theme:"You are the strategist and architect of legacy. Capricorn energy gives you exceptional discipline, long-term vision, and the patience to build empires methodically.",
+                   strengths:"Ambition, discipline, reliability, strategic thinking, leadership under pressure",
+                   challenges:"Workaholism, emotional suppression, difficulty asking for help, excessive self-criticism",
+                   shadow:"Success as compensation for unworthiness — Saturn's true lesson is that you are enough before the achievement",
+                   love:"You love through provision and protection — you need a partner who respects your ambition and matches your loyalty.",
+                   career:"Best in corporate, governmental, or legacy-building roles: CEO, politician, architect, project manager.",
+                   finance:"Natural wealth-accumulator; compound interest and blue-chip investments align with your patient nature." },
+    Aquarius:    { ruler:"Uranus/Saturn",quality:"Fixed",    polarity:"Positive", body:"Circulatory system",     gem:"Amethyst",  color:"Electric blue",day:"Saturday",
+                   theme:"You are the visionary and humanitarian. Aquarius energy gives you original thinking, a commitment to collective progress, and a natural ability to see the future before others do.",
+                   strengths:"Innovation, objectivity, humanitarian values, intellectual independence, community building",
+                   challenges:"Emotional detachment, contrarianism, difficulty with personal intimacy, unpredictability",
+                   shadow:"Rebellion as identity rather than purpose; true Aquarian power serves humanity, not just disrupts tradition",
+                   love:"You need a partner who is also a best friend — intellectual connection precedes emotional intimacy.",
+                   career:"Best in tech, social innovation, or future-focused fields: scientist, technologist, activist, futurist.",
+                   finance:"Unconventional earner; crypto, tech stocks, and disruptive industries align with your Uranian instinct." },
+    Pisces:      { ruler:"Neptune/Jupiter",quality:"Mutable",polarity:"Negative",body:"Feet & lymphatic system",gem:"Aquamarine",color:"Sea green",    day:"Thursday",
+                   theme:"You are the mystic and empath. Pisces energy gives you extraordinary imagination, spiritual sensitivity, and the ability to dissolve boundaries between self and other.",
+                   strengths:"Creativity, compassion, psychic sensitivity, artistic brilliance, spiritual depth",
+                   challenges:"Escapism, boundary diffusion, victim mentality, hypersensitivity to criticism",
+                   shadow:"Martyrdom as avoidance of personal power; Neptune calls you to channel dreams into form, not fantasy",
+                   love:"You love unconditionally and need a partner who grounds you while honoring your sensitivity.",
+                   career:"Best in creative, healing, or spiritual fields: artist, musician, healer, filmmaker, psychic.",
+                   finance:"Irregular income from creative work is common — build a practical financial structure so Neptune's fog doesn't cloud your security." }
+  };
 
-    // ── Western Astrology ────────────────────────────────────────────────────
-    const signData = {
-      Aries:       { ruler:"Mars", quality:"Cardinal", polarity:"Positive", body:"Head & face", gem:"Diamond", color:"Red", day:"Tuesday",
-                     theme:"You are a pioneer and initiator. Aries energy drives you to act first and reflect later — your courage opens doors others won't even knock on.",
-                     strengths:"Bold decision-making, infectious enthusiasm, natural leadership, raw courage",
-                     challenges:"Impatience, impulsiveness, difficulty finishing what you start",
-                     shadow:"Aggression when blocked; learn to channel Mars fire into discipline, not explosions",
-                     love:"You need a partner who matches your energy and won't try to tame you — chemistry must be electric.",
-                     career:"Best in roles with autonomy, urgency, and visible impact: entrepreneur, athlete, surgeon, military, emergency services.",
-                     finance:"You earn boldly but spend impulsively — build a forced savings structure so future-you benefits from present-you's drive." },
-      Taurus:      { ruler:"Venus", quality:"Fixed", polarity:"Negative", body:"Throat & neck", gem:"Emerald", color:"Green", day:"Friday",
-                     theme:"You are the builder and sustainer. Taurus energy gives you unmatched patience and a deep appreciation for beauty, comfort, and lasting quality.",
-                     strengths:"Reliability, sensory intelligence, financial instinct, loyalty, endurance",
-                     challenges:"Stubbornness, resistance to necessary change, materialism as emotional compensation",
-                     shadow:"Fear of loss creates hoarding or stagnation; true security is internal, not material",
-                     love:"You love deeply and need physical affection and consistency — betrayal is unforgivable to you.",
-                     career:"Best in roles requiring precision, aesthetics, or financial stewardship: chef, architect, banker, artist, land developer.",
-                     finance:"Natural wealth-builder — you thrive with long-term investments, real estate, and compound growth strategies." },
-      Gemini:      { ruler:"Mercury", quality:"Mutable", polarity:"Positive", body:"Lungs & hands", gem:"Agate", color:"Yellow", day:"Wednesday",
-                     theme:"You are the connector and communicator. Gemini energy makes you a natural bridge between ideas and people — your mind is your superpower.",
-                     strengths:"Adaptability, wit, intellectual curiosity, multi-tasking, social intelligence",
-                     challenges:"Scattered focus, inconsistency, anxiety from over-stimulation, surface-level relationships",
-                     shadow:"Avoidance of depth; the twin energy must eventually choose a path and commit",
-                     love:"You need mental stimulation above all — a partner who can surprise and challenge you intellectually.",
-                     career:"Best in fast-paced, varied environments: journalist, teacher, sales, marketing, programmer, social media strategist.",
-                     finance:"Income peaks when you leverage communication and networking; guard against impulse purchases during Mercury retrograde." },
-      Cancer:      { ruler:"Moon", quality:"Cardinal", polarity:"Negative", body:"Chest & stomach", gem:"Pearl", color:"Silver", day:"Monday",
-                     theme:"You are the nurturer and guardian. Cancer energy gives you profound emotional intelligence and the ability to make others feel genuinely at home.",
-                     strengths:"Empathy, intuition, memory, loyalty, ability to create safe spaces for others",
-                     challenges:"Moodiness linked to lunar cycles, over-attachment, difficulty letting go of the past",
-                     shadow:"Emotional manipulation when hurt; healing the inner child unlocks tremendous power",
-                     love:"Home, family, and emotional safety define love for you — you need a partner who values roots.",
-                     career:"Best in care-centered, creative, or legacy-building roles: therapist, chef, real estate, historian, social work, parenting.",
-                     finance:"Security-driven; you save instinctively but must avoid hoarding or fear-based financial paralysis." },
-      Leo:         { ruler:"Sun", quality:"Fixed", polarity:"Positive", body:"Heart & spine", gem:"Ruby", color:"Gold", day:"Sunday",
-                     theme:"You are the sovereign and creative force. Leo energy radiates warmth, magnetism, and an innate desire to inspire others through authentic self-expression.",
-                     strengths:"Confidence, generosity, creative brilliance, natural charisma, loyalty to loved ones",
-                     challenges:"Pride that blocks vulnerability, need for external validation, drama when unappreciated",
-                     shadow:"Ego protection hides a tender heart — true Leo strength is leading without needing applause",
-                     love:"You love passionately and need a partner who celebrates you — you give everything and expect devotion in return.",
-                     career:"Best in high-visibility roles: performer, CEO, creative director, politician, teacher, luxury brand specialist.",
-                     finance:"Generous spender; wealth grows when you align financial goals with your identity — invest in quality, not status." },
-      Virgo:       { ruler:"Mercury", quality:"Mutable", polarity:"Negative", body:"Digestive system", gem:"Sapphire", color:"Navy", day:"Wednesday",
-                     theme:"You are the analyst and craftsperson. Virgo energy gives you an extraordinary eye for detail, a service orientation, and a drive for continuous improvement.",
-                     strengths:"Precision, reliability, critical thinking, health awareness, practical problem-solving",
-                     challenges:"Perfectionism that delays action, over-criticism of self and others, difficulty trusting process",
-                     shadow:"Anxiety masked as productivity; the body keeps score — build rituals that calm the nervous system",
-                     love:"You show love through acts of service — you need a partner who notices the effort in your details.",
-                     career:"Best in analytical, health, or process-driven fields: analyst, doctor, nutritionist, editor, programmer, researcher.",
-                     finance:"Meticulous with money; build detailed budgets but avoid analysis paralysis when investing." },
-      Libra:       { ruler:"Venus", quality:"Cardinal", polarity:"Positive", body:"Kidneys & lower back", gem:"Opal", color:"Pink", day:"Friday",
-                     theme:"You are the diplomat and aesthete. Libra energy gives you a refined sense of beauty, a gift for fairness, and the ability to see all sides of any situation.",
-                     strengths:"Charm, objectivity, aesthetic intelligence, partnership skills, conflict mediation",
-                     challenges:"Indecisiveness, people-pleasing, difficulty asserting personal needs, relationship dependency",
-                     shadow:"Suppressed anger from chronic compromise; boundaries are an act of love, not selfishness",
-                     love:"Partnership is your life force — you thrive when fully committed to someone who mirrors your values.",
-                     career:"Best in roles requiring balance, beauty, or negotiation: lawyer, diplomat, designer, counselor, HR professional.",
-                     finance:"You may overspend on aesthetics and social experiences — budgeting for beauty keeps Venusian impulses sustainable." },
-      Scorpio:     { ruler:"Pluto/Mars", quality:"Fixed", polarity:"Negative", body:"Reproductive system", gem:"Topaz", color:"Crimson", day:"Tuesday",
-                     theme:"You are the transformer and truth-seeker. Scorpio energy gives you extraordinary depth, psychological insight, and the power to regenerate after any collapse.",
-                     strengths:"Intensity, resilience, perceptiveness, loyalty when trusted, investigative brilliance",
-                     challenges:"Jealousy, control issues, difficulty forgiving, intensity that overwhelms others",
-                     shadow:"Power used manipulatively; Pluto's true gift is using your own pain as fuel for others' healing",
-                     love:"You love with totality — you need complete honesty and emotional transparency, or you close off entirely.",
-                     career:"Best in high-stakes, research, or healing fields: investigator, surgeon, psychologist, strategist, occultist, forensics.",
-                     finance:"You have an instinct for hidden value — investments in transformation industries (tech, pharma, real estate) suit you." },
-      Sagittarius: { ruler:"Jupiter", quality:"Mutable", polarity:"Positive", body:"Hips & thighs", gem:"Turquoise", color:"Purple", day:"Thursday",
-                     theme:"You are the philosopher and explorer. Sagittarius energy drives you toward truth, adventure, and the continuous expansion of your mental and physical horizons.",
-                     strengths:"Optimism, wisdom, adventurousness, honesty, ability to inspire with big-picture thinking",
-                     challenges:"Overconfidence, tactless honesty, commitment avoidance, scattered goals",
-                     shadow:"Freedom as avoidance of depth; the archer must eventually aim at one target with full intention",
-                     love:"You need a partner who is also your travel companion and intellectual equal — freedom within commitment is essential.",
-                     career:"Best in roles involving travel, teaching, publishing, or law: professor, travel writer, spiritual teacher, coach, attorney.",
-                     finance:"Abundant but unpredictable income; Jupiter expands what you focus on — invest in education and knowledge assets." },
-      Capricorn:   { ruler:"Saturn", quality:"Cardinal", polarity:"Negative", body:"Bones & knees", gem:"Garnet", color:"Brown", day:"Saturday",
-                     theme:"You are the strategist and architect of legacy. Capricorn energy gives you exceptional discipline, long-term vision, and the patience to build empires methodically.",
-                     strengths:"Ambition, discipline, reliability, strategic thinking, leadership under pressure",
-                     challenges:"Workaholism, emotional suppression, difficulty asking for help, excessive self-criticism",
-                     shadow:"Success as compensation for unworthiness — Saturn's true lesson is that you are enough before the achievement",
-                     love:"You love through provision and protection — you need a partner who respects your ambition and matches your loyalty.",
-                     career:"Best in corporate, governmental, or legacy-building roles: CEO, politician, architect, project manager, financial planner.",
-                     finance:"Natural wealth-accumulator; compound interest and blue-chip investments align with your patient, disciplined nature." },
-      Aquarius:    { ruler:"Uranus/Saturn", quality:"Fixed", polarity:"Positive", body:"Circulatory system", gem:"Amethyst", color:"Electric blue", day:"Saturday",
-                     theme:"You are the visionary and humanitarian. Aquarius energy gives you original thinking, a commitment to collective progress, and a natural ability to see the future before others do.",
-                     strengths:"Innovation, objectivity, humanitarian values, intellectual independence, community building",
-                     challenges:"Emotional detachment, contrarianism, difficulty with personal intimacy, unpredictability",
-                     shadow:"Rebellion as identity rather than purpose; true Aquarian power serves humanity, not just disrupts tradition",
-                     love:"You need a partner who is also a best friend — intellectual connection precedes emotional intimacy.",
-                     career:"Best in tech, social innovation, or future-focused fields: scientist, technologist, activist, futurist, humanitarian NGO.",
-                     finance:"Unconventional earner; crypto, tech stocks, and disruptive industries align with your Uranian innovation instinct." },
-      Pisces:      { ruler:"Neptune/Jupiter", quality:"Mutable", polarity:"Negative", body:"Feet & lymphatic system", gem:"Aquamarine", color:"Sea green", day:"Thursday",
-                     theme:"You are the mystic and empath. Pisces energy gives you extraordinary imagination, spiritual sensitivity, and the ability to dissolve boundaries between self and other.",
-                     strengths:"Creativity, compassion, psychic sensitivity, artistic brilliance, spiritual depth",
-                     challenges:"Escapism, boundary diffusion, victim mentality, hypersensitivity to criticism",
-                     shadow:"Martyrdom as avoidance of personal power; Neptune calls you to channel dreams into form, not fantasy",
-                     love:"You love unconditionally and need a partner who grounds you while honoring your sensitivity and spiritual nature.",
-                     career:"Best in creative, healing, or spiritual fields: artist, musician, healer, filmmaker, psychic, addiction counselor.",
-                     finance:"Irregular income from creative work is common — build a practical financial structure so Neptune's fog doesn't cloud your security." }
-    };
+  const nakshatras = [
+    { name:"Ashwini",          deity:"Ashwini Kumaras", quality:"Swift healing, new beginnings, pioneering energy" },
+    { name:"Bharani",          deity:"Yama",            quality:"Transformation, creativity, carrying life's burdens with grace" },
+    { name:"Krittika",         deity:"Agni (Fire)",     quality:"Purification, sharp intellect, cutting through illusion" },
+    { name:"Rohini",           deity:"Brahma",          quality:"Creativity, beauty, growth, sensual abundance" },
+    { name:"Mrigashira",       deity:"Soma (Moon)",     quality:"Seeking, curiosity, gentle nature, eternal search for beauty" },
+    { name:"Ardra",            deity:"Rudra",           quality:"Storm energy, transformation through destruction, scientific mind" },
+    { name:"Punarvasu",        deity:"Aditi",           quality:"Renewal, restoration, philosophical optimism, abundance" },
+    { name:"Pushya",           deity:"Brihaspati",      quality:"Nourishment, spiritual wisdom, nurturing leadership" },
+    { name:"Ashlesha",         deity:"Nagas (Serpents)",quality:"Penetrating intuition, mystical power, healing through shadow" },
+    { name:"Magha",            deity:"Pitris (Ancestors)",quality:"Royal nature, ancestral gifts, leadership, past-life karma" },
+    { name:"Purva Phalguni",   deity:"Bhaga",           quality:"Creative pleasure, romance, artistry, rest and rejuvenation" },
+    { name:"Uttara Phalguni",  deity:"Aryaman",         quality:"Service, partnerships, social responsibility, patronage" },
+    { name:"Hasta",            deity:"Savitar (Sun)",   quality:"Craftsmanship, healing hands, practicality, wit" },
+    { name:"Chitra",           deity:"Vishwakarma",     quality:"Artistic vision, architectural brilliance, multifaceted talent" },
+    { name:"Swati",            deity:"Vayu (Wind)",     quality:"Independence, flexibility, business acumen, spiritual seeking" },
+    { name:"Vishakha",         deity:"Indra & Agni",    quality:"Goal-oriented intensity, transformation, harvest after patience" },
+    { name:"Anuradha",         deity:"Mitra",           quality:"Devotion, friendship, organizational ability, occult knowledge" },
+    { name:"Jyeshtha",         deity:"Indra",           quality:"Authority, protective instinct, seniority, occult power" },
+    { name:"Mula",             deity:"Nirriti",         quality:"Root investigation, dissolution of the false, raw transformative truth" },
+    { name:"Purva Ashadha",    deity:"Apas (Water)",    quality:"Invincibility, purification, philosophical depth, early victory" },
+    { name:"Uttara Ashadha",   deity:"Vishvedevas",     quality:"Final victory, universal principles, unchallengeable achievement" },
+    { name:"Shravana",         deity:"Vishnu",          quality:"Learning, listening, connecting wisdom traditions, preservation" },
+    { name:"Dhanishtha",       deity:"Eight Vasus",     quality:"Wealth, music, community, abundance through discipline" },
+    { name:"Shatabhisha",      deity:"Varuna",          quality:"Healing, independence, mystical knowledge, cosmic law" },
+    { name:"Purva Bhadrapada", deity:"Aja Ekapada",     quality:"Fiery transformation, idealism, two-sided nature" },
+    { name:"Uttara Bhadrapada",deity:"Ahir Budhnya",    quality:"Depth, wisdom, serpentine power, rain of abundance" },
+    { name:"Revati",           deity:"Pushan",          quality:"Completion, safe journeys, compassion, nourishing others" }
+  ];
 
-    // ── Vedic Astrology (Moon Sign / Nakshatra / Dasha approximation) ────────
-    const vedicMoonSign = (dob) => {
-      const d = new Date(dob + "T00:00:00");
-      const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
-      const moonSigns = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
-      // Moon moves ~1 sign per 2.3 days — approximation using birth date seed
-      return moonSigns[Math.floor((dayOfYear * 13.1) / 30) % 12];
-    };
-    const nakshatras = [
-      { name:"Ashwini", deity:"Ashwini Kumaras", quality:"Swift healing, new beginnings, pioneering energy" },
-      { name:"Bharani", deity:"Yama", quality:"Transformation, creativity, carrying life's burdens with grace" },
-      { name:"Krittika", deity:"Agni (Fire)", quality:"Purification, sharp intellect, cutting through illusion" },
-      { name:"Rohini", deity:"Brahma", quality:"Creativity, beauty, growth, sensual abundance" },
-      { name:"Mrigashira", deity:"Soma (Moon)", quality:"Seeking, curiosity, gentle nature, eternal search for beauty" },
-      { name:"Ardra", deity:"Rudra", quality:"Storm energy, transformation through destruction, scientific mind" },
-      { name:"Punarvasu", deity:"Aditi", quality:"Renewal, restoration, philosophical optimism, abundance" },
-      { name:"Pushya", deity:"Brihaspati", quality:"Nourishment, spiritual wisdom, nurturing leadership" },
-      { name:"Ashlesha", deity:"Nagas (Serpents)", quality:"Penetrating intuition, mystical power, healing through shadow" },
-      { name:"Magha", deity:"Pitris (Ancestors)", quality:"Royal nature, ancestral gifts, leadership, past-life karma" },
-      { name:"Purva Phalguni", deity:"Bhaga", quality:"Creative pleasure, romance, artistry, rest and rejuvenation" },
-      { name:"Uttara Phalguni", deity:"Aryaman", quality:"Service, partnerships, social responsibility, patronage" },
-      { name:"Hasta", deity:"Savitar (Sun)", quality:"Craftsmanship, healing hands, practicality, wit" },
-      { name:"Chitra", deity:"Vishwakarma", quality:"Artistic vision, architectural brilliance, multifaceted talent" },
-      { name:"Swati", deity:"Vayu (Wind)", quality:"Independence, flexibility, business acumen, spiritual seeking" },
-      { name:"Vishakha", deity:"Indra & Agni", quality:"Goal-oriented intensity, transformation, harvest after patience" },
-      { name:"Anuradha", deity:"Mitra", quality:"Devotion, friendship, organizational ability, occult knowledge" },
-      { name:"Jyeshtha", deity:"Indra", quality:"Authority, protective instinct, seniority, occult power" },
-      { name:"Mula", deity:"Nirriti", quality:"Root investigation, dissolution of the false, raw transformative truth" },
-      { name:"Purva Ashadha", deity:"Apas (Water)", quality:"Invincibility, purification, philosophical depth, early victory" },
-      { name:"Uttara Ashadha", deity:"Vishvedevas", quality:"Final victory, universal principles, unchallengeable achievement" },
-      { name:"Shravana", deity:"Vishnu", quality:"Learning, listening, connecting wisdom traditions, preservation" },
-      { name:"Dhanishtha", deity:"Eight Vasus", quality:"Wealth, music, community, abundance through discipline" },
-      { name:"Shatabhisha", deity:"Varuna", quality:"Healing, independence, mystical knowledge, cosmic law" },
-      { name:"Purva Bhadrapada", deity:"Aja Ekapada", quality:"Fiery transformation, idealism, two-sided nature" },
-      { name:"Uttara Bhadrapada", deity:"Ahir Budhnya", quality:"Depth, wisdom, serpentine power, rain of abundance" },
-      { name:"Revati", deity:"Pushan", quality:"Completion, safe journeys, compassion, nourishing others" }
-    ];
-    const getNakshatra = (dob) => {
-      const d = new Date(dob + "T00:00:00");
-      const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
-      return nakshatras[Math.floor((dayOfYear * 27) / 365) % 27];
-    };
-    const vedicDashaLord = (dob) => {
-      const d = new Date(dob + "T00:00:00");
-      const lords = ["Sun","Moon","Mars","Rahu","Jupiter","Saturn","Mercury","Ketu","Venus"];
-      const idx = (d.getDate() + d.getMonth()) % lords.length;
-      return lords[idx];
-    };
-    const dashaThemes = {
-      Sun:"authority, self-expression, and recognition — career peaks and identity consolidation",
-      Moon:"emotional depth, home, nurturing relationships, and inner healing",
-      Mars:"action, ambition, courage, and overcoming obstacles through bold moves",
-      Rahu:"rapid material expansion, unconventional paths, foreign connections, and karmic acceleration",
-      Jupiter:"wisdom, expansion, higher education, spiritual growth, and fortunate opportunities",
-      Saturn:"discipline, karma, hard work, restructuring, and building lasting foundations",
-      Mercury:"communication, commerce, learning, adaptability, and intellectual mastery",
-      Ketu:"spiritual detachment, past-life resolution, psychic sensitivity, and inner liberation",
-      Venus:"love, creativity, sensual pleasure, artistic success, and material comfort"
-    };
+  const vedicMoonSign = (dob) => {
+    const d = new Date(dob + "T00:00:00");
+    const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+    return signNames[Math.floor((dayOfYear * 13.1) / 30) % 12];
+  };
+  const getNakshatra = (dob) => {
+    const d = new Date(dob + "T00:00:00");
+    const dayOfYear = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+    return nakshatras[Math.floor((dayOfYear * 27) / 365) % 27];
+  };
+  const dashaThemes = {
+    Sun:"authority, self-expression, and recognition — career peaks and identity consolidation",
+    Moon:"emotional depth, home, nurturing relationships, and inner healing",
+    Mars:"action, ambition, courage, and overcoming obstacles through bold moves",
+    Rahu:"rapid material expansion, unconventional paths, foreign connections, and karmic acceleration",
+    Jupiter:"wisdom, expansion, higher education, spiritual growth, and fortunate opportunities",
+    Saturn:"discipline, karma, hard work, restructuring, and building lasting foundations",
+    Mercury:"communication, commerce, learning, adaptability, and intellectual mastery",
+    Ketu:"spiritual detachment, past-life resolution, psychic sensitivity, and inner liberation",
+    Venus:"love, creativity, sensual pleasure, artistic success, and material comfort"
+  };
 
-    // ── Chinese Astrology ─────────────────────────────────────────────────────
-    const chineseZodiac = (year) => {
-      const signs = ["Monkey","Rooster","Dog","Pig","Rat","Ox","Tiger","Rabbit","Dragon","Snake","Horse","Goat"];
-      return signs[year % 12];
-    };
-    const chineseElement = (year) => {
-      const els = ["Metal","Metal","Water","Water","Wood","Wood","Fire","Fire","Earth","Earth"];
-      return els[year % 10];
-    };
-    const chineseData = {
-      Rat:     { nature:"Intelligent, resourceful, charming, opportunistic. Born in a Rat year, you are quick-witted and thrive in complex environments." },
-      Ox:      { nature:"Dependable, methodical, strong-willed, and patient. Ox energy gives you the endurance to outlast every obstacle." },
-      Tiger:   { nature:"Brave, competitive, unpredictable, and magnetic. You lead with instinct and inspire loyalty through sheer presence." },
-      Rabbit:  { nature:"Gracious, kind, artistic, and cautious. You navigate life with elegance and a gift for diplomacy." },
-      Dragon:  { nature:"Vibrant, courageous, confident, and lucky. Born under the Dragon, you carry an aura of destiny and natural power." },
-      Snake:   { nature:"Wise, intuitive, elegant, and intensely private. Snake people trust their gut and rarely reveal their full hand." },
-      Horse:   { nature:"Energetic, free-spirited, passionate, and independent. You are happiest in motion — routine is your enemy." },
-      Goat:    { nature:"Creative, gentle, compassionate, and artistic. You have deep inner reserves of empathy and aesthetic sensitivity." },
-      Monkey:  { nature:"Clever, curious, inventive, and mischievous. Your mind moves faster than most — adaptability is your greatest asset." },
-      Rooster: { nature:"Observant, hardworking, confident, and perfectionistic. You have high standards and the discipline to meet them." },
-      Dog:     { nature:"Loyal, honest, diligent, and straightforward. You are the most trustworthy sign — your word is your bond." },
-      Pig:     { nature:"Sincere, generous, indulgent, and compassionate. You approach life with big-heartedness and a love of the good life." }
-    };
-    const chineseElementData = {
-      Metal:  "Metal energy adds determination, righteousness, and a sharp strategic mind to your chart.",
-      Water:  "Water element brings fluidity, creativity, communication gifts, and emotional intelligence.",
-      Wood:   "Wood element brings growth energy, idealism, compassion, and a pioneering drive.",
-      Fire:   "Fire element adds charisma, passion, leadership, and a dynamic transformative force.",
-      Earth:  "Earth element grounds your chart with practicality, reliability, and wealth-building power."
-    };
+  const chineseZodiac = (year) => {
+    const signs = ["Monkey","Rooster","Dog","Pig","Rat","Ox","Tiger","Rabbit","Dragon","Snake","Horse","Goat"];
+    return signs[year % 12];
+  };
+  const chineseElement = (year) => {
+    const els = ["Metal","Metal","Water","Water","Wood","Wood","Fire","Fire","Earth","Earth"];
+    return els[year % 10];
+  };
+  const chineseData = {
+    Rat:     { nature:"Intelligent, resourceful, charming, opportunistic. Born in a Rat year, you are quick-witted and thrive in complex environments." },
+    Ox:      { nature:"Dependable, methodical, strong-willed, and patient. Ox energy gives you the endurance to outlast every obstacle." },
+    Tiger:   { nature:"Brave, competitive, unpredictable, and magnetic. You lead with instinct and inspire loyalty through sheer presence." },
+    Rabbit:  { nature:"Gracious, kind, artistic, and cautious. You navigate life with elegance and a gift for diplomacy." },
+    Dragon:  { nature:"Vibrant, courageous, confident, and lucky. Born under the Dragon, you carry an aura of destiny and natural power." },
+    Snake:   { nature:"Wise, intuitive, elegant, and intensely private. Snake people trust their gut and rarely reveal their full hand." },
+    Horse:   { nature:"Energetic, free-spirited, passionate, and independent. You are happiest in motion — routine is your enemy." },
+    Goat:    { nature:"Creative, gentle, compassionate, and artistic. You have deep inner reserves of empathy and aesthetic sensitivity." },
+    Monkey:  { nature:"Clever, curious, inventive, and mischievous. Your mind moves faster than most — adaptability is your greatest asset." },
+    Rooster: { nature:"Observant, hardworking, confident, and perfectionistic. You have high standards and the discipline to meet them." },
+    Dog:     { nature:"Loyal, honest, diligent, and straightforward. You are the most trustworthy sign — your word is your bond." },
+    Pig:     { nature:"Sincere, generous, indulgent, and compassionate. You approach life with big-heartedness and a love of the good life." }
+  };
+  const chineseElementData = {
+    Metal:"Metal energy adds determination, righteousness, and a sharp strategic mind to your chart.",
+    Water:"Water element brings fluidity, creativity, communication gifts, and emotional intelligence.",
+    Wood:"Wood element brings growth energy, idealism, compassion, and a pioneering drive.",
+    Fire:"Fire element adds charisma, passion, leadership, and a dynamic transformative force.",
+    Earth:"Earth element grounds your chart with practicality, reliability, and wealth-building power."
+  };
 
-    // ── Numerology ────────────────────────────────────────────────────────────
-    const lifePathMeanings = {
-      1:  { title:"The Leader",       theme:"Independence, originality, and pioneering courage. You are here to forge new paths, not follow them.",
-            career:"Best as founder, entrepreneur, innovator, or trailblazer in any field.",
-            love:"You need a partner who celebrates your independence without competing with it.",
-            challenge:"Avoid isolation — your greatest growth comes through collaborative leadership." },
-      2:  { title:"The Peacemaker",   theme:"Cooperation, intuition, and deep sensitivity. You are the most powerful force in any room precisely because you listen.",
-            career:"Best in diplomacy, counseling, partnerships, music, and collaborative creative work.",
-            love:"Partnership is your life's central theme — you are at your best when deeply bonded.",
-            challenge:"Avoid self-erasure in relationships; your needs are equally valid." },
-      3:  { title:"The Creator",      theme:"Joy, creativity, and expressive communication. You are here to bring beauty and laughter into the world.",
-            career:"Best in writing, performance, design, teaching, and any role requiring creative expression.",
-            love:"You need lightness and play in love — a partner who makes life feel like an adventure.",
-            challenge:"Develop follow-through; scattered creativity without discipline loses its power." },
-      4:  { title:"The Builder",      theme:"Order, stability, and methodical achievement. You are the architect of lasting systems and reliable structures.",
-            career:"Best in engineering, finance, project management, law, and any field requiring precision.",
-            love:"You show love through loyalty and practical support — you need a partner who values reliability.",
-            challenge:"Guard against rigidity; life's greatest gifts often arrive off-schedule." },
-      5:  { title:"The Free Spirit",  theme:"Freedom, adventure, and sensory experience. You are here to explore every dimension of human experience.",
-            career:"Best in travel, journalism, entrepreneurship, sales, and any dynamic, ever-changing role.",
-            love:"You need freedom within commitment — a partner who trusts you enough to let you roam.",
-            challenge:"Develop healthy routines; the body and relationships need consistency to thrive." },
-      6:  { title:"The Nurturer",     theme:"Responsibility, healing, and unconditional love. You carry the gift of creating harmony wherever you go.",
-            career:"Best in healing, education, counseling, design, hospitality, and community leadership.",
-            love:"Home and family are your sacred space — you give deeply and need someone who reciprocates.",
-            challenge:"Avoid martyrdom; you cannot pour from an empty vessel." },
-      7:  { title:"The Seeker",       theme:"Analysis, spiritual depth, and the pursuit of hidden truth. You are here to question, investigate, and illuminate.",
-            career:"Best in research, philosophy, science, spirituality, writing, and technical mastery.",
-            love:"You need intellectual and spiritual resonance — surface connection leaves you cold.",
-            challenge:"Open to receiving; your introversion protects but also isolates." },
-      8:  { title:"The Powerhouse",   theme:"Abundance, authority, and material mastery. You are here to build, lead, and demonstrate that spiritual and material success are not opposites.",
-            career:"Best in business, finance, real estate, executive leadership, and large-scale management.",
-            love:"You need a partner who respects your ambition and shares your work ethic.",
-            challenge:"Guard against workaholism and the illusion that worth equals net worth." },
-      9:  { title:"The Humanitarian", theme:"Completion, compassion, and universal service. You carry the accumulated wisdom of all previous numbers.",
-            career:"Best in the arts, humanitarian work, education, spiritual leadership, and healing.",
-            love:"You love humanity — in romantic love, you need someone who understands your vast heart.",
-            challenge:"Release attachment to outcomes; your role is planting seeds, not controlling harvests." },
-      11: { title:"The Illuminator",  theme:"Spiritual inspiration, intuition, and the gift of vision. You are a Master Number — here to channel higher consciousness into practical form.",
-            career:"Best as spiritual teacher, visionary artist, counselor, or innovator bridging mystical and material worlds.",
-            love:"You need a deeply conscious partner who honors your sensitivity and depth.",
-            challenge:"Ground your visions; brilliance without structure remains inspiration only." },
-      22: { title:"The Master Builder",theme:"Building on the grandest scale — Master Number 22 combines vision with discipline to create lasting change for the world.",
-            career:"Best as architect of large systems: global leader, large-scale entrepreneur, humanitarian engineer.",
-            love:"Your mission is enormous — you need a partner who is your equal and your anchor.",
-            challenge:"Avoid being crushed by the weight of your own potential; start small, build big." },
-      33: { title:"The Master Teacher",theme:"The highest Master Number — pure compassion and teaching. You are here to uplift collective consciousness.",
-            career:"Best as healer, spiritual leader, master artist, or transformational educator.",
-            love:"Your love is universal — in romance, you need a partner who shares your devotion to service.",
-            challenge:"Personal needs are not selfish — you cannot teach what you have not lived." }
-    };
-    const expressionNumber = (name) => {
-      if (!name) return null;
-      const map = {a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9,j:1,k:2,l:3,m:4,n:5,o:6,p:7,q:8,r:9,s:1,t:2,u:3,v:4,w:5,x:6,y:7,z:8};
-      let sum = name.toLowerCase().replace(/[^a-z]/g,"").split("").reduce((a,c) => a + (map[c]||0), 0);
-      while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) sum = String(sum).split("").reduce((a,b) => a + Number(b), 0);
-      return sum;
-    };
-    const personalYearThemes = {
-      1:"New beginnings, fresh starts, planting seeds — this is a year to initiate boldly.",
-      2:"Patience and partnership — relationships and collaborations take centre stage.",
-      3:"Creative expression and social expansion — let joy lead the way.",
-      4:"Hard work and foundation-building — discipline now pays dividends for years.",
-      5:"Change, freedom, and unexpected opportunities — stay adaptable.",
-      6:"Responsibility and healing — home, family, and service are your priorities.",
-      7:"Inner reflection, spiritual growth, and deepening knowledge — go inward.",
-      8:"Abundance and authority — career ambitions and financial goals accelerate.",
-      9:"Completion and release — clear what no longer serves to prepare for the next cycle.",
-      11:"Master year of spiritual awakening and heightened intuition.",
-      22:"Master year of large-scale building and collective impact."
-    };
+  const lifePathMeanings = {
+    1:  { title:"The Leader",        theme:"Independence, originality, and pioneering courage. You are here to forge new paths, not follow them.", career:"Best as founder, entrepreneur, innovator, or trailblazer in any field.", love:"You need a partner who celebrates your independence without competing with it.", challenge:"Avoid isolation — your greatest growth comes through collaborative leadership." },
+    2:  { title:"The Peacemaker",    theme:"Cooperation, intuition, and deep sensitivity. You are the most powerful force in any room precisely because you listen.", career:"Best in diplomacy, counseling, partnerships, music, and collaborative creative work.", love:"Partnership is your life's central theme — you are at your best when deeply bonded.", challenge:"Avoid self-erasure in relationships; your needs are equally valid." },
+    3:  { title:"The Creator",       theme:"Joy, creativity, and expressive communication. You are here to bring beauty and laughter into the world.", career:"Best in writing, performance, design, teaching, and any role requiring creative expression.", love:"You need lightness and play in love — a partner who makes life feel like an adventure.", challenge:"Develop follow-through; scattered creativity without discipline loses its power." },
+    4:  { title:"The Builder",       theme:"Order, stability, and methodical achievement. You are the architect of lasting systems and reliable structures.", career:"Best in engineering, finance, project management, law, and any field requiring precision.", love:"You show love through loyalty and practical support — you need a partner who values reliability.", challenge:"Guard against rigidity; life's greatest gifts often arrive off-schedule." },
+    5:  { title:"The Free Spirit",   theme:"Freedom, adventure, and sensory experience. You are here to explore every dimension of human experience.", career:"Best in travel, journalism, entrepreneurship, sales, and any dynamic, ever-changing role.", love:"You need freedom within commitment — a partner who trusts you enough to let you roam.", challenge:"Develop healthy routines; the body and relationships need consistency to thrive." },
+    6:  { title:"The Nurturer",      theme:"Responsibility, healing, and unconditional love. You carry the gift of creating harmony wherever you go.", career:"Best in healing, education, counseling, design, hospitality, and community leadership.", love:"Home and family are your sacred space — you give deeply and need someone who reciprocates.", challenge:"Avoid martyrdom; you cannot pour from an empty vessel." },
+    7:  { title:"The Seeker",        theme:"Analysis, spiritual depth, and the pursuit of hidden truth. You are here to question, investigate, and illuminate.", career:"Best in research, philosophy, science, spirituality, writing, and technical mastery.", love:"You need intellectual and spiritual resonance — surface connection leaves you cold.", challenge:"Open to receiving; your introversion protects but also isolates." },
+    8:  { title:"The Powerhouse",    theme:"Abundance, authority, and material mastery. You are here to build, lead, and demonstrate that spiritual and material success are not opposites.", career:"Best in business, finance, real estate, executive leadership, and large-scale management.", love:"You need a partner who respects your ambition and shares your work ethic.", challenge:"Guard against workaholism and the illusion that worth equals net worth." },
+    9:  { title:"The Humanitarian",  theme:"Completion, compassion, and universal service. You carry the accumulated wisdom of all previous numbers.", career:"Best in the arts, humanitarian work, education, spiritual leadership, and healing.", love:"You love humanity — in romantic love, you need someone who understands your vast heart.", challenge:"Release attachment to outcomes; your role is planting seeds, not controlling harvests." },
+    11: { title:"The Illuminator",   theme:"Spiritual inspiration, intuition, and the gift of vision. You are a Master Number — here to channel higher consciousness into practical form.", career:"Best as spiritual teacher, visionary artist, counselor, or innovator bridging mystical and material worlds.", love:"You need a deeply conscious partner who honors your sensitivity and depth.", challenge:"Ground your visions; brilliance without structure remains inspiration only." },
+    22: { title:"The Master Builder",theme:"Building on the grandest scale — Master Number 22 combines vision with discipline to create lasting change for the world.", career:"Best as architect of large systems: global leader, large-scale entrepreneur, humanitarian engineer.", love:"Your mission is enormous — you need a partner who is your equal and your anchor.", challenge:"Avoid being crushed by the weight of your own potential; start small, build big." },
+    33: { title:"The Master Teacher",theme:"The highest Master Number — pure compassion and teaching. You are here to uplift collective consciousness.", career:"Best as healer, spiritual leader, master artist, or transformational educator.", love:"Your love is universal — in romance, you need a partner who shares your devotion to service.", challenge:"Personal needs are not selfish — you cannot teach what you have not lived." }
+  };
 
-    // ── Tarot Birth Card ───────────────────────────────────────────────────────
-    const tarotBirthCard = (lifePath) => {
-      const cards = {
-        1:"The Magician — you have all the tools; your power lies in focused will and intentional creation.",
-        2:"The High Priestess — you hold deep mystery; trust your intuition over external noise.",
-        3:"The Empress — abundance, creativity, and sensual vitality are your birthright.",
-        4:"The Emperor — structure, authority, and the discipline to build lasting legacy.",
-        5:"The Hierophant — tradition, spiritual teaching, and finding wisdom in established systems.",
-        6:"The Lovers — choice, values alignment, and the power of deep conscious partnership.",
-        7:"The Chariot — willpower, direction, and victory through discipline and focus.",
-        8:"Strength — inner courage, patience with the shadow, and compassionate power.",
-        9:"The Hermit — solitary wisdom, inner lantern, guiding others through your own truth.",
-        11:"Justice — karma, fairness, and the call to align action with truth.",
-        22:"The Fool — infinite potential, sacred beginnings, trusting the cosmic leap."
-      };
-      return cards[lifePath] || cards[9];
-    };
+  const tarotBirthCard = (lp) => {
+    const cards = {1:"The Magician — you have all the tools; your power lies in focused will and intentional creation.",2:"The High Priestess — you hold deep mystery; trust your intuition over external noise.",3:"The Empress — abundance, creativity, and sensual vitality are your birthright.",4:"The Emperor — structure, authority, and the discipline to build lasting legacy.",5:"The Hierophant — tradition, spiritual teaching, and finding wisdom in established systems.",6:"The Lovers — choice, values alignment, and the power of deep conscious partnership.",7:"The Chariot — willpower, direction, and victory through discipline and focus.",8:"Strength — inner courage, patience with the shadow, and compassionate power.",9:"The Hermit — solitary wisdom, inner lantern, guiding others through your own truth.",11:"Justice — karma, fairness, and the call to align action with truth.",22:"The Fool — infinite potential, sacred beginnings, trusting the cosmic leap."};
+    return cards[lp] || cards[9];
+  };
 
-    // ── Celtic / Druidic Tree Sign ─────────────────────────────────────────────
-    const celticTree = (dob) => {
-      const d = new Date(dob + "T00:00:00");
-      const m = d.getMonth() + 1;
-      const day = d.getDate();
-      if ((m===12&&day>=24)||(m===1&&day<=20)) return {tree:"Birch",quality:"Ambitious, driven, highly capable — born at the darkest point of the year, you carry the light of new beginnings."};
-      if ((m===1&&day>=21)||(m===2&&day<=17)) return {tree:"Rowan",quality:"Visionary and protective — your insight shields others from chaos."};
-      if ((m===2&&day>=18)||(m===3&&day<=17)) return {tree:"Ash",quality:"Enchanted and imaginative — you bridge the inner and outer worlds."};
-      if ((m===3&&day>=18)||(m===4&&day<=14)) return {tree:"Alder",quality:"Trailblazing and confident — you forge paths through unexplored territory."};
-      if ((m===4&&day>=15)||(m===5&&day<=12)) return {tree:"Willow",quality:"Intuitive and connected to cycles — you understand mystery and the rhythm of nature."};
-      if ((m===5&&day>=13)||(m===6&&day<=9))  return {tree:"Hawthorn",quality:"Illusory and unique — what you appear to be and what you are rarely match."};
-      if ((m===6&&day>=10)||(m===7&&day<=7))  return {tree:"Oak",quality:"Nurturing and protective — a natural guardian with extraordinary strength."};
-      if ((m===7&&day>=8)||(m===8&&day<=4))   return {tree:"Holly",quality:"Noble and competitive — you take on challenges that others avoid."};
-      if ((m===8&&day>=5)||(m===9&&day<=1))   return {tree:"Hazel",quality:"Artistic and knowledgeable — a natural teacher with a gift for creative communication."};
-      if ((m===9&&day>=2)||(m===9&&day<=29))  return {tree:"Vine",quality:"Unpredictable and empathetic — you see both sides of every situation."};
-      if ((m===9&&day>=30)||(m===10&&day<=27)) return {tree:"Ivy",quality:"Resilient and loyal — you survive what would break others."};
-      if ((m===10&&day>=28)||(m===11&&day<=24)) return {tree:"Reed",quality:"Purposeful and complex — you unearth hidden truths."};
-      return {tree:"Elder",quality:"Deeply wise and transformative — a natural healer who has earned wisdom through experience."};
-    };
+  const celticTree = (dob) => {
+    const d = new Date(dob + "T00:00:00"); const m = d.getMonth() + 1; const day = d.getDate();
+    if ((m===12&&day>=24)||(m===1&&day<=20)) return {tree:"Birch",quality:"Ambitious, driven, highly capable — born at the darkest point of the year, you carry the light of new beginnings."};
+    if ((m===1&&day>=21)||(m===2&&day<=17)) return {tree:"Rowan",quality:"Visionary and protective — your insight shields others from chaos."};
+    if ((m===2&&day>=18)||(m===3&&day<=17)) return {tree:"Ash",quality:"Enchanted and imaginative — you bridge the inner and outer worlds."};
+    if ((m===3&&day>=18)||(m===4&&day<=14)) return {tree:"Alder",quality:"Trailblazing and confident — you forge paths through unexplored territory."};
+    if ((m===4&&day>=15)||(m===5&&day<=12)) return {tree:"Willow",quality:"Intuitive and connected to cycles — you understand mystery and the rhythm of nature."};
+    if ((m===5&&day>=13)||(m===6&&day<=9))  return {tree:"Hawthorn",quality:"Illusory and unique — what you appear to be and what you are rarely match."};
+    if ((m===6&&day>=10)||(m===7&&day<=7))  return {tree:"Oak",quality:"Nurturing and protective — a natural guardian with extraordinary strength."};
+    if ((m===7&&day>=8)||(m===8&&day<=4))   return {tree:"Holly",quality:"Noble and competitive — you take on challenges that others avoid."};
+    if ((m===8&&day>=5)||(m===9&&day<=1))   return {tree:"Hazel",quality:"Artistic and knowledgeable — a natural teacher with a gift for creative communication."};
+    if ((m===9&&day>=2)||(m===9&&day<=29))  return {tree:"Vine",quality:"Unpredictable and empathetic — you see both sides of every situation."};
+    if ((m===9&&day>=30)||(m===10&&day<=27))return {tree:"Ivy",quality:"Resilient and loyal — you survive what would break others."};
+    if ((m===10&&day>=28)||(m===11&&day<=24)) return {tree:"Reed",quality:"Purposeful and complex — you unearth hidden truths."};
+    return {tree:"Elder",quality:"Deeply wise and transformative — a natural healer who has earned wisdom through experience."};
+  };
 
-    // ── Active State & Profile Storage ────────────────────────────────────────
-    const activeTabState = { tab: "events", payload: null, reading: null };
-    const PROFILE_STORE_KEY = "astroProfilesV1";
-    let activeProfileId = "";
+  const personalYearThemes = {1:"New beginnings, fresh starts, planting seeds — this is a year to initiate boldly.",2:"Patience and partnership — relationships and collaborations take centre stage.",3:"Creative expression and social expansion — let joy lead the way.",4:"Hard work and foundation-building — discipline now pays dividends for years.",5:"Change, freedom, and unexpected opportunities — stay adaptable.",6:"Responsibility and healing — home, family, and service are your priorities.",7:"Inner reflection, spiritual growth, and deepening knowledge — go inward.",8:"Abundance and authority — career ambitions and financial goals accelerate.",9:"Completion and release — clear what no longer serves to prepare for the next cycle.",11:"Master year of spiritual awakening and heightened intuition.",22:"Master year of large-scale building and collective impact."};
 
-    const nameEl = document.getElementById("name");
-    const dobEl = document.getElementById("dob");
-    const birthTimeEl = document.getElementById("birthTime");
-    const placeEl = document.getElementById("place");
-    const generateBtn = document.getElementById("generateBtn");
-    const sampleBtn = document.getElementById("sampleBtn");
-    const resultEl = document.getElementById("result");
-    const chipsEl = document.getElementById("detailChips");
-    const readingEl = document.getElementById("reading");
-    const errorEl = document.getElementById("errorText");
-    const rangeSelectEl = document.getElementById("rangeSelect");
-    const tabContentEl = document.getElementById("tabContent");
-    const tabButtons = [...document.querySelectorAll(".tab-btn")];
-    const themeSelectEl = document.getElementById("themeSelect");
-    const upcomingDatesBoxEl = document.getElementById("upcomingDatesBox");
-    const profileSelectEl = document.getElementById("profileSelect");
-    const saveProfileBtn = document.getElementById("saveProfileBtn");
-    const deleteProfileBtn = document.getElementById("deleteProfileBtn");
-    const newProfileBtn = document.getElementById("newProfileBtn");
-    const statusTextEl = document.getElementById("statusText");
-    const privacyModeEl = document.getElementById("privacyMode");
-    const toggleSensitiveBtn = document.getElementById("toggleSensitiveBtn");
-    let showSensitiveInputs = false;
+  // ─────────────────────────────────────────────────────────────────────────────
+  // HELPER FUNCTIONS
+  // ─────────────────────────────────────────────────────────────────────────────
+  const safeNum = (v) => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
+  const toIntHash = (text) => { let h = 0; for (let i = 0; i < text.length; i++) h = ((h << 5) - h + text.charCodeAt(i)) | 0; return Math.abs(h); };
 
-    const setStatus = (m) => { statusTextEl.textContent = m; };
-    const toIntHash = (text) => { let h = 0; for (let i = 0; i < text.length; i += 1) h = ((h << 5) - h + text.charCodeAt(i)) | 0; return Math.abs(h); };
-    const safeNum = (v) => { const n = Number(v); return Number.isFinite(n) ? n : 0; };
-    function isValidIsoDate(isoDate) {
-      if (!/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) return false;
-      const [y, m, d] = isoDate.split("-").map((n) => Number(n));
-      if (m < 1 || m > 12 || d < 1 || d > 31) return false;
-      const test = new Date(isoDate + "T00:00:00");
-      return !Number.isNaN(test.getTime()) &&
-        test.getFullYear() === y &&
-        (test.getMonth() + 1) === m &&
-        test.getDate() === d;
+  function getZodiacSign(dateObj) {
+    const month = dateObj.getMonth() + 1, day = dateObj.getDate();
+    for (const [sign,[sm,sd],[em,ed]] of zodiacRanges) {
+      if ((month > sm || (month === sm && day >= sd)) && (month < em || (month === em && day <= ed))) return sign;
     }
-    function normalizeDob(rawDob) {
-      const value = (rawDob || "").trim();
-      if (!value) return "";
-      if (/^\d{4}-\d{2}-\d{2}$/.test(value)) return isValidIsoDate(value) ? value : "";
-
-      const ymdSlash = value.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
-      if (ymdSlash) {
-        const yy = ymdSlash[1];
-        const mm = String(Number(ymdSlash[2])).padStart(2, "0");
-        const dd = String(Number(ymdSlash[3])).padStart(2, "0");
-        return yy + "-" + mm + "-" + dd;
-      }
-
-      const mdySlash = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-      if (mdySlash) {
-        const a = Number(mdySlash[1]);
-        const b = Number(mdySlash[2]);
-        const yyyy = mdySlash[3];
-        // Accept both MM/DD/YYYY and DD/MM/YYYY intelligently.
-        const asMdy = yyyy + "-" + String(a).padStart(2, "0") + "-" + String(b).padStart(2, "0");
-        const asDmy = yyyy + "-" + String(b).padStart(2, "0") + "-" + String(a).padStart(2, "0");
-        if (a > 12 && b <= 12) return isValidIsoDate(asDmy) ? asDmy : "";
-        if (b > 12 && a <= 12) return isValidIsoDate(asMdy) ? asMdy : "";
-        if (isValidIsoDate(asMdy)) return asMdy;
-        if (isValidIsoDate(asDmy)) return asDmy;
-        return "";
-      }
-
-      const mdyDash = value.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
-      if (mdyDash) {
-        const a = Number(mdyDash[1]);
-        const b = Number(mdyDash[2]);
-        const yyyy = mdyDash[3];
-        const asMdy = yyyy + "-" + String(a).padStart(2, "0") + "-" + String(b).padStart(2, "0");
-        const asDmy = yyyy + "-" + String(b).padStart(2, "0") + "-" + String(a).padStart(2, "0");
-        if (a > 12 && b <= 12) return isValidIsoDate(asDmy) ? asDmy : "";
-        if (b > 12 && a <= 12) return isValidIsoDate(asMdy) ? asMdy : "";
-        if (isValidIsoDate(asMdy)) return asMdy;
-        if (isValidIsoDate(asDmy)) return asDmy;
-        return "";
-      }
-
-      return "";
+    return "Capricorn";
+  }
+  function isValidIsoDate(isoDate) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(isoDate)) return false;
+    const [y,m,d] = isoDate.split("-").map(Number);
+    if (m<1||m>12||d<1||d>31) return false;
+    const t = new Date(isoDate + "T00:00:00");
+    return !isNaN(t) && t.getFullYear()===y && t.getMonth()+1===m && t.getDate()===d;
+  }
+  function normalizeDob(raw) {
+    const v = (raw||"").trim();
+    if (!v) return "";
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return isValidIsoDate(v) ? v : "";
+    const ymdS = v.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+    if (ymdS) { const iso = ymdS[1]+"-"+String(+ymdS[2]).padStart(2,"0")+"-"+String(+ymdS[3]).padStart(2,"0"); return isValidIsoDate(iso)?iso:""; }
+    const mdyS = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (mdyS) {
+      const [,a,b,yyyy] = mdyS;
+      const mdy = yyyy+"-"+String(+a).padStart(2,"0")+"-"+String(+b).padStart(2,"0");
+      const dmy = yyyy+"-"+String(+b).padStart(2,"0")+"-"+String(+a).padStart(2,"0");
+      if (+a>12&&+b<=12) return isValidIsoDate(dmy)?dmy:"";
+      if (+b>12&&+a<=12) return isValidIsoDate(mdy)?mdy:"";
+      return isValidIsoDate(mdy)?mdy:isValidIsoDate(dmy)?dmy:"";
     }
-    function normalizeTime(rawTime) {
-      const value = (rawTime || "").trim();
-      if (!value) return "";
-      const match = value.match(/^(\d{1,2}):(\d{2})$/);
-      if (!match) return "";
-      const hh = Number(match[1]);
-      const mm = Number(match[2]);
-      if (hh < 0 || hh > 23 || mm < 0 || mm > 59) return "";
-      return String(hh).padStart(2, "0") + ":" + String(mm).padStart(2, "0");
+    const mdyD = v.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+    if (mdyD) {
+      const [,a,b,yyyy] = mdyD;
+      const mdy = yyyy+"-"+String(+a).padStart(2,"0")+"-"+String(+b).padStart(2,"0");
+      const dmy = yyyy+"-"+String(+b).padStart(2,"0")+"-"+String(+a).padStart(2,"0");
+      if (+a>12&&+b<=12) return isValidIsoDate(dmy)?dmy:"";
+      if (+b>12&&+a<=12) return isValidIsoDate(mdy)?mdy:"";
+      return isValidIsoDate(mdy)?mdy:isValidIsoDate(dmy)?dmy:"";
     }
-    const getFormPayload = () => ({
-      name: nameEl.value.trim(),
-      dob: normalizeDob(dobEl.value),
-      birthTime: normalizeTime(birthTimeEl.value),
-      place: placeEl.value.trim()
+    return "";
+  }
+  function normalizeTime(raw) {
+    const v = (raw||"").trim();
+    if (!v) return "";
+    const m = v.match(/^(\d{1,2}):(\d{2})$/);
+    if (!m) return "";
+    const hh = +m[1], mm = +m[2];
+    if (hh<0||hh>23||mm<0||mm>59) return "";
+    return String(hh).padStart(2,"0")+":"+String(mm).padStart(2,"0");
+  }
+  function getLifePath(dob) {
+    let sum = dob.replace(/-/g,"").split("").reduce((a,b)=>a+safeNum(b),0);
+    while (sum>9&&sum!==11&&sum!==22&&sum!==33) sum = String(sum).split("").reduce((a,b)=>a+safeNum(b),0);
+    return sum;
+  }
+  function reduceToCoreNumber(n) {
+    while (n>9&&n!==11&&n!==22&&n!==33) n = String(n).split("").reduce((a,b)=>a+safeNum(b),0);
+    return n;
+  }
+  function getPersonalYear(dob) {
+    const now = new Date();
+    const yd = String(now.getFullYear()).split("").reduce((a,b)=>a+safeNum(b),0);
+    const [year,month,day] = dob.split("-").map(n=>safeNum(n));
+    return reduceToCoreNumber(day+month+yd+(year%9));
+  }
+  function getSeason(month) {
+    if (month===12||month<=2) return "Winter"; if (month<=5) return "Spring";
+    if (month<=8) return "Summer"; return "Autumn";
+  }
+  function getElementStrength(sign, birthTime) {
+    const s = {Fire:55,Earth:55,Air:55,Water:55};
+    s[elementBySign[sign]||"Air"] += 25;
+    if (birthTime) { const h=+birthTime.split(":")[0]; if(h<6)s.Water+=10;else if(h<12)s.Air+=10;else if(h<18)s.Fire+=10;else s.Earth+=10; }
+    return s;
+  }
+  function getTimeVibe(tv) {
+    if (!tv) return null;
+    const h = +tv.split(":")[0];
+    if (h<6)  return "Pre-dawn birth (before 6am): deeply intuitive, introspective, and spiritually sensitive. You process life from the inside out.";
+    if (h<12) return "Morning birth (6am–12pm): mentally sharp, expressive, and energised by fresh starts. You think clearly and act decisively early in the day.";
+    if (h<18) return "Afternoon birth (12pm–6pm): socially confident, practically driven, and outwardly ambitious. You thrive in collaborative, visible roles.";
+    return "Evening birth (after 6pm): emotionally wise, strategically patient, and deeply self-aware. You understand what others miss.";
+  }
+  function getPlaceTone(p) { return p ? "Born in " + p + " — your birth location imprints cultural rhythms, seasonal energy, and social patterns that shape your instinctive worldview." : null; }
+  function scoreAreas(payload, sign) {
+    const seed = toIntHash([payload.name,payload.dob,payload.birthTime,payload.place,sign].join("|"));
+    const d = new Date(payload.dob+"T00:00:00");
+    return {
+      personal:  60+((seed%14)+(d.getDate()%10)-4),
+      financial: 58+(((seed>>2)%14)+((d.getMonth()+1)%10)-4),
+      career:    59+(((seed>>4)%14)+(payload.birthTime?+payload.birthTime.split(":")[0]%10:4)+(payload.place?payload.place.length%10:5)-8)
+    };
+  }
+  function expressionNumber(name) {
+    if (!name) return null;
+    const map = {a:1,b:2,c:3,d:4,e:5,f:6,g:7,h:8,i:9,j:1,k:2,l:3,m:4,n:5,o:6,p:7,q:8,r:9,s:1,t:2,u:3,v:4,w:5,x:6,y:7,z:8};
+    let sum = name.toLowerCase().replace(/[^a-z]/g,"").split("").reduce((a,c)=>a+(map[c]||0),0);
+    while (sum>9&&sum!==11&&sum!==22&&sum!==33) sum = String(sum).split("").reduce((a,b)=>a+Number(b),0);
+    return sum;
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // UPCOMING ASTRO EVENTS — Real calendar-based events with types & dates
+  // ─────────────────────────────────────────────────────────────────────────────
+
+  // Known astronomical events (approximate) – next 12 months from March 2026
+  const knownAstroEvents = [
+    { date:"2026-03-29", type:"new-moon",   title:"New Moon in Aries", desc:"Fresh starts and bold initiations — ideal time to plant intentions around independence and courage." },
+    { date:"2026-04-01", type:"retrograde", title:"Mercury Retrograde begins (Aries)", desc:"Review communications and decisions made since mid-March. Back up devices and confirm travel plans." },
+    { date:"2026-04-12", type:"full-moon",  title:"Full Moon in Libra", desc:"Relationships and balance are illuminated. Partnerships reach a culmination or turning point." },
+    { date:"2026-04-25", type:"retrograde", title:"Mercury Retrograde ends", desc:"Forward motion resumes — good time to launch projects delayed since April 1." },
+    { date:"2026-04-27", type:"new-moon",   title:"New Moon in Taurus", desc:"Plant seeds around finances, beauty, and long-term security. Excellent for practical intentions." },
+    { date:"2026-05-11", type:"full-moon",  title:"Full Moon in Scorpio", desc:"Emotional depths are stirred. Transformation, release, and regeneration themes intensify." },
+    { date:"2026-05-26", type:"new-moon",   title:"New Moon in Gemini", desc:"Curiosity and communication surge. A powerful time to start learning something new." },
+    { date:"2026-06-03", type:"eclipse",    title:"Lunar Eclipse in Sagittarius", desc:"Major culmination around beliefs, travel, and life philosophy. Revelations and endings are possible." },
+    { date:"2026-06-10", type:"full-moon",  title:"Full Moon in Sagittarius", desc:"Freedom and truth come to light. Long-distance matters and philosophical questions peak." },
+    { date:"2026-06-17", type:"transit",    title:"Venus enters Leo", desc:"Romance, creativity, and self-expression are amplified. A vibrant period for love and artistry." },
+    { date:"2026-06-25", type:"new-moon",   title:"New Moon in Cancer", desc:"Focus on home, family, and emotional foundations. Set intentions around nurturing and security." },
+    { date:"2026-07-10", type:"full-moon",  title:"Full Moon in Capricorn", desc:"Career ambitions and responsibilities are highlighted. Hard work receives recognition." },
+    { date:"2026-07-18", type:"eclipse",    title:"Solar Eclipse in Cancer", desc:"Powerful new beginning in home and family life. A significant chapter opens — intentions set now carry extra weight." },
+    { date:"2026-07-25", type:"new-moon",   title:"New Moon in Leo", desc:"Creative power and self-expression peak. Step into the spotlight with confidence." },
+    { date:"2026-08-03", type:"retrograde", title:"Saturn Retrograde begins (Pisces)", desc:"Review long-term structures, boundaries, and responsibilities. Revisit commitments made since May." },
+    { date:"2026-08-09", type:"full-moon",  title:"Full Moon in Aquarius", desc:"Collective ideals and innovation come to fruition. Community projects and friendships are highlighted." },
+    { date:"2026-08-23", type:"new-moon",   title:"New Moon in Virgo", desc:"Health, routines, and practical improvements take center stage. Set intentions around wellness." },
+    { date:"2026-09-08", type:"full-moon",  title:"Full Moon in Pisces", desc:"Spirituality, dreams, and creative vision culminate. Intuition is at its sharpest." },
+    { date:"2026-09-22", type:"new-moon",   title:"New Moon in Libra", desc:"New beginnings in partnerships and aesthetic endeavors. Relationships can be reset with intention." },
+    { date:"2026-10-07", type:"full-moon",  title:"Full Moon in Aries", desc:"Personal power and independent action peak. Energy is high — channel it consciously." },
+    { date:"2026-10-22", type:"new-moon",   title:"New Moon in Scorpio", desc:"Deep transformation begins. Shadow work and financial restructuring are powerfully supported." },
+    { date:"2026-11-05", type:"full-moon",  title:"Full Moon in Taurus", desc:"Material stability and sensory pleasures peak. Financial situations reach a resolution point." },
+    { date:"2026-11-21", type:"new-moon",   title:"New Moon in Sagittarius", desc:"Adventure, philosophy, and expansion beckon. Set bold intentions for travel or higher learning." },
+    { date:"2026-12-04", type:"full-moon",  title:"Full Moon in Gemini", desc:"Communication and information peak. Contracts, negotiations, and conversations come to a head." },
+    { date:"2026-12-21", type:"transit",    title:"Winter Solstice — Sun enters Capricorn", desc:"The longest night; a cosmic reset. Set intentions for the year ahead." },
+    { date:"2026-12-21", type:"new-moon",   title:"New Moon in Capricorn", desc:"Career and long-term ambitions are energized. An auspicious time to plan the year ahead." }
+  ];
+
+  function getEventTypeLabel(type) {
+    const labels = {
+      "new-moon":"🌑 New Moon","full-moon":"🌕 Full Moon","eclipse":"🌑🌕 Eclipse",
+      "retrograde":"↺ Retrograde","conjunction":"☌ Conjunction","transit":"→ Transit",
+      "nakshatra":"★ Nakshatra","dasa":"⊕ Dasa Period","power-day":"✦ Power Day"
+    };
+    return labels[type] || type;
+  }
+
+  function buildEventCards(payload, reading, rangeValue) {
+    const now = new Date();
+    let endDate = new Date(now);
+    if (rangeValue==="day")   endDate.setDate(now.getDate()+1);
+    else if (rangeValue==="week")  endDate.setDate(now.getDate()+7);
+    else if (rangeValue==="month") endDate.setMonth(now.getMonth()+1);
+    else if (rangeValue==="year")  endDate.setFullYear(now.getFullYear()+1);
+    else endDate.setFullYear(now.getFullYear()+10);
+
+    const sign = reading.sign;
+    const nak = reading.nakshatra || {name:"Ashwini"};
+    const lp = reading.lp || lifePathMeanings[reading.lifePath] || lifePathMeanings[9];
+    const dasha = reading.dashaLord || "Jupiter";
+    const personalYear = reading.personalYear;
+    const pyTheme = personalYearThemes[personalYear] || personalYearThemes[9];
+    const sd = reading.sd || signData[sign] || signData.Aries;
+
+    // Filter known events in range
+    const eventsInRange = knownAstroEvents.filter(ev => {
+      const d = new Date(ev.date + "T00:00:00");
+      return d >= now && d <= endDate;
     });
-    const setFormPayload = (p) => { nameEl.value = p.name || ""; dobEl.value = p.dob || ""; birthTimeEl.value = p.birthTime || ""; placeEl.value = p.place || ""; };
-    const loadProfilesLocal = () => { try { const raw = localStorage.getItem(PROFILE_STORE_KEY); const parsed = raw ? JSON.parse(raw) : []; return Array.isArray(parsed) ? parsed : []; } catch { return []; } };
-    const persistProfilesLocal = (profiles) => localStorage.setItem(PROFILE_STORE_KEY, JSON.stringify(profiles));
 
-    function getZodiacSign(dateObj) {
-      const month = dateObj.getMonth() + 1;
-      const day = dateObj.getDate();
-      for (const [sign, [sm, sd], [em, ed]] of zodiacRanges) {
-        if ((month > sm || (month === sm && day >= sd)) && (month < em || (month === em && day <= ed))) return sign;
+    // Build personalized events list
+    const cards = [];
+
+    // Add known astronomical events with personalization
+    eventsInRange.forEach(ev => {
+      const d = new Date(ev.date + "T00:00:00");
+      const dateStr = d.toLocaleDateString(undefined, {weekday:"short", month:"short", day:"numeric", year:d.getFullYear()!==now.getFullYear()?"numeric":undefined});
+
+      // Personalize the description based on their sign
+      let personalNote = "";
+      if (ev.type==="full-moon"||ev.type==="new-moon") {
+        const moonSign = ev.title.match(/in (\w+)/)?.[1] || "";
+        const moonElement = elementBySign[moonSign] || "";
+        const userElement = elementBySign[sign] || "";
+        if (moonElement && moonElement===userElement)
+          personalNote = " As a " + sign + " (" + userElement + " sign), this lunation resonates strongly with your chart.";
+        else if (moonSign===sign)
+          personalNote = " This lunation falls in your own sign — exceptionally personal and powerful for you.";
+      } else if (ev.type==="retrograde") {
+        const planet = ev.title.split(" ")[0];
+        personalNote = " Your " + sign + " chart is " + (sd.ruler.includes(planet) ? "directly impacted — extra caution with " + sd.ruler + "-ruled matters." : "influenced in communication and review processes.");
+      } else if (ev.type==="eclipse") {
+        personalNote = " Eclipses accelerate karmic timelines. For " + sign + ", themes of " + sd.theme.split(".")[0].toLowerCase().replace("you are the ","").replace("you are a ","") + " may see sudden shifts.";
       }
-      return "Capricorn";
+
+      cards.push({ date: dateStr, rawDate: ev.date, type: ev.type, title: ev.title, desc: ev.desc + personalNote });
+    });
+
+    // Add birthdate-specific power days
+    const [,bm,bd] = payload.dob.split("-").map(Number);
+    const powerDayThisMonth = new Date(now.getFullYear(), now.getMonth(), bd);
+    if (powerDayThisMonth >= now && powerDayThisMonth <= endDate) {
+      cards.push({
+        date: powerDayThisMonth.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"}),
+        rawDate: powerDayThisMonth.toISOString().slice(0,10),
+        type: "power-day",
+        title: "✦ Personal Power Day (Birth Date Echo)",
+        desc: "The " + bd + (bd===1||bd===21||bd===31?"st":bd===2||bd===22?"nd":bd===3||bd===23?"rd":"th") + " of each month resonates with your birth energy. Life Path " + reading.lifePath + " (" + lp.title + ") qualities are amplified — lean into your natural strengths today."
+      });
     }
-    function getTimeVibe(timeValue) {
-      if (!timeValue) return null;
-      const hour = Number(timeValue.split(":")[0]);
-      if (hour < 6) return "Pre-dawn birth (before 6am): deeply intuitive, introspective, and spiritually sensitive. You process life from the inside out.";
-      if (hour < 12) return "Morning birth (6am–12pm): mentally sharp, expressive, and energised by fresh starts. You think clearly and act decisively early in the day.";
-      if (hour < 18) return "Afternoon birth (12pm–6pm): socially confident, practically driven, and outwardly ambitious. You thrive in collaborative, visible roles.";
-      return "Evening birth (after 6pm): emotionally wise, strategically patient, and deeply self-aware. You understand what others miss.";
+
+    // Add current nakshatra window
+    if (rangeValue==="day"||rangeValue==="week") {
+      cards.push({
+        date: "Now through " + new Date(now.getTime()+2*24*3600000).toLocaleDateString(undefined,{month:"short",day:"numeric"}),
+        rawDate: now.toISOString().slice(0,10),
+        type: "nakshatra",
+        title: "Birth Nakshatra Window — " + nak.name,
+        desc: "Your birth star " + nak.name + " (deity: " + nak.deity + ") carries the quality of: " + nak.quality + ". When the Moon transits compatible nakshatras, your intuition and effectiveness peak."
+      });
     }
-    const getPlaceTone = (p) => p ? "Born in " + p + " — your birth location imprints cultural rhythms, seasonal energy, and social patterns that shape your instinctive worldview." : null;
-    function getLifePath(dob) {
-      let sum = dob.replace(/-/g, "").split("").reduce((a, b) => a + safeNum(b), 0);
-      while (sum > 9 && sum !== 11 && sum !== 22 && sum !== 33) sum = String(sum).split("").reduce((a, b) => a + safeNum(b), 0);
-      return sum;
+
+    // Add dasha period note
+    cards.push({
+      date: "Current Period",
+      rawDate: now.toISOString().slice(0,10),
+      type: "dasa",
+      title: "Active Dasha Lord: " + dasha,
+      desc: "Your Vimsottari Dasha is ruled by " + dasha + ", emphasizing " + (dashaThemes[dasha]||"growth and transformation") + ". This colors every event in your life right now — work with this energy consciously."
+    });
+
+    // Sort by date
+    cards.sort((a,b) => a.rawDate.localeCompare(b.rawDate));
+
+    if (cards.length===0) {
+      return "<div class='event-card'><div class='ev-title'>No major events found in this window</div><div class='ev-desc'>Try selecting a wider range (Week, Month, or Year) to see upcoming events.</div></div>";
     }
-    function reduceToCoreNumber(value) {
-      let n = value;
-      while (n > 9 && n !== 11 && n !== 22 && n !== 33) n = String(n).split("").reduce((a, b) => a + safeNum(b), 0);
-      return n;
-    }
-    function getPersonalYear(dob) {
+
+    return cards.map(card => `
+      <div class="event-card">
+        <div class="ev-date">${card.date}</div>
+        <span class="ev-type ${card.type}">${getEventTypeLabel(card.type)}</span>
+        <div class="ev-title">${card.title}</div>
+        <div class="ev-desc">${card.desc}</div>
+      </div>
+    `).join("");
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // FREE ASTROLOGY API INTEGRATION
+  // ─────────────────────────────────────────────────────────────────────────────
+  const FAA_BASE = "https://json.freeastrologyapi.com";
+  const FAA_KEY_STORE = "faaApiKey";
+
+  function getFaaKey() {
+    return (localStorage.getItem(FAA_KEY_STORE) || document.getElementById("faaKeyInput").value || "").trim();
+  }
+
+  async function faaPost(endpoint, body) {
+    const key = getFaaKey();
+    if (!key) return null;
+    try {
+      const resp = await fetch(FAA_BASE + "/" + endpoint, {
+        method:"POST",
+        headers:{"Content-Type":"application/json","x-api-key":key},
+        body: JSON.stringify(body)
+      });
+      if (!resp.ok) return null;
+      return await resp.json();
+    } catch { return null; }
+  }
+
+  // Convert place name to lat/lon using freeastrologyapi geo endpoint
+  async function geoLookup(place) {
+    if (!place) return null;
+    const key = getFaaKey();
+    if (!key) return null;
+    try {
+      const resp = await fetch("https://json.freeastrologyapi.com/geo-details", {
+        method:"POST",
+        headers:{"Content-Type":"application/json","x-api-key":key},
+        body: JSON.stringify({place})
+      });
+      if (!resp.ok) return null;
+      const data = await resp.json();
+      if (data && data.latitude && data.longitude) return data;
+      return null;
+    } catch { return null; }
+  }
+
+  // Build request body for FAA from birth data
+  function buildFaaBirthBody(payload, geoData) {
+    const dob = payload.dob; // YYYY-MM-DD
+    const [year,month,date] = dob.split("-").map(Number);
+    const time = payload.birthTime || "12:00";
+    const [hours,minutes] = time.split(":").map(Number);
+    const lat  = geoData ? geoData.latitude  : 20.5937; // default India center
+    const lon  = geoData ? geoData.longitude : 78.9629;
+    const tz   = geoData ? (geoData.timezone||5.5)     : 5.5;
+    return { year, month, date, hours, minutes, seconds:0, latitude:lat, longitude:lon, timezone:tz, config:{ observation_point:"topocentric", ayanamsha:"lahiri" } };
+  }
+
+  async function fetchRealPlanetData(payload) {
+    const key = getFaaKey();
+    if (!key) return null;
+    setApiStatus("loading", "Fetching real planetary data…");
+    try {
+      // Step 1: Geocode the birth place
+      let geoData = null;
+      if (payload.place) {
+        geoData = await geoLookup(payload.place);
+      }
+
+      const body = buildFaaBirthBody(payload, geoData);
+
+      // Step 2: Fetch planets
+      const planetResp = await faaPost("planets", body);
+      if (!planetResp || !planetResp.output) { setApiStatus("error","Planet data unavailable. Check your API key."); return null; }
+
+      const planets = planetResp.output[1] || {}; // named-key object
+
+      // Step 3: Fetch current dasha
       const now = new Date();
-      const yearDigits = String(now.getFullYear()).split("").reduce((a, b) => a + safeNum(b), 0);
-      const [year, month, day] = dob.split("-").map(n => safeNum(n));
-      return reduceToCoreNumber(day + month + yearDigits + (year % 9));
+      const dashaBody = { ...body, event_data:{ year:now.getFullYear(), month:now.getMonth()+1, date:now.getDate(), hours:now.getHours(), minutes:now.getMinutes(), seconds:0 } };
+      const dashaResp = await faaPost("vimsottari/dasa-information", dashaBody);
+      const currentDasha = dashaResp?.maha_dasa?.Lord || null;
+      const antarDasha   = dashaResp?.antar_dasa?.Lord || null;
+      const dashaEnd     = dashaResp?.maha_dasa?.end_time ? new Date(dashaResp.maha_dasa.end_time).getFullYear() : null;
+
+      // Step 4: Fetch nakshatra for today (live sky nakshatra)
+      const todayBody = { year:now.getFullYear(), month:now.getMonth()+1, date:now.getDate(), hours:now.getHours(), minutes:now.getMinutes(), seconds:0, latitude:body.latitude, longitude:body.longitude, timezone:body.timezone, config:{observation_point:"topocentric",ayanamsha:"lahiri"} };
+      const nakResp = await faaPost("nakshatra-durations", todayBody);
+      const todayNakshatra = nakResp?.name || null;
+      const nakEnds = nakResp?.ends_at || null;
+
+      setApiStatus("success", "✓ Live planetary data loaded from Free Astrology API");
+      return { planets, currentDasha, antarDasha, dashaEnd, todayNakshatra, nakEnds, geoData };
+    } catch (e) {
+      setApiStatus("error", "API error: " + e.message);
+      return null;
     }
-    function getSeason(month) {
-      if (month === 12 || month <= 2) return "Winter"; if (month <= 5) return "Spring";
-      if (month <= 8) return "Summer"; return "Autumn";
-    }
-    function getPowerDates(dob, rangeValue) {
-      const [_, month, day] = dob.split("-").map(n => safeNum(n));
-      const shift = rangeValue === "day" ? 0 : rangeValue === "week" ? 1 : rangeValue === "month" ? 2 : rangeValue === "year" ? 3 : 4;
-      const d1 = ((reduceToCoreNumber(day + month) * 3 + shift) % 28) + 1;
-      const d2 = ((reduceToCoreNumber(day + month + 7) * 5 + shift) % 28) + 1;
-      const d3 = ((reduceToCoreNumber(day + month + 14) * 7 + shift) % 28) + 1;
-      return [d1, d2, d3].sort((a, b) => a - b);
-    }
-    const getBirthDayName = (dob) => new Date(dob + "T00:00:00").toLocaleDateString(undefined, { weekday: "long" });
-    function getElementStrength(sign, birthTime) {
-      const s = { Fire: 55, Earth: 55, Air: 55, Water: 55 };
-      s[elementBySign[sign] || "Air"] += 25;
-      if (birthTime) { const h = Number(birthTime.split(":")[0]); if (h<6) s.Water+=10; else if (h<12) s.Air+=10; else if (h<18) s.Fire+=10; else s.Earth+=10; }
-      return s;
-    }
-    function getDominantElement(es) { return Object.entries(es).sort((a,b)=>b[1]-a[1])[0][0]; }
-    function scoreAreas(payload, sign) {
-      const seed = toIntHash([payload.name, payload.dob, payload.birthTime, payload.place, sign].join("|"));
-      const d = new Date(payload.dob + "T00:00:00");
-      return {
-        personal:  60 + ((seed % 14) + (d.getDate() % 10) - 4),
-        financial: 58 + (((seed >> 2) % 14) + ((d.getMonth()+1) % 10) - 4),
-        career:    59 + (((seed >> 4) % 14) + (payload.birthTime ? Number(payload.birthTime.split(":")[0])%10 : 4) + (payload.place ? payload.place.length%10 : 5) - 8)
-      };
-    }
-    function getUpcomingEventDates(powerDates, rangeValue) {
-      const now = new Date(); const base = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      if (rangeValue === "day") return [2,5,9].map(h => new Date(now.getTime()+h*3600000));
-      if (rangeValue === "week") return [1,3,6].map(d => new Date(base.getFullYear(), base.getMonth(), base.getDate()+d));
-      if (rangeValue === "year") return powerDates.map(n => new Date(base.getFullYear(), ((n%12)||12)-1, Math.min(28, base.getDate())));
-      if (rangeValue === "decade") return [1,4,8].map(y => new Date(base.getFullYear()+y, base.getMonth(), base.getDate()));
-      return powerDates.map(d => { const dt = new Date(base.getFullYear(), base.getMonth(), Math.min(28,Math.max(1,d))); return dt < base ? new Date(base.getFullYear(), base.getMonth()+1, dt.getDate()) : dt; }).sort((a,b)=>a-b);
-    }
-    function formatEventDate(date, rangeValue) {
-      if (rangeValue === "day") return date.toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" });
-      if (rangeValue === "decade") return date.toLocaleDateString(undefined, { year:"numeric", month:"short" });
-      return date.toLocaleDateString(undefined, { weekday:"short", month:"short", day:"numeric" });
-    }
-    function getRealDateWindows(rangeValue, powerDates) {
-      const now = new Date(); const yr = now.getFullYear(); const mo = now.getMonth();
-      const mk = d => new Date(yr, mo, Math.min(28,Math.max(1,d))).toLocaleDateString(undefined,{month:"short",day:"numeric"});
-      if (rangeValue==="day") { const s=new Date(now.getTime()+2*3600000),e=new Date(now.getTime()+8*3600000); return "Today window: "+s.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" – "+e.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+"."; }
-      if (rangeValue==="week") { const a=new Date(now); a.setDate(now.getDate()+((powerDates[0]%6)+1)); const b=new Date(now); b.setDate(now.getDate()+((powerDates[1]%6)+1)); return "Best days: "+a.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})+" and "+b.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"})+"."; }
-      if (rangeValue==="month") return "Power dates: "+mk(powerDates[0])+", "+mk(powerDates[1])+", "+mk(powerDates[2])+".";
-      if (rangeValue==="year") return "Peak quarters: Q"+((powerDates[0]%4)||4)+", Q"+((powerDates[1]%4)||4)+", Q"+((powerDates[2]%4)||4)+".";
-      return "Decade arc: years 1–3 foundation, 4–7 expansion, 8–10 mastery and legacy.";
-    }
-    function buildUpcomingDatesBox(rangeValue, payload, reading) {
-      const powerDates = getPowerDates(payload.dob, rangeValue);
-      const dates = getUpcomingEventDates(powerDates, rangeValue);
-      const nak = reading.nakshatra || { name:"Ashwini" };
-      const sign = reading.sign;
-      const sd = reading.sd || signData[sign] || signData.Aries;
-      const lines = dates.map((dt, i) => {
-        const label = formatEventDate(dt, rangeValue);
-        const tips = [
-          label + ": " + sd.ruler + " influence active — good for " + (sd.ruler==="Mars"?"bold action and physical energy.":sd.ruler==="Venus"?"relationships and financial agreements.":sd.ruler==="Mercury"?"communication and learning.":sd.ruler==="Moon"?"emotional clarity and intuition.":sd.ruler==="Sun"?"visibility and leadership decisions.":sd.ruler==="Jupiter"?"expansion and fortunate opportunities.":sd.ruler==="Saturn"?"disciplined work and long-term planning.":"innovation and unconventional approaches."),
-          label + ": Nakshatra " + nak.name + " window — " + (nak.quality||"heightened cosmic sensitivity").split(",")[0].toLowerCase() + ".",
-          label + ": Life Path " + reading.lifePath + " energy peak — lean into your natural strengths."
-        ];
-        return "- " + tips[i % tips.length];
-      });
-      return "Upcoming Power Dates — " + sign + " / " + nak.name + " (Nakshatra)\n" + lines.join("\n");
+  }
+
+  function setApiStatus(type, msg) {
+    const bar = document.getElementById("apiStatusBar");
+    bar.className = "api-status-bar visible " + (type==="loading"?"":type);
+    bar.innerHTML = type==="loading" ? "<span class='spinner'></span>" + msg : msg;
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // GENERATE READING — enhanced with real API data when available
+  // ─────────────────────────────────────────────────────────────────────────────
+  function generateReading(payload, privacyMode, liveData) {
+    const dob = payload.dob;
+    const d = new Date(dob + "T00:00:00");
+    const birthYear = d.getFullYear(), birthMonth = d.getMonth()+1;
+    const sign = getZodiacSign(d);
+    const sd = signData[sign] || signData.Aries;
+    const lifePath = getLifePath(dob);
+    const personalYear = getPersonalYear(dob);
+    const season = getSeason(birthMonth);
+    const bdayName = new Date(dob+"T00:00:00").toLocaleDateString(undefined,{weekday:"long"});
+    const elementStrength = getElementStrength(sign, payload.birthTime);
+    const dominantElement = Object.entries(elementStrength).sort((a,b)=>b[1]-a[1])[0][0];
+    const nakshatra = getNakshatra(dob);
+    const moonSign = vedicMoonSign(dob);
+
+    // Use real dasha from API if available, otherwise approximate
+    let dashaLord = "Jupiter";
+    let dashaNote = "";
+    if (liveData && liveData.currentDasha) {
+      dashaLord = liveData.currentDasha;
+      dashaNote = " (Antar Dasha: " + (liveData.antarDasha||"—") + (liveData.dashaEnd ? ", Maha ends ~" + liveData.dashaEnd : "") + ")";
+    } else {
+      const lords = ["Sun","Moon","Mars","Rahu","Jupiter","Saturn","Mercury","Ketu","Venus"];
+      dashaLord = lords[(d.getDate() + d.getMonth()) % lords.length];
     }
 
-    function generateReading(payload, privacyMode) {
-      const dob = payload.dob;
-      const d = new Date(dob + "T00:00:00");
-      const birthYear = d.getFullYear();
-      const birthMonth = d.getMonth() + 1;
-      const sign = getZodiacSign(d);
-      const sd = signData[sign] || signData.Aries;
-      const lifePath = getLifePath(dob);
-      const personalYear = getPersonalYear(dob);
-      const season = getSeason(birthMonth);
-      const bdayName = getBirthDayName(dob);
-      const elementStrength = getElementStrength(sign, payload.birthTime);
-      const dominantElement = getDominantElement(elementStrength);
-      const nakshatra = getNakshatra(dob);
-      const moonSign = vedicMoonSign(dob);
-      const dashaLord = vedicDashaLord(dob);
-      const chSign = chineseZodiac(birthYear);
-      const chEl = chineseElement(birthYear);
-      const lp = lifePathMeanings[lifePath] || lifePathMeanings[9];
-      const tarot = tarotBirthCard(lifePath);
-      const celtic = celticTree(dob);
-      const expNum = expressionNumber(payload.name);
-      const pyTheme = personalYearThemes[personalYear] || personalYearThemes[9];
-      const archetype = sign + " " + lp.title;
-      const timeVibe = getTimeVibe(payload.birthTime);
-      const placeTone = getPlaceTone(payload.place);
-      const name = payload.name || "You";
-
-      let text = name + ", here is your complete multi-tradition cosmic profile:\n\n";
-      text += "✦ WESTERN ASTROLOGY\n";
-      text += "Sun Sign: " + sign + " (Ruler: " + sd.ruler + " | Quality: " + sd.quality + " | Element: " + (elementBySign[sign]||"Air") + ")\n";
-      text += sd.theme + "\n";
-      text += "Strengths: " + sd.strengths + "\n";
-      text += "Challenges: " + sd.challenges + "\n";
-      if (!privacyMode) text += "Shadow lesson: " + sd.shadow + "\n";
-      text += "Lucky gem: " + sd.gem + " | Power color: " + sd.color + " | Ruled day: " + sd.day + "\n";
-      if (payload.birthTime) {
-        const hour = Number(payload.birthTime.split(":")[0]);
-        const asc = ["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"][Math.floor(hour*12/24)];
-        text += "Rising Sign (approx): " + asc + " — shapes how the world first perceives you.\n";
+    // Use real planet positions if available
+    let realPlanets = {};
+    let ascendantSign = null;
+    if (liveData && liveData.planets) {
+      realPlanets = liveData.planets;
+      if (realPlanets.Ascendant) {
+        ascendantSign = signNames[Math.round((realPlanets.Ascendant.fullDegree||0)/30) % 12];
       }
-      if (timeVibe) text += "\nBirth Time: " + timeVibe + "\n";
-      if (placeTone && !privacyMode) text += placeTone + "\n";
-      text += "\n";
-      text += "✦ VEDIC ASTROLOGY (Jyotish)\n";
-      if (!privacyMode) {
-        text += "Moon Sign (Rashi): " + moonSign + " — your emotional instincts and subconscious mind.\n";
-        text += "Nakshatra (Birth Star): " + nakshatra.name + " (Deity: " + nakshatra.deity + ")\n";
-        text += "Nakshatra quality: " + nakshatra.quality + "\n";
-        text += "Current Dasha Lord: " + dashaLord + " — life themes now revolve around " + (dashaThemes[dashaLord]||"spiritual growth") + ".\n";
-      } else {
-        text += "Nakshatra: " + nakshatra.name + " — " + nakshatra.quality + "\n";
-      }
-      text += "\n";
-      text += "✦ CHINESE ASTROLOGY\n";
-      if (!privacyMode) {
-        text += "Chinese Zodiac: " + chSign + " (" + birthYear + ") | Element: " + chEl + "\n";
-        text += (chineseData[chSign]||chineseData.Rat).nature + "\n";
-        text += chineseElementData[chEl] + "\n";
-      } else {
-        text += "Chinese Sign: " + chSign + " — " + (chineseData[chSign]||chineseData.Rat).nature.split(".")[0] + ".\n";
-      }
-      text += "\n";
-      text += "✦ NUMEROLOGY\n";
-      text += "Life Path " + lifePath + ": " + lp.title + "\n";
-      text += lp.theme + "\n";
-      if (!privacyMode) {
-        text += "Personal Year " + personalYear + ": " + pyTheme + "\n";
-        if (expNum) text += "Expression Number " + expNum + " (from your name) amplifies your outward gifts and natural talents.\n";
-      }
-      text += "\n";
-      text += "✦ TAROT BIRTH CARD\n" + tarot + "\n\n";
-      text += "✦ CELTIC TREE SIGN\n";
-      text += "Your birth tree: " + celtic.tree + "\n";
-      text += celtic.quality + "\n\n";
-      text += "✦ ELEMENTAL BALANCE\n";
-      text += "Fire " + elementStrength.Fire + " | Earth " + elementStrength.Earth + " | Air " + elementStrength.Air + " | Water " + elementStrength.Water + "\n";
-      const dominant2 = Object.entries(elementStrength).sort((a,b)=>b[1]-a[1]);
-      text += "Dominant: " + dominant2[0][0] + " | Secondary: " + dominant2[1][0] + " | Least expressed: " + dominant2[3][0] + "\n";
-      text += "Developing your " + dominant2[3][0] + " element unlocks hidden dimensions of your potential.\n";
-
-      return { sign, element: elementBySign[sign]||"Air", lifePath, personalYear, season, birthDay: bdayName,
-               archetype, dominantElement, elementStrength, nakshatra, moonSign, dashaLord, chSign, chEl, lp, celtic, tarot, sd, text };
+    } else if (payload.birthTime) {
+      const hour = +payload.birthTime.split(":")[0];
+      ascendantSign = signNames[Math.floor(hour*12/24)];
     }
 
-    function buildTabContent(tabName, rangeValue, payload, reading, privacyMode) {
-      const who = payload.name || "You";
-      const horizon = horizonLabels[rangeValue];
-      const scores = scoreAreas(payload, reading.sign);
-      const powerDates = getPowerDates(payload.dob, rangeValue);
-      const eventDates = getUpcomingEventDates(powerDates, rangeValue);
-      const realWindows = getRealDateWindows(rangeValue, powerDates);
-      const pyTheme = personalYearThemes[reading.personalYear] || personalYearThemes[9];
-      const sign = reading.sign;
-      const sd = reading.sd || signData[sign] || signData.Aries;
-      const lp = reading.lp || lifePathMeanings[reading.lifePath] || lifePathMeanings[9];
-      const nak = reading.nakshatra || { name:"Ashwini", quality:"swift pioneering energy" };
-      const dasha = reading.dashaLord || "Jupiter";
-      const chSign = reading.chSign || "Rat";
-      const chEl = reading.chEl || "Wood";
-      const celtic = reading.celtic || { tree:"Oak", quality:"strength and protection" };
-      const momentumAvg = Math.round((scores.personal + scores.financial + scores.career) / 3);
-      const topArea = scores.personal >= scores.financial && scores.personal >= scores.career ? "Personal" : scores.financial >= scores.career ? "Financial" : "Career";
-      const lowArea = scores.personal <= scores.financial && scores.personal <= scores.career ? "Personal" : scores.financial <= scores.career ? "Financial" : "Career";
+    const chSign = chineseZodiac(birthYear);
+    const chEl = chineseElement(birthYear);
+    const lp = lifePathMeanings[lifePath] || lifePathMeanings[9];
+    const tarot = tarotBirthCard(lifePath);
+    const celtic = celticTree(dob);
+    const expNum = expressionNumber(payload.name);
+    const pyTheme = personalYearThemes[personalYear] || personalYearThemes[9];
+    const archetype = sign + " " + lp.title;
+    const timeVibe = getTimeVibe(payload.birthTime);
+    const placeTone = getPlaceTone(payload.place);
+    const name = payload.name || "You";
 
-      if (tabName === "events") {
-        const impactsByElement = {
-          Fire:  ["Mars energizes bold action — initiate new projects and assert leadership confidently.",
-                  "Sun transit amplifies your natural charisma — visibility and recognition increase.",
-                  "Jupiter expands your fire — take calculated risks; fortune favors the bold right now."],
-          Earth: ["Saturn rewards discipline — structured effort produces tangible, lasting results.",
-                  "Venus transit brings material pleasures — financial agreements and beauty investments are favorable.",
-                  "Mercury grounds communication — contracts, proposals, and practical plans gain clarity."],
-          Air:   ["Mercury accelerates your mind — ideal for writing, presenting, negotiating, and learning.",
-                  "New Moon in an Air sign resets your mental framework — journal your intentions clearly.",
-                  "Social transits energize your sphere — networking creates unexpected breakthroughs."],
-          Water: ["Moon cycles align with your emotional body — honor rest and intuitive signals this period.",
-                  "Neptune deepens your creative and psychic sensitivity — spiritual practices amplify inner guidance.",
-                  "Venus in a Water sign enriches your love life and artistic output significantly."]
-        };
-        const impacts = impactsByElement[reading.dominantElement] || impactsByElement.Air;
-        let out = "✦ UPCOMING ASTRO EVENTS — " + who + " (" + horizon + ")\n\n";
-        out += "Western Transits for " + sign + " (" + sd.ruler + "-ruled):\n";
-        out += "- " + impacts[0] + "\n- " + impacts[1] + "\n- " + impacts[2] + "\n\n";
-        out += "Vedic Dasha Influence (" + dasha + " Dasha period):\n";
-        out += "- Your Dasha Lord " + dasha + " is currently emphasizing " + (dashaThemes[dasha]||"expansion") + ".\n";
-        out += "- Nakshatra " + nak.name + " (birth star) adds the energy of: " + nak.quality + ".\n\n";
-        out += "Chinese Astrology (" + chSign + " / " + chEl + " year):\n";
-        out += "- " + (chineseElementData[chEl]||"Balanced elemental support.") + "\n";
-        out += "- " + chSign + " energy this cycle: " + ((chineseData[chSign]||chineseData.Rat).nature.split(".")[0]) + ".\n\n";
-        out += "Numerology Cycle (Personal Year " + reading.personalYear + " — " + lp.title + "):\n";
-        out += "- " + pyTheme + "\n";
-        out += "- Life Path " + reading.lifePath + " colors every event this cycle: " + lp.theme.split(".")[0] + ".\n\n";
-        out += "Celtic Tree — " + celtic.tree + ":\n- " + celtic.quality + "\n\n";
-        out += "Power Windows (" + horizon + "): " + realWindows + "\n";
-        out += "Key dates: " + eventDates.map((dt,i) => formatEventDate(dt,rangeValue)+(i===0?" ★ peak action":i===1?" ◎ review & refine":" ◌ complete & rest")).join(" | ") + "\n\n";
-        out += "Momentum Score: " + momentumAvg + "/100 | Strongest area: " + topArea + " | Needs attention: " + lowArea;
-        return out;
-      }
+    let text = name + ", here is your complete multi-tradition cosmic profile:\n\n";
 
-      if (tabName === "personal") {
-        let out = "✦ PERSONAL OUTLOOK — " + who + " (" + horizon + ")\n\n";
-        out += "Western — " + sign + " Identity:\n";
-        out += "- Core theme: " + sd.theme + "\n";
-        out += "- In relationships: " + sd.love + "\n";
-        out += "- Shadow work: " + sd.shadow + "\n";
-        out += "- Lean into: " + sd.strengths + "\n";
-        out += "- Watch for: " + sd.challenges + "\n\n";
-        out += "Vedic Self — Nakshatra " + nak.name + ":\n";
-        out += "- " + nak.quality + "\n";
-        out += "- Dasha Lord " + dasha + " currently activates: " + (dashaThemes[dasha]||"growth") + " in your personal life.\n";
-        if (!privacyMode) out += "- Moon Sign " + reading.moonSign + " shapes your emotional instincts and subconscious patterns.\n";
-        out += "\n";
-        out += "Chinese Wisdom — " + chSign + " (" + chEl + "):\n";
-        out += "- " + (chineseData[chSign]||chineseData.Rat).nature + "\n\n";
-        out += "Numerology — Life Path " + reading.lifePath + " (" + lp.title + "):\n";
-        out += "- " + lp.theme + "\n- In love: " + lp.love + "\n- Core challenge: " + lp.challenge + "\n";
-        if (!privacyMode) out += "- Personal Year " + reading.personalYear + ": " + pyTheme + "\n";
-        out += "\n";
-        out += "Tarot Birth Card:\n- " + reading.tarot + "\n\n";
-        out += "Celtic Tree — " + celtic.tree + ":\n- " + celtic.quality + "\n\n";
-        out += "Elemental Self-Awareness:\n";
-        out += "- Dominant element " + reading.dominantElement + ": you naturally operate through " + (reading.dominantElement==="Fire"?"passion, initiative, and inspiration.":reading.dominantElement==="Earth"?"practicality, patience, and sensory intelligence.":reading.dominantElement==="Air"?"ideas, communication, and mental agility.":"emotion, intuition, and deep empathy.") + "\n";
-        out += "- Least expressed: " + Object.entries(reading.elementStrength).sort((a,b)=>a[1]-b[1])[0][0] + " — developing this unlocks hidden dimensions.\n\n";
-        out += "Action Plan (" + horizon + "):\n";
-        out += "- Honor your " + sd.ruler + " ruler: " + (["Aries","Scorpio"].includes(sign)?"channel energy into physical discipline and purposeful action.":["Taurus","Libra"].includes(sign)?"create beauty and comfort deliberately — environment shapes mood.":["Gemini","Virgo"].includes(sign)?"feed your mind with quality input and meaningful conversations.":sign==="Cancer"?"tend to home and emotional relationships first.":sign==="Leo"?"express yourself creatively and allow yourself to be seen.":["Sagittarius","Pisces"].includes(sign)?"connect to something larger — philosophy, nature, or spirituality.":"build structure and measure progress toward one meaningful goal.") + "\n";
-        out += "- Power window: " + realWindows + "\n";
-        out += "- Personal score " + horizon + ": " + scores.personal + "/100";
-        return out;
-      }
+    // ── WESTERN ASTROLOGY ──────────────────────────────
+    text += "✦ WESTERN ASTROLOGY\n";
+    text += "Sun Sign: " + sign + " (Ruler: " + sd.ruler + " | Quality: " + sd.quality + " | Element: " + (elementBySign[sign]||"Air") + ")\n";
+    text += sd.theme + "\n";
+    text += "Strengths: " + sd.strengths + "\n";
+    text += "Challenges: " + sd.challenges + "\n";
+    if (!privacyMode) text += "Shadow lesson: " + sd.shadow + "\n";
+    text += "Lucky gem: " + sd.gem + " | Power color: " + sd.color + " | Ruled day: " + sd.day + "\n";
 
-      if (tabName === "financial") {
-        let out = "✦ FINANCIAL OUTLOOK — " + who + " (" + horizon + ")\n\n";
-        out += "Western Money Profile — " + sign + ":\n";
-        out += "- Earning archetype: " + sd.finance + "\n";
-        out += "- Ruling planet " + sd.ruler + " governs your financial rhythms: " + (sd.ruler==="Venus"?"peak earnings align with Venus transits; beauty, luxury, and social investments pay off.":sd.ruler==="Mars"?"aggressive action and entrepreneurial bets create wealth — but impulse destroys it.":sd.ruler==="Mercury"?"communication, commerce, and quick intelligence drive your income.":sd.ruler==="Moon"?"income fluctuates with emotional cycles — build savings as your foundation.":sd.ruler==="Sun"?"leadership positions and high-visibility roles generate your greatest income.":sd.ruler==="Jupiter"?"expansion and generosity attract abundance — scarcity thinking blocks your flow.":sd.ruler==="Saturn"?"disciplined long-term strategy always beats short-term tactics for you.":"unconventional income streams and innovation often outperform traditional paths.") + "\n\n";
-        out += "Vedic Financial Indicators:\n";
-        out += "- Nakshatra " + nak.name + ": " + nak.quality.split(",")[0] + " influences your approach to material resources.\n";
-        out += "- Dasha Lord " + dasha + ": " + (dasha==="Jupiter"||dasha==="Venus"?"expansive opportunities — a favorable period for growth investments.":dasha==="Saturn"?"disciplined restructuring — build systems now that pay later.":dasha==="Rahu"?"unconventional wealth paths and rapid material acceleration.":dasha==="Ketu"?"detach from money-chasing and focus on skill-building.":"active management — review budgets, renegotiate terms, launch income streams.") + "\n\n";
-        out += "Chinese Wealth Element — " + chEl + ":\n";
-        out += "- " + (chineseElementData[chEl]||"Balanced approach to resources is favored.") + "\n";
-        out += "- " + chSign + " financial strength: " + (chSign==="Rat"?"shrewd resourcefulness and opportunistic timing.":chSign==="Ox"?"methodical wealth accumulation through hard work.":chSign==="Tiger"?"bold financial bets — manage impulsiveness.":chSign==="Dragon"?"fortunate financial luck combined with ambitious vision.":chSign==="Snake"?"careful long-game financial planning.":chSign==="Horse"?"active income from multiple energetic pursuits.":chSign==="Monkey"?"clever financial innovation and adaptable streams.":chSign==="Rooster"?"perfectionist financial management with detailed tracking.":chSign==="Dog"?"steady reliable income built on trust and reputation.":chSign==="Pig"?"natural abundance — guard against over-indulgence.":"patience and relationship-based financial growth.") + "\n\n";
-        out += "Numerology — Life Path " + reading.lifePath + " Blueprint:\n";
-        out += "- " + lp.career + "\n";
-        if (!privacyMode) out += "- Personal Year " + reading.personalYear + ": " + (reading.personalYear===8?"Peak wealth cycle — think big and act boldly.":reading.personalYear===4?"Build financial systems now — they compound later.":reading.personalYear===1?"Plant income seeds; harvest comes in years 3–5.":reading.personalYear===9?"Clear debts; prepare for a new 9-year wealth cycle.":"Steady consolidation and smart growth define this year.") + "\n";
-        out += "\n";
-        out += "Integrated Strategy (" + horizon + "):\n";
-        out += "- Investment style: " + (reading.dominantElement==="Earth"?"long-term tangible assets — real estate, index funds, gold.":reading.dominantElement==="Fire"?"growth stocks, entrepreneurial ventures, performance-linked income.":reading.dominantElement==="Air"?"tech, communications, education, and intellectual property.":"stable income instruments, healthcare, and emotionally meaningful ventures.") + "\n";
-        out += "- Risk warning: guard against " + (["Aries","Sagittarius","Leo"].includes(sign)?"impulsive spending driven by optimism or ego.":["Pisces","Cancer","Scorpio"].includes(sign)?"emotionally reactive financial decisions.":["Gemini","Aquarius","Libra"].includes(sign)?"scattered investments lacking focus.":"over-caution that misses genuine opportunities.") + "\n";
-        out += "- Power window: " + realWindows + "\n";
-        out += "- Financial score " + horizon + ": " + scores.financial + "/100";
-        return out;
-      }
-
-      if (tabName === "career") {
-        let out = "✦ CAREER OUTLOOK — " + who + " (" + horizon + ")\n\n";
-        out += "Western Career Archetype — " + sign + ":\n";
-        out += "- " + sd.career + "\n";
-        out += "- Ruling planet " + sd.ruler + " energizes: " + (sd.ruler==="Mars"?"leadership, competition, and pioneering roles.":sd.ruler==="Venus"?"aesthetic, relational, and creative roles.":sd.ruler==="Mercury"?"communication, analysis, and data-driven roles.":sd.ruler==="Moon"?"caring, nurturing, and cyclically creative roles.":sd.ruler==="Sun"?"authority, visibility, and high-impact leadership.":sd.ruler==="Jupiter"?"teaching, expanding, and wisdom-sharing roles.":sd.ruler==="Saturn"?"structuring, planning, and long-horizon leadership.":"innovative, disruptive, and unconventional roles.") + "\n";
-        out += "- " + sd.quality + " quality: you " + (sd.quality==="Cardinal"?"initiate — most energized when launching and leading, not maintaining.":sd.quality==="Fixed"?"sustain — excel at deepening, mastering, and seeing things through.":"adapt — thrive in changing environments and excel at connecting systems.") + "\n\n";
-        out += "Vedic Career Indicators:\n";
-        out += "- Nakshatra " + nak.name + " career gifts: " + nak.quality + "\n";
-        out += "- Dasha Lord " + dasha + ": " + (dasha==="Jupiter"?"expansion and fortunate advancement opportunities.":dasha==="Saturn"?"disciplined rise through merit — prove yourself completely.":dasha==="Mars"?"assertive moves — launch, compete, claim your space.":dasha==="Mercury"?"intellectual and commercial acumen amplified.":dasha==="Venus"?"creative and relational work thrives; charm opens doors.":dasha==="Rahu"?"unconventional paths and rapid advancement possible.":dasha==="Ketu"?"deepen mastery rather than climbing the ladder.":"emotionally intuitive leadership highlighted.") + "\n\n";
-        out += "Chinese Career Profile — " + chSign + " (" + chEl + "):\n";
-        out += "- " + (chineseData[chSign]||chineseData.Rat).nature.split(".")[0] + " — your professional identity.\n";
-        out += "- " + chEl + " career advantage: " + (chEl==="Metal"?"decisive leadership and the courage to make tough calls.":chEl==="Water"?"creative flow, persuasion, and connecting disparate ideas.":chEl==="Wood"?"growing organizations and idealistic leadership.":chEl==="Fire"?"charismatic leadership and energizing teams.":"operational excellence and building durable systems.") + "\n\n";
-        out += "Numerology — Life Path " + reading.lifePath + " Career Destiny:\n";
-        out += "- " + lp.career + "\n- Challenge: " + lp.challenge + "\n";
-        if (!privacyMode) out += "- Personal Year " + reading.personalYear + ": " + (reading.personalYear===1?"Launch bold new initiatives.":reading.personalYear===4?"Build expertise and prove reliability.":reading.personalYear===8?"Assert leadership and pursue ambitious milestones.":reading.personalYear===9?"Complete current chapters; new phase incoming.":reading.personalYear===5?"Embrace change — unexpected shifts carry opportunity.":"Steady growth and deepening mastery.") + "\n";
-        out += "\n";
-        out += "Integrated Strategy (" + horizon + "):\n";
-        out += "- Zone of genius: roles at the intersection of " + reading.dominantElement + " qualities and " + sign + " strengths.\n";
-        out += "- Advancement trigger: " + (reading.dominantElement==="Fire"?"make bold, visible moves — be seen leading.":reading.dominantElement==="Earth"?"deliver measurable, undeniable results consistently.":reading.dominantElement==="Air"?"position yourself as the most informed and connected person.":"build deep trust networks that champion your work.") + "\n";
-        out += "- Collaboration style: " + (sd.quality==="Cardinal"?"you lead best with full mandate to initiate.":sd.quality==="Fixed"?"you are the team anchor — depth over breadth.":"you are the bridge builder who makes diverse teams cohere.") + "\n";
-        out += "- Power window: " + realWindows + "\n";
-        out += "- Career score " + horizon + ": " + scores.career + "/100";
-        return out;
-      }
-      return "";
+    if (ascendantSign) {
+      const ascNote = liveData && liveData.planets ? " (calculated from your exact birth time & place)" : " (approx, based on birth time)";
+      text += "Rising Sign: " + ascendantSign + ascNote + " — shapes how the world first perceives you.\n";
     }
-    function safeBuildTabContent(tabName, rangeValue, payload, reading, privacyMode) {
-      try {
-        return buildTabContent(tabName, rangeValue, payload, reading, privacyMode);
-      } catch (error) {
-        return (
-          "Detailed forecast is temporarily unavailable.\n\n" +
-          "Fallback Guidance:\n" +
-          "- Focus on one clear priority for this cycle.\n" +
-          "- Keep communication direct and simple.\n" +
-          "- Review routines and avoid rushed decisions."
-        );
-      }
-    }
-    function renderChips({ sign, lifePath, dominantElement, nakshatra, chSign, chEl, celtic }, privacyMode) {
-      chipsEl.innerHTML = "";
-      const chips = privacyMode
-        ? ["☉ " + sign, "# Life Path " + lifePath, "✦ Privacy Mode"]
-        : ["☉ " + sign, "# Life Path " + lifePath, "✦ " + dominantElement,
-           "★ " + (nakshatra ? nakshatra.name : ""), "🐉 " + chSign + " / " + chEl,
-           "🌿 " + (celtic ? celtic.tree : "")];
-      chips.filter(Boolean).forEach((item) => {
-        const chip = document.createElement("span");
-        chip.className = "chip";
-        chip.textContent = item;
-        chipsEl.appendChild(chip);
+
+    // Real planet sign positions if available
+    if (liveData && liveData.planets && Object.keys(liveData.planets).length > 2) {
+      text += "\nYour Birth Chart Planets:\n";
+      const planetOrder = ["Sun","Moon","Mercury","Venus","Mars","Jupiter","Saturn","Rahu","Ketu"];
+      planetOrder.forEach(planet => {
+        const p = liveData.planets[planet];
+        if (p && p.current_sign) {
+          const pSign = signNames[(p.current_sign-1) % 12];
+          const retro = p.isRetro==="true" ? " ℞" : "";
+          text += "  " + planet + " in " + pSign + retro + "\n";
+        }
       });
     }
-    function onGenerate() {
-      try {
-        const payload = getFormPayload();
-        if (!payload.dob) {
-          errorEl.style.display = "block";
-          errorEl.textContent = "Please enter a valid DOB. Supported: YYYY-MM-DD, YYYY/MM/DD, MM/DD/YYYY, DD/MM/YYYY, MM-DD-YYYY.";
-          resultEl.style.display = "none";
-          setStatus("Generate failed: invalid DOB format.");
-          return;
-        }
-        if (!isValidIsoDate(payload.dob)) {
-          errorEl.style.display = "block";
-          errorEl.textContent = "DOB looks invalid. Please check day/month values and try again.";
-          resultEl.style.display = "none";
-          setStatus("Generate failed: invalid calendar date.");
-          return;
-        }
 
-        errorEl.style.display = "none";
-        errorEl.textContent = "Please enter at least the Date of Birth.";
-        const reading = generateReading(payload, privacyModeEl.checked);
-        if (!reading || !reading.sign) {
-          throw new Error("Reading engine returned incomplete profile.");
-        }
-        activeTabState.payload = payload;
-        activeTabState.reading = reading;
-        renderChips({ sign: reading.sign, lifePath: reading.lifePath, dominantElement: reading.dominantElement, nakshatra: reading.nakshatra, chSign: reading.chSign, chEl: reading.chEl, celtic: reading.celtic }, privacyModeEl.checked);
-        readingEl.textContent = reading.text;
-        upcomingDatesBoxEl.textContent = buildUpcomingDatesBox(rangeSelectEl.value, payload, reading);
-        tabContentEl.textContent = safeBuildTabContent(activeTabState.tab, rangeSelectEl.value, payload, reading, privacyModeEl.checked);
-        resultEl.style.display = "block";
-        setStatus("Reading generated.");
-      } catch (error) {
-        resultEl.style.display = "none";
-        errorEl.style.display = "block";
-        const detail = error && error.message ? error.message : "unknown error";
-        errorEl.textContent = "Generate failed: " + detail;
-        setStatus("Generate failed. " + detail);
+    if (timeVibe) text += "\nBirth Time: " + timeVibe + "\n";
+    if (placeTone && !privacyMode) text += placeTone + "\n";
+
+    // ── VEDIC ASTROLOGY ────────────────────────────────
+    text += "\n✦ VEDIC ASTROLOGY (Jyotish)\n";
+    if (!privacyMode) {
+      text += "Moon Sign (Rashi): " + moonSign + " — your emotional instincts and subconscious mind.\n";
+      text += "Birth Nakshatra: " + nakshatra.name + " (Deity: " + nakshatra.deity + ")\n";
+      text += "Nakshatra quality: " + nakshatra.quality + "\n";
+      text += "Current Dasha Lord: " + dashaLord + dashaNote + " — life themes now revolve around " + (dashaThemes[dashaLord]||"spiritual growth") + ".\n";
+      if (liveData && liveData.todayNakshatra) {
+        text += "Today's Sky Nakshatra: " + liveData.todayNakshatra + (liveData.nakEnds ? " (active until " + new Date(liveData.nakEnds).toLocaleString() + ")" : "") + "\n";
       }
-    }
-    function fillSample() {
-      setFormPayload({ name: "Riya", dob: "1996-08-17", birthTime: "06:40", place: "Mumbai, India" });
-      onGenerate();
+    } else {
+      text += "Birth Nakshatra: " + nakshatra.name + " — " + nakshatra.quality + "\n";
     }
 
-    function loadProfiles() {
-      return loadProfilesLocal();
+    // ── CHINESE ASTROLOGY ───────────────────────────────
+    text += "\n✦ CHINESE ASTROLOGY\n";
+    if (!privacyMode) {
+      text += "Chinese Zodiac: " + chSign + " (" + birthYear + ") | Element: " + chEl + "\n";
+      text += (chineseData[chSign]||chineseData.Rat).nature + "\n";
+      text += chineseElementData[chEl] + "\n";
+    } else {
+      text += "Chinese Sign: " + chSign + " — " + (chineseData[chSign]||chineseData.Rat).nature.split(".")[0] + ".\n";
     }
-    function renderProfileOptions(selectedId = "") {
-      const profiles = loadProfiles();
-      profileSelectEl.innerHTML = '<option value="">New profile</option>';
-      profiles.forEach((profile) => {
-        const option = document.createElement("option");
-        option.value = profile.id;
-        option.textContent = profile.name;
-        if (profile.id === selectedId) option.selected = true;
-        profileSelectEl.appendChild(option);
-      });
-    }
-    function saveCurrentProfile() {
-      const payload = getFormPayload();
-      if (!payload.name || !payload.dob) return setStatus("Name and DOB are required to save a profile.");
 
-      const profiles = loadProfilesLocal();
-      if (activeProfileId) {
-        const i = profiles.findIndex((item) => item.id === activeProfileId);
-        if (i >= 0) profiles[i] = { ...profiles[i], ...payload };
+    // ── NUMEROLOGY ─────────────────────────────────────
+    text += "\n✦ NUMEROLOGY\n";
+    text += "Life Path " + lifePath + ": " + lp.title + "\n";
+    text += lp.theme + "\n";
+    if (!privacyMode) {
+      text += "Personal Year " + personalYear + " (2026): " + pyTheme + "\n";
+      if (expNum) text += "Expression Number " + expNum + " (from your name) amplifies your outward gifts and natural talents.\n";
+    }
+    text += "\n✦ TAROT BIRTH CARD\n" + tarot + "\n";
+    text += "\n✦ CELTIC TREE SIGN\nYour birth tree: " + celtic.tree + "\n" + celtic.quality + "\n";
+    text += "\n✦ ELEMENTAL BALANCE\n";
+    text += "Fire " + elementStrength.Fire + " | Earth " + elementStrength.Earth + " | Air " + elementStrength.Air + " | Water " + elementStrength.Water + "\n";
+    const dominant2 = Object.entries(elementStrength).sort((a,b)=>b[1]-a[1]);
+    text += "Dominant: " + dominant2[0][0] + " | Secondary: " + dominant2[1][0] + " | Least expressed: " + dominant2[3][0] + "\n";
+    text += "Developing your " + dominant2[3][0] + " element unlocks hidden dimensions of your potential.\n";
+
+    return { sign, element:elementBySign[sign]||"Air", lifePath, personalYear, season, birthDay:bdayName,
+             archetype, dominantElement, elementStrength, nakshatra, moonSign, dashaLord, dashaNote,
+             chSign, chEl, lp, celtic, tarot, sd, text };
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // TAB CONTENT BUILDERS
+  // ─────────────────────────────────────────────────────────────────────────────
+  function buildTabContent(tabName, rangeValue, payload, reading, privacyMode) {
+    const who = payload.name || "You";
+    const horizon = horizonLabels[rangeValue];
+    const scores = scoreAreas(payload, reading.sign);
+    const sign = reading.sign;
+    const sd = reading.sd || signData[sign] || signData.Aries;
+    const lp = reading.lp || lifePathMeanings[reading.lifePath] || lifePathMeanings[9];
+    const nak = reading.nakshatra || {name:"Ashwini",quality:"swift pioneering energy"};
+    const dasha = reading.dashaLord || "Jupiter";
+    const chSign = reading.chSign || "Rat";
+    const chEl = reading.chEl || "Wood";
+    const celtic = reading.celtic || {tree:"Oak",quality:"strength and protection"};
+    const personalYear = reading.personalYear;
+    const pyTheme = personalYearThemes[personalYear] || personalYearThemes[9];
+    const topArea = scores.personal>=scores.financial&&scores.personal>=scores.career?"Personal":scores.financial>=scores.career?"Financial":"Career";
+    const lowArea  = scores.personal<=scores.financial&&scores.personal<=scores.career?"Personal":scores.financial<=scores.career?"Financial":"Career";
+    const momentumAvg = Math.round((scores.personal+scores.financial+scores.career)/3);
+
+    // Power dates based on birthdate
+    const [,bm,bd] = payload.dob.split("-").map(Number);
+    const now = new Date();
+    const nextPowerDay = new Date(now.getFullYear(), now.getMonth(), bd);
+    if (nextPowerDay < now) nextPowerDay.setMonth(nextPowerDay.getMonth()+1);
+    const powerDateStr = nextPowerDay.toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+
+    if (tabName === "personal") {
+      let out = "✦ PERSONAL OUTLOOK — " + who + " (" + horizon + ")\n\n";
+      out += "Western — " + sign + " Identity:\n";
+      out += "- Core theme: " + sd.theme + "\n";
+      out += "- In relationships: " + sd.love + "\n";
+      out += "- Shadow work: " + sd.shadow + "\n";
+      out += "- Lean into: " + sd.strengths + "\n";
+      out += "- Watch for: " + sd.challenges + "\n\n";
+      out += "Vedic Self — Nakshatra " + nak.name + ":\n";
+      out += "- " + nak.quality + "\n";
+      out += "- Dasha Lord " + dasha + " currently activates: " + (dashaThemes[dasha]||"growth") + " in your personal life.\n";
+      if (!privacyMode) out += "- Moon Sign " + reading.moonSign + " shapes your emotional instincts and subconscious patterns.\n";
+      out += "\nChinese Wisdom — " + chSign + " (" + chEl + "):\n- " + (chineseData[chSign]||chineseData.Rat).nature + "\n\n";
+      out += "Numerology — Life Path " + reading.lifePath + " (" + lp.title + "):\n";
+      out += "- " + lp.theme + "\n- In love: " + lp.love + "\n- Core challenge: " + lp.challenge + "\n";
+      if (!privacyMode) out += "- Personal Year " + personalYear + " (2026): " + pyTheme + "\n";
+      out += "\nTarot Birth Card:\n- " + reading.tarot + "\n\n";
+      out += "Celtic Tree — " + celtic.tree + ":\n- " + celtic.quality + "\n\n";
+      out += "Elemental Self-Awareness:\n";
+      out += "- Dominant element " + reading.dominantElement + ": you naturally operate through " + (reading.dominantElement==="Fire"?"passion, initiative, and inspiration.":reading.dominantElement==="Earth"?"practicality, patience, and sensory intelligence.":reading.dominantElement==="Air"?"ideas, communication, and mental agility.":"emotion, intuition, and deep empathy.") + "\n";
+      out += "- Least expressed: " + Object.entries(reading.elementStrength).sort((a,b)=>a[1]-b[1])[0][0] + " — developing this unlocks hidden dimensions.\n\n";
+      out += "Upcoming Personal Power Date: " + powerDateStr + "\n";
+      out += "Personal score " + horizon + ": " + scores.personal + "/100";
+      return out;
+    }
+
+    if (tabName === "financial") {
+      let out = "✦ FINANCIAL OUTLOOK — " + who + " (" + horizon + ")\n\n";
+      out += "Western Money Profile — " + sign + ":\n";
+      out += "- Earning archetype: " + sd.finance + "\n";
+      out += "- Ruling planet " + sd.ruler + " governs your financial rhythms: " + (sd.ruler==="Venus"?"peak earnings align with Venus transits; beauty, luxury, and social investments pay off.":sd.ruler==="Mars"?"aggressive action and entrepreneurial bets create wealth — but impulse destroys it.":sd.ruler==="Mercury"?"communication, commerce, and quick intelligence drive your income.":sd.ruler==="Moon"?"income fluctuates with emotional cycles — build savings as your foundation.":sd.ruler==="Sun"?"leadership positions and high-visibility roles generate your greatest income.":sd.ruler==="Jupiter"?"expansion and generosity attract abundance — scarcity thinking blocks your flow.":sd.ruler==="Saturn"?"disciplined long-term strategy always beats short-term tactics for you.":"unconventional income streams and innovation often outperform traditional paths.") + "\n\n";
+      out += "Vedic Financial Indicators:\n";
+      out += "- Nakshatra " + nak.name + ": " + nak.quality.split(",")[0] + " influences your approach to material resources.\n";
+      out += "- Dasha Lord " + dasha + ": " + (dasha==="Jupiter"||dasha==="Venus"?"expansive opportunities — a favorable period for growth investments.":dasha==="Saturn"?"disciplined restructuring — build systems now that pay later.":dasha==="Rahu"?"unconventional wealth paths and rapid material acceleration.":dasha==="Ketu"?"detach from money-chasing and focus on skill-building.":"active management — review budgets, renegotiate terms, launch income streams.") + "\n\n";
+      out += "Chinese Wealth Element — " + chEl + ":\n- " + (chineseElementData[chEl]||"Balanced approach to resources is favored.") + "\n";
+      out += "- " + chSign + " financial strength: " + (chSign==="Rat"?"shrewd resourcefulness and opportunistic timing.":chSign==="Ox"?"methodical wealth accumulation through hard work.":chSign==="Tiger"?"bold financial bets — manage impulsiveness.":chSign==="Dragon"?"fortunate financial luck combined with ambitious vision.":chSign==="Snake"?"careful long-game financial planning.":chSign==="Horse"?"active income from multiple energetic pursuits.":chSign==="Monkey"?"clever financial innovation and adaptable streams.":chSign==="Rooster"?"perfectionist financial management with detailed tracking.":chSign==="Dog"?"steady reliable income built on trust and reputation.":chSign==="Pig"?"natural abundance — guard against over-indulgence.":"patience and relationship-based financial growth.") + "\n\n";
+      out += "Numerology — Life Path " + reading.lifePath + " Blueprint:\n- " + lp.career + "\n";
+      if (!privacyMode) out += "- Personal Year " + personalYear + " (2026): " + (personalYear===8?"Peak wealth cycle — think big and act boldly.":personalYear===4?"Build financial systems now — they compound later.":personalYear===1?"Plant income seeds; harvest comes in years 3–5.":personalYear===9?"Clear debts; prepare for a new 9-year wealth cycle.":"Steady consolidation and smart growth define this year.") + "\n";
+      out += "\nIntegrated Strategy (" + horizon + "):\n";
+      out += "- Investment style: " + (reading.dominantElement==="Earth"?"long-term tangible assets — real estate, index funds, gold.":reading.dominantElement==="Fire"?"growth stocks, entrepreneurial ventures, performance-linked income.":reading.dominantElement==="Air"?"tech, communications, education, and intellectual property.":"stable income instruments, healthcare, and emotionally meaningful ventures.") + "\n";
+      out += "- Risk warning: guard against " + (["Aries","Sagittarius","Leo"].includes(sign)?"impulsive spending driven by optimism or ego.":["Pisces","Cancer","Scorpio"].includes(sign)?"emotionally reactive financial decisions.":["Gemini","Aquarius","Libra"].includes(sign)?"scattered investments lacking focus.":"over-caution that misses genuine opportunities.") + "\n";
+      out += "- Upcoming Power Date: " + powerDateStr + "\n";
+      out += "- Financial score " + horizon + ": " + scores.financial + "/100";
+      return out;
+    }
+
+    if (tabName === "career") {
+      let out = "✦ CAREER OUTLOOK — " + who + " (" + horizon + ")\n\n";
+      out += "Western Career Archetype — " + sign + ":\n";
+      out += "- " + sd.career + "\n";
+      out += "- Ruling planet " + sd.ruler + " energizes: " + (sd.ruler==="Mars"?"leadership, competition, and pioneering roles.":sd.ruler==="Venus"?"aesthetic, relational, and creative roles.":sd.ruler==="Mercury"?"communication, analysis, and data-driven roles.":sd.ruler==="Moon"?"caring, nurturing, and cyclically creative roles.":sd.ruler==="Sun"?"authority, visibility, and high-impact leadership.":sd.ruler==="Jupiter"?"teaching, expanding, and wisdom-sharing roles.":sd.ruler==="Saturn"?"structuring, planning, and long-horizon leadership.":"innovative, disruptive, and unconventional roles.") + "\n";
+      out += "- " + sd.quality + " quality: you " + (sd.quality==="Cardinal"?"initiate — most energized when launching and leading, not maintaining.":sd.quality==="Fixed"?"sustain — excel at deepening, mastering, and seeing things through.":"adapt — thrive in changing environments and excel at connecting systems.") + "\n\n";
+      out += "Vedic Career Indicators:\n";
+      out += "- Nakshatra " + nak.name + " career gifts: " + nak.quality + "\n";
+      out += "- Dasha Lord " + dasha + ": " + (dasha==="Jupiter"?"expansion and fortunate advancement opportunities.":dasha==="Saturn"?"disciplined rise through merit — prove yourself completely.":dasha==="Mars"?"assertive moves — launch, compete, claim your space.":dasha==="Mercury"?"intellectual and commercial acumen amplified.":dasha==="Venus"?"creative and relational work thrives; charm opens doors.":dasha==="Rahu"?"unconventional paths and rapid advancement possible.":dasha==="Ketu"?"deepen mastery rather than climbing the ladder.":"emotionally intuitive leadership highlighted.") + "\n\n";
+      out += "Chinese Career Profile — " + chSign + " (" + chEl + "):\n";
+      out += "- " + (chineseData[chSign]||chineseData.Rat).nature.split(".")[0] + " — your professional identity.\n";
+      out += "- " + chEl + " career advantage: " + (chEl==="Metal"?"decisive leadership and the courage to make tough calls.":chEl==="Water"?"creative flow, persuasion, and connecting disparate ideas.":chEl==="Wood"?"growing organizations and idealistic leadership.":chEl==="Fire"?"charismatic leadership and energizing teams.":"operational excellence and building durable systems.") + "\n\n";
+      out += "Numerology — Life Path " + reading.lifePath + " Career Destiny:\n- " + lp.career + "\n- Challenge: " + lp.challenge + "\n";
+      if (!privacyMode) out += "- Personal Year " + personalYear + " (2026): " + (personalYear===1?"Launch bold new initiatives.":personalYear===4?"Build expertise and prove reliability.":personalYear===8?"Assert leadership and pursue ambitious milestones.":personalYear===9?"Complete current chapters; new phase incoming.":personalYear===5?"Embrace change — unexpected shifts carry opportunity.":"Steady growth and deepening mastery.") + "\n";
+      out += "\nIntegrated Strategy (" + horizon + "):\n";
+      out += "- Zone of genius: roles at the intersection of " + reading.dominantElement + " qualities and " + sign + " strengths.\n";
+      out += "- Advancement trigger: " + (reading.dominantElement==="Fire"?"make bold, visible moves — be seen leading.":reading.dominantElement==="Earth"?"deliver measurable, undeniable results consistently.":reading.dominantElement==="Air"?"position yourself as the most informed and connected person.":"build deep trust networks that champion your work.") + "\n";
+      out += "- Collaboration style: " + (sd.quality==="Cardinal"?"you lead best with full mandate to initiate.":sd.quality==="Fixed"?"you are the team anchor — depth over breadth.":"you are the bridge builder who makes diverse teams cohere.") + "\n";
+      out += "- Upcoming Power Date: " + powerDateStr + "\n";
+      out += "- Career score " + horizon + ": " + scores.career + "/100";
+      return out;
+    }
+    return "";
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // DOM REFERENCES & STATE
+  // ─────────────────────────────────────────────────────────────────────────────
+  const activeTabState = { tab:"events", payload:null, reading:null };
+  const PROFILE_STORE_KEY = "astroProfilesV1";
+  let activeProfileId = "";
+  let lastLiveData = null;
+
+  const nameEl          = document.getElementById("name");
+  const dobEl           = document.getElementById("dob");
+  const birthTimeEl     = document.getElementById("birthTime");
+  const placeEl         = document.getElementById("place");
+  const generateBtn     = document.getElementById("generateBtn");
+  const sampleBtn       = document.getElementById("sampleBtn");
+  const resultEl        = document.getElementById("result");
+  const chipsEl         = document.getElementById("detailChips");
+  const readingEl       = document.getElementById("reading");
+  const errorEl         = document.getElementById("errorText");
+  const rangeSelectEl   = document.getElementById("rangeSelect");
+  const tabContentEl    = document.getElementById("tabContent");
+  const tabButtons      = [...document.querySelectorAll(".tab-btn")];
+  const themeSelectEl   = document.getElementById("themeSelect");
+  const eventCardsEl    = document.getElementById("eventCardsContainer");
+  const upcomingBoxEl   = document.getElementById("upcomingDatesBox");
+  const profileSelectEl = document.getElementById("profileSelect");
+  const saveProfileBtn  = document.getElementById("saveProfileBtn");
+  const deleteProfileBtn= document.getElementById("deleteProfileBtn");
+  const newProfileBtn   = document.getElementById("newProfileBtn");
+  const statusTextEl    = document.getElementById("statusText");
+  const privacyModeEl   = document.getElementById("privacyMode");
+  const toggleSensitiveBtn = document.getElementById("toggleSensitiveBtn");
+  let showSensitiveInputs = false;
+  const setStatus = (m) => { statusTextEl.textContent = m; };
+
+  // ── Free Astrology API key management ───────────────────────────────────────
+  const faaKeyInput   = document.getElementById("faaKeyInput");
+  const faaKeySaveBtn = document.getElementById("faaKeySaveBtn");
+  const faaKeySavedMsg= document.getElementById("faaKeySavedMsg");
+  const savedFaaKey   = localStorage.getItem(FAA_KEY_STORE) || "";
+  if (savedFaaKey) { faaKeyInput.value = savedFaaKey; faaKeySavedMsg.style.display = "inline"; }
+  faaKeySaveBtn.addEventListener("click", () => {
+    const k = faaKeyInput.value.trim();
+    if (k) { localStorage.setItem(FAA_KEY_STORE, k); faaKeySavedMsg.style.display = "inline"; setTimeout(()=>{faaKeySavedMsg.style.display="none";},2500); }
+  });
+  faaKeyInput.addEventListener("input", () => { faaKeySavedMsg.style.display = "none"; });
+
+  // ── Profile storage ─────────────────────────────────────────────────────────
+  const loadProfilesLocal   = () => { try { const r = localStorage.getItem(PROFILE_STORE_KEY); const p = r ? JSON.parse(r) : []; return Array.isArray(p)?p:[]; } catch { return []; } };
+  const persistProfilesLocal= (p) => localStorage.setItem(PROFILE_STORE_KEY, JSON.stringify(p));
+  const getFormPayload = () => ({
+    name: nameEl.value.trim(),
+    dob: normalizeDob(dobEl.value),
+    birthTime: normalizeTime(birthTimeEl.value),
+    place: placeEl.value.trim()
+  });
+  const setFormPayload = (p) => { nameEl.value=p.name||""; dobEl.value=p.dob||""; birthTimeEl.value=p.birthTime||""; placeEl.value=p.place||""; };
+
+  function renderChips({ sign, lifePath, dominantElement, nakshatra, chSign, chEl, celtic }, privacyMode) {
+    chipsEl.innerHTML = "";
+    const chips = privacyMode
+      ? ["☉ "+sign, "# Life Path "+lifePath, "✦ Privacy Mode"]
+      : ["☉ "+sign, "# Life Path "+lifePath, "✦ "+dominantElement,
+         "★ "+(nakshatra?nakshatra.name:""), "🐉 "+chSign+" / "+chEl,
+         "🌿 "+(celtic?celtic.tree:"")];
+    chips.filter(Boolean).forEach(item => {
+      const chip = document.createElement("span");
+      chip.className = "chip"; chip.textContent = item;
+      chipsEl.appendChild(chip);
+    });
+  }
+
+  function updateTabDisplay() {
+    const tab = activeTabState.tab;
+    if (tab === "events") {
+      eventCardsEl.style.display = "flex";
+      upcomingBoxEl.style.display  = "none";
+      tabContentEl.style.display   = "none";
+      eventCardsEl.innerHTML = buildEventCards(activeTabState.payload, activeTabState.reading, rangeSelectEl.value);
+    } else {
+      eventCardsEl.style.display = "none";
+      upcomingBoxEl.style.display  = "none";
+      tabContentEl.style.display   = "block";
+      tabContentEl.textContent = buildTabContent(tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
+    }
+  }
+
+  async function onGenerate() {
+    const payload = getFormPayload();
+    if (!payload.dob) {
+      errorEl.style.display="block"; errorEl.textContent="Please enter a valid DOB. Supported: YYYY-MM-DD, MM/DD/YYYY, DD/MM/YYYY.";
+      resultEl.style.display="none"; setStatus("Generate failed: invalid DOB format."); return;
+    }
+    if (!isValidIsoDate(payload.dob)) {
+      errorEl.style.display="block"; errorEl.textContent="DOB looks invalid. Please check day/month values.";
+      resultEl.style.display="none"; setStatus("Generate failed: invalid calendar date."); return;
+    }
+    errorEl.style.display = "none";
+    generateBtn.disabled = true;
+    generateBtn.innerHTML = "<span class='spinner'></span>Generating…";
+
+    try {
+      // Try to fetch real data if API key exists
+      lastLiveData = null;
+      const faaKey = getFaaKey();
+      if (faaKey) {
+        lastLiveData = await fetchRealPlanetData(payload);
       } else {
-        activeProfileId = "p_" + Date.now();
-        profiles.push({ id: activeProfileId, ...payload });
+        document.getElementById("apiStatusBar").className = "api-status-bar";
       }
-      persistProfilesLocal(profiles);
-      renderProfileOptions(activeProfileId);
-      setStatus("Profile saved.");
-    }
-    function deleteCurrentProfile() {
-      if (!activeProfileId) return setStatus("Select a saved profile to delete.");
-      persistProfilesLocal(loadProfilesLocal().filter((item) => item.id !== activeProfileId));
-      activeProfileId = "";
-      profileSelectEl.value = "";
-      setFormPayload({ name: "", dob: "", birthTime: "", place: "" });
+
+      const reading = generateReading(payload, privacyModeEl.checked, lastLiveData);
+      if (!reading || !reading.sign) throw new Error("Reading engine returned incomplete profile.");
+
+      activeTabState.payload = payload;
+      activeTabState.reading = reading;
+
+      renderChips({ sign:reading.sign, lifePath:reading.lifePath, dominantElement:reading.dominantElement, nakshatra:reading.nakshatra, chSign:reading.chSign, chEl:reading.chEl, celtic:reading.celtic }, privacyModeEl.checked);
+      readingEl.textContent = reading.text;
+      updateTabDisplay();
+      resultEl.style.display = "block";
+      setStatus("Reading generated." + (lastLiveData ? " (Live planetary data included)" : ""));
+      resultEl.scrollIntoView({ behavior:"smooth", block:"start" });
+    } catch (error) {
       resultEl.style.display = "none";
-      renderProfileOptions("");
-      setStatus("Profile deleted.");
+      errorEl.style.display = "block";
+      errorEl.textContent = "Generate failed: " + (error?.message || "unknown error");
+      setStatus("Generate failed.");
     }
-    function onProfileChange() {
-      activeProfileId = profileSelectEl.value;
-      if (!activeProfileId) return setStatus("Switched to new profile mode.");
-      const found = loadProfiles().find((item) => item.id === activeProfileId);
-      if (!found) return setStatus("Profile not found.");
-      setFormPayload(found);
-      setStatus("Profile loaded. Click Generate Astrology Page.");
-    }
+    generateBtn.disabled = false;
+    generateBtn.innerHTML = "Generate Astrology Page";
+  }
 
-    generateBtn.addEventListener("click", onGenerate);
-    sampleBtn.addEventListener("click", fillSample);
-    saveProfileBtn.addEventListener("click", () => { saveCurrentProfile(); });
-    deleteProfileBtn.addEventListener("click", () => { deleteCurrentProfile(); });
-    newProfileBtn.addEventListener("click", () => { activeProfileId = ""; profileSelectEl.value = ""; setFormPayload({ name: "", dob: "", birthTime: "", place: "" }); resultEl.style.display = "none"; setStatus("Ready to create a new profile."); });
-    profileSelectEl.addEventListener("change", () => { onProfileChange(); });
-    rangeSelectEl.addEventListener("change", () => {
-      if (!activeTabState.payload || !activeTabState.reading) return;
-      upcomingDatesBoxEl.textContent = buildUpcomingDatesBox(rangeSelectEl.value, activeTabState.payload, activeTabState.reading);
-      tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
+  function fillSample() {
+    setFormPayload({ name:"Riya", dob:"1996-08-17", birthTime:"06:40", place:"Mumbai, India" });
+    onGenerate();
+  }
+
+  // ── Profile management ───────────────────────────────────────────────────────
+  function renderProfileOptions(selectedId="") {
+    const profiles = loadProfilesLocal();
+    profileSelectEl.innerHTML = '<option value="">New profile</option>';
+    profiles.forEach(p => {
+      const o = document.createElement("option"); o.value=p.id; o.textContent=p.name;
+      if (p.id===selectedId) o.selected=true;
+      profileSelectEl.appendChild(o);
     });
-    privacyModeEl.addEventListener("change", () => {
+  }
+  function saveCurrentProfile() {
+    const payload = getFormPayload();
+    if (!payload.name||!payload.dob) return setStatus("Name and DOB are required to save a profile.");
+    const profiles = loadProfilesLocal();
+    if (activeProfileId) {
+      const i = profiles.findIndex(p=>p.id===activeProfileId);
+      if (i>=0) profiles[i] = {...profiles[i],...payload};
+    } else {
+      activeProfileId = "p_"+Date.now();
+      profiles.push({id:activeProfileId,...payload});
+    }
+    persistProfilesLocal(profiles); renderProfileOptions(activeProfileId); setStatus("Profile saved.");
+  }
+  function deleteCurrentProfile() {
+    if (!activeProfileId) return setStatus("Select a saved profile to delete.");
+    persistProfilesLocal(loadProfilesLocal().filter(p=>p.id!==activeProfileId));
+    activeProfileId=""; profileSelectEl.value="";
+    setFormPayload({name:"",dob:"",birthTime:"",place:""});
+    resultEl.style.display="none"; renderProfileOptions(""); setStatus("Profile deleted.");
+  }
+  function onProfileChange() {
+    activeProfileId = profileSelectEl.value;
+    if (!activeProfileId) return setStatus("Switched to new profile mode.");
+    const found = loadProfilesLocal().find(p=>p.id===activeProfileId);
+    if (!found) return setStatus("Profile not found.");
+    setFormPayload(found); setStatus("Profile loaded. Click Generate Astrology Page.");
+  }
+
+  // ── Event listeners ──────────────────────────────────────────────────────────
+  generateBtn.addEventListener("click", onGenerate);
+  sampleBtn.addEventListener("click", fillSample);
+  saveProfileBtn.addEventListener("click", saveCurrentProfile);
+  deleteProfileBtn.addEventListener("click", deleteCurrentProfile);
+  newProfileBtn.addEventListener("click", () => { activeProfileId=""; profileSelectEl.value=""; setFormPayload({name:"",dob:"",birthTime:"",place:""}); resultEl.style.display="none"; setStatus("Ready to create a new profile."); });
+  profileSelectEl.addEventListener("change", onProfileChange);
+  rangeSelectEl.addEventListener("change", () => { if (!activeTabState.payload) return; updateTabDisplay(); });
+  privacyModeEl.addEventListener("change", () => { if (!activeTabState.payload) return; onGenerate(); });
+  toggleSensitiveBtn.addEventListener("click", () => {
+    showSensitiveInputs = !showSensitiveInputs;
+    const mode = showSensitiveInputs?"text":"password";
+    dobEl.type=mode; birthTimeEl.type=mode; placeEl.type=mode;
+    toggleSensitiveBtn.textContent = showSensitiveInputs?"Hide Sensitive Inputs":"Show Sensitive Inputs";
+  });
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      activeTabState.tab = btn.dataset.tab;
+      tabButtons.forEach(b=>b.classList.remove("active")); btn.classList.add("active");
+      document.getElementById("qaTabLabel").textContent = {events:"Upcoming Astro Events",personal:"Personal",financial:"Financial",career:"Career"}[btn.dataset.tab]||btn.dataset.tab;
       if (!activeTabState.payload) return;
-      onGenerate();
+      updateTabDisplay();
     });
-    toggleSensitiveBtn.addEventListener("click", () => {
-      showSensitiveInputs = !showSensitiveInputs;
-      const mode = showSensitiveInputs ? "text" : "password";
-      dobEl.type = mode;
-      birthTimeEl.type = mode;
-      placeEl.type = mode;
-      toggleSensitiveBtn.textContent = showSensitiveInputs ? "Hide Sensitive Inputs" : "Show Sensitive Inputs";
-    });
-    tabButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        activeTabState.tab = button.dataset.tab;
-        tabButtons.forEach((item) => item.classList.remove("active"));
-        button.classList.add("active");
-        if (!activeTabState.payload || !activeTabState.reading) return;
-        upcomingDatesBoxEl.textContent = buildUpcomingDatesBox(rangeSelectEl.value, activeTabState.payload, activeTabState.reading);
-        tabContentEl.textContent = buildTabContent(activeTabState.tab, rangeSelectEl.value, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
+  });
+  themeSelectEl.addEventListener("change", () => {
+    const t = themeSelectEl.value;
+    if (t==="dark") document.body.removeAttribute("data-theme");
+    else document.body.setAttribute("data-theme",t);
+    localStorage.setItem("astroTheme",t);
+  });
+  const savedTheme = localStorage.getItem("astroTheme")||"dark";
+  themeSelectEl.value = savedTheme;
+  if (savedTheme!=="dark") document.body.setAttribute("data-theme",savedTheme);
+
+  renderProfileOptions();
+  setStatus("Create a profile or select an existing one.");
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // Q&A FEATURE (OpenRouter)
+  // ─────────────────────────────────────────────────────────────────────────────
+  const qaInput      = document.getElementById("qaInput");
+  const qaAskBtn     = document.getElementById("qaAskBtn");
+  const qaHistory    = document.getElementById("qaHistory");
+  const qaClearBtn   = document.getElementById("qaClearBtn");
+  const apiKeyInput  = document.getElementById("apiKeyInput");
+  const apiKeySaveBtn= document.getElementById("apiKeySaveBtn");
+  const apiKeySavedMsg=document.getElementById("apiKeySavedMsg");
+  const API_KEY_STORE = "astroApiKey";
+  const savedKey = localStorage.getItem(API_KEY_STORE)||"";
+  if (savedKey) { apiKeyInput.value=savedKey; apiKeySavedMsg.style.display="inline"; }
+  apiKeySaveBtn.addEventListener("click", () => {
+    const k=apiKeyInput.value.trim();
+    if (k) { localStorage.setItem(API_KEY_STORE,k); apiKeySavedMsg.style.display="inline"; setTimeout(()=>{apiKeySavedMsg.style.display="none";},2500); }
+  });
+  apiKeyInput.addEventListener("input", ()=>{apiKeySavedMsg.style.display="none";});
+
+  const tabLabels = {events:"Upcoming Astro Events",personal:"Personal",financial:"Financial",career:"Career"};
+  const qaConversations = {events:[],personal:[],financial:[],career:[]};
+
+  function buildSystemPrompt(tab, payload, reading, privacyMode) {
+    const name = payload.name||"the user";
+    const dob  = privacyMode?"(hidden)":payload.dob;
+    const time = privacyMode?"(hidden)":(payload.birthTime||"unknown");
+    const place= privacyMode?"(hidden)":(payload.place||"unknown");
+    return "You are a warm, insightful astrology assistant. You have access to the following birth details:\n"+
+      "- Name: "+name+"\n- Date of Birth: "+dob+"\n- Birth Time: "+time+"\n- Birth Place: "+place+
+      "\n- Zodiac Sign: "+reading.sign+"\n- Dominant Element: "+reading.dominantElement+
+      "\n- Life Path Number: "+reading.lifePath+"\n- Season of Birth: "+reading.season+
+      "\n- Nakshatra: "+(reading.nakshatra?.name||"unknown")+
+      "\n- Current Dasha Lord: "+reading.dashaLord+(reading.dashaNote||"")+
+      "\n- Personal Year 2026: "+reading.personalYear+"\n\n"+
+      "The user is currently viewing the '"+(tabLabels[tab]||tab)+"' tab of their astrology reading.\n"+
+      "Answer questions thoughtfully, keeping responses concise (2-4 paragraphs max). "+
+      "Ground your answers in the birth details above. "+
+      (privacyMode?"Privacy mode is active — avoid referencing specific dates or locations.\n":"")+
+      "Be encouraging, specific, and practical.";
+  }
+
+  function appendBubble(role, text) {
+    const div = document.createElement("div");
+    div.className = "qa-bubble "+role; div.textContent = text;
+    qaHistory.appendChild(div); div.scrollIntoView({behavior:"smooth",block:"nearest"}); return div;
+  }
+  function renderQaHistory(tab) {
+    qaHistory.innerHTML = "";
+    (qaConversations[tab]||[]).forEach(msg => { if (msg.role==="user"||msg.role==="assistant") appendBubble(msg.role,msg.content); });
+    qaClearBtn.style.display = (qaConversations[tab]&&qaConversations[tab].length>0)?"inline-block":"none";
+  }
+
+  async function askQuestion() {
+    if (!activeTabState.payload||!activeTabState.reading) { appendBubble("assistant","Please generate your astrology reading first before asking questions."); return; }
+    const question = qaInput.value.trim(); if (!question) return;
+    const apiKey = (localStorage.getItem(API_KEY_STORE)||apiKeyInput.value||"").trim();
+    if (!apiKey) { appendBubble("assistant","⚠ Please enter and save your OpenRouter API key above. Get a free key at openrouter.ai"); return; }
+    const tab = activeTabState.tab; const history = qaConversations[tab];
+    qaInput.value = ""; qaAskBtn.disabled = true;
+    appendBubble("user", question); history.push({role:"user",content:question});
+    const loadingDiv = document.createElement("div"); loadingDiv.className="qa-bubble loading"; loadingDiv.textContent="Consulting the stars…";
+    qaHistory.appendChild(loadingDiv); loadingDiv.scrollIntoView({behavior:"smooth",block:"nearest"});
+    try {
+      const sysPrompt = buildSystemPrompt(tab, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
+      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+        method:"POST",
+        headers:{"Content-Type":"application/json","Authorization":"Bearer "+apiKey,"HTTP-Referer":window.location.href,"X-Title":"Personal Astrology Page"},
+        body: JSON.stringify({model:"mistralai/mistral-7b-instruct:free",messages:[{role:"system",content:sysPrompt},...history],max_tokens:1000})
       });
-    });
-    themeSelectEl.addEventListener("change", () => {
-      if (themeSelectEl.value === "dark") {
-        document.body.removeAttribute("data-theme");
-      } else {
-        document.body.setAttribute("data-theme", themeSelectEl.value);
-      }
-      localStorage.setItem("astroTheme", themeSelectEl.value);
-    });
-    const savedTheme = localStorage.getItem("astroTheme") || "dark";
-    themeSelectEl.value = savedTheme;
-    if (savedTheme !== "dark") {
-      document.body.setAttribute("data-theme", savedTheme);
-    }
-    renderProfileOptions();
-    setStatus("Create a profile or select an existing one.");
+      const data = await response.json(); loadingDiv.remove();
+      if (data.error) { appendBubble("assistant","⚠ API error: "+(data.error.message||"Check your API key.")); history.pop(); }
+      else { const answer = data.choices?.[0]?.message?.content||"No response received."; history.push({role:"assistant",content:answer}); appendBubble("assistant",answer); }
+    } catch (err) { loadingDiv.remove(); appendBubble("assistant","⚠ Network error: "+err.message); history.pop(); }
+    qaAskBtn.disabled=false; qaClearBtn.style.display="inline-block"; qaInput.focus();
+  }
 
-    // ── Q&A Feature ──────────────────────────────────────────────────────────
-    const qaInput       = document.getElementById("qaInput");
-    const qaAskBtn      = document.getElementById("qaAskBtn");
-    const qaHistory     = document.getElementById("qaHistory");
-    const qaClearBtn    = document.getElementById("qaClearBtn");
-    const qaTabLabel    = document.getElementById("qaTabLabel");
-    const apiKeyInput   = document.getElementById("apiKeyInput");
-    const apiKeySaveBtn = document.getElementById("apiKeySaveBtn");
-    const apiKeySavedMsg = document.getElementById("apiKeySavedMsg");
-
-    const API_KEY_STORE = "astroApiKey";
-
-    // Load saved key on startup
-    const savedKey = localStorage.getItem(API_KEY_STORE) || "";
-    if (savedKey) { apiKeyInput.value = savedKey; apiKeySavedMsg.style.display = "inline"; }
-
-    apiKeySaveBtn.addEventListener("click", () => {
-      const k = apiKeyInput.value.trim();
-      if (k) {
-        localStorage.setItem(API_KEY_STORE, k);
-        apiKeySavedMsg.style.display = "inline";
-        setTimeout(() => { apiKeySavedMsg.style.display = "none"; }, 2500);
-      }
-    });
-    apiKeyInput.addEventListener("input", () => { apiKeySavedMsg.style.display = "none"; });
-
-    const tabLabels = { events: "Upcoming Astro Events", personal: "Personal", financial: "Financial", career: "Career" };
-    const qaConversations = { events: [], personal: [], financial: [], career: [] };
-
-    function buildSystemPrompt(tab, payload, reading, privacyMode) {
-      const name = payload.name || "the user";
-      const dob  = privacyMode ? "(hidden)" : payload.dob;
-      const time = privacyMode ? "(hidden)" : (payload.birthTime || "unknown");
-      const place = privacyMode ? "(hidden)" : (payload.place || "unknown");
-      return (
-        "You are a warm, insightful astrology assistant. You have access to the following birth details:\n" +
-        "- Name: " + name + "\n- Date of Birth: " + dob + "\n- Birth Time: " + time +
-        "\n- Birth Place: " + place + "\n- Zodiac Sign: " + reading.sign +
-        "\n- Dominant Element: " + reading.dominantElement + "\n- Life Path Number: " + reading.lifePath +
-        "\n- Season of Birth: " + reading.season + "\n\n" +
-        "The user is currently viewing the '" + (tabLabels[tab] || tab) + "' tab of their astrology reading.\n" +
-        "Answer questions thoughtfully, keeping responses concise (2-4 paragraphs max). " +
-        "Ground your answers in the birth details above. " +
-        (privacyMode ? "Privacy mode is active — avoid referencing specific dates or locations.\n" : "") +
-        "Be encouraging, specific, and practical."
-      );
-    }
-
-    function appendBubble(role, text) {
-      const div = document.createElement("div");
-      div.className = "qa-bubble " + role;
-      div.textContent = text;
-      qaHistory.appendChild(div);
-      div.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      return div;
-    }
-
-    function renderQaHistory(tab) {
-      qaHistory.innerHTML = "";
-      (qaConversations[tab] || []).forEach(msg => {
-        if (msg.role === "user" || msg.role === "assistant") appendBubble(msg.role, msg.content);
-      });
-      qaClearBtn.style.display = (qaConversations[tab] && qaConversations[tab].length > 0) ? "inline-block" : "none";
-    }
-
-    async function askQuestion() {
-      if (!activeTabState.payload || !activeTabState.reading) {
-        appendBubble("assistant", "Please generate your astrology reading first before asking questions.");
-        return;
-      }
-      const question = qaInput.value.trim();
-      if (!question) return;
-
-      const apiKey = (localStorage.getItem(API_KEY_STORE) || apiKeyInput.value || "").trim();
-      if (!apiKey) {
-        appendBubble("assistant", "⚠ Please enter and save your OpenRouter API key above. Get a free key at openrouter.ai");
-        return;
-      }
-
-      const tab = activeTabState.tab;
-      const history = qaConversations[tab];
-      qaInput.value = "";
-      qaAskBtn.disabled = true;
-
-      appendBubble("user", question);
-      history.push({ role: "user", content: question });
-
-      const loadingDiv = document.createElement("div");
-      loadingDiv.className = "qa-bubble loading";
-      loadingDiv.textContent = "Consulting the stars\u2026";
-      qaHistory.appendChild(loadingDiv);
-      loadingDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-      try {
-        const sysPrompt = buildSystemPrompt(tab, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
-
-        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer " + apiKey,
-            "HTTP-Referer": window.location.href,
-            "X-Title": "Personal Astrology Page"
-          },
-          body: JSON.stringify({
-            model: "mistralai/mistral-7b-instruct:free",
-            messages: [
-              { role: "system", content: sysPrompt },
-              ...history
-            ],
-            max_tokens: 1000
-          })
-        });
-        const data = await response.json();
-        loadingDiv.remove();
-        if (data.error) {
-          appendBubble("assistant", "\u26a0 API error: " + (data.error.message || "Something went wrong. Check your API key and try again."));
-          history.pop();
-        } else {
-          const answer = data.choices?.[0]?.message?.content || "No response received.";
-          history.push({ role: "assistant", content: answer });
-          appendBubble("assistant", answer);
-        }
-      } catch (err) {
-        loadingDiv.remove();
-        appendBubble("assistant", "\u26a0 Network error: " + err.message);
-        history.pop();
-      }
-      qaAskBtn.disabled = false;
-      qaClearBtn.style.display = "inline-block";
-      qaInput.focus();
-    }
-
-    qaAskBtn.addEventListener("click", askQuestion);
-    qaInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); askQuestion(); }
-    });
-    qaClearBtn.addEventListener("click", () => {
-      const tab = activeTabState.tab;
-      qaConversations[tab] = [];
-      qaHistory.innerHTML = "";
-      qaClearBtn.style.display = "none";
-    });
-
-    tabButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        const tab = button.dataset.tab;
-        qaTabLabel.textContent = tabLabels[tab] || tab;
-        renderQaHistory(tab);
-      });
-    });
-    // ── End Q&A ──────────────────────────────────────────────────────────────
+  qaAskBtn.addEventListener("click", askQuestion);
+  qaInput.addEventListener("keydown", e => { if (e.key==="Enter"&&!e.shiftKey){e.preventDefault();askQuestion();} });
+  qaClearBtn.addEventListener("click", () => { const t=activeTabState.tab; qaConversations[t]=[]; qaHistory.innerHTML=""; qaClearBtn.style.display="none"; });
+  tabButtons.forEach(btn => {
+    btn.addEventListener("click", () => { renderQaHistory(btn.dataset.tab); });
+  });
   </script>
 </body>
 </html>
