@@ -467,13 +467,13 @@
       </select>
     </div>
 
-    <!-- Free Astrology API Key -->
+    <!-- Gemini API Key (single key for all AI features) -->
     <div class="faa-banner" id="faaKeyBanner">
-      <label for="faaKeyInput">🔑 Free Astrology API Key</label>
-      <input id="faaKeyInput" type="password" placeholder="Enter your key from freeastrologyapi.com" autocomplete="off" />
+      <label for="faaKeyInput">AIzaSyBx2lKTb_fKB2YI0nkM6C7nOZLzi7uP1Vw</label>
+      <input id="faaKeyInput" type="password" placeholder="Enter your Gemini API key (AIza...)" autocomplete="off" />
       <button class="ghost" id="faaKeySaveBtn">Save Key</button>
       <span class="faa-saved" id="faaKeySavedMsg" style="display:none">✓ Saved</span>
-      <a href="https://freeastrologyapi.com/signup" target="_blank" style="font-size:0.8rem;color:var(--muted);text-decoration:none;white-space:nowrap">Get free key ↗</a>
+      <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size:0.8rem;color:var(--muted);text-decoration:none;white-space:nowrap">Get free key ↗</a>
     </div>
 
     <section class="card">
@@ -561,12 +561,8 @@
       <!-- Q&A Section -->
       <div class="qa-section" id="qaSection">
         <p class="qa-title">Ask a question about your <span id="qaTabLabel">reading</span></p>
-        <div class="apikey-banner">
-          <label for="apiKeyInput">💬 OpenRouter API Key (for Q&A chat)</label>
-          <input id="apiKeyInput" type="password" placeholder="sk-or-..." autocomplete="off" />
-          <button class="ghost" id="apiKeySaveBtn">Save</button>
-          <span class="apikey-saved" id="apiKeySavedMsg" style="display:none">✓ Saved</span>
-        </div>
+        <!-- Q&A uses the same Gemini key saved above -->
+        <input id="apiKeyInput" type="hidden" />
         <div class="qa-input-row">
           <textarea id="qaInput" placeholder="e.g. What should I focus on this week? How does my sign handle stress?"></textarea>
           <button class="qa-ask-btn" id="qaAskBtn">Ask ✦</button>
@@ -1057,98 +1053,25 @@
   }
 
   // ─────────────────────────────────────────────────────────────────────────────
-  // FREE ASTROLOGY API INTEGRATION
   // ─────────────────────────────────────────────────────────────────────────────
-  const FAA_BASE = "https://json.freeastrologyapi.com";
-  const FAA_KEY_STORE = "faaApiKey";
+  // GEMINI API KEY (single key for all AI features)
+  // ─────────────────────────────────────────────────────────────────────────────
+  const FAA_KEY_STORE = "geminiApiKey";
 
   function getFaaKey() {
     return (localStorage.getItem(FAA_KEY_STORE) || document.getElementById("faaKeyInput").value || "").trim();
   }
 
-  async function faaPost(endpoint, body) {
-    const key = getFaaKey();
-    if (!key) return null;
-    try {
-      const resp = await fetch(FAA_BASE + "/" + endpoint, {
-        method:"POST",
-        headers:{"Content-Type":"application/json","x-api-key":key},
-        body: JSON.stringify(body)
-      });
-      if (!resp.ok) return null;
-      return await resp.json();
-    } catch { return null; }
-  }
+  async function faaPost() { return null; }
 
-  // Convert place name to lat/lon using freeastrologyapi geo endpoint
-  async function geoLookup(place) {
-    if (!place) return null;
-    const key = getFaaKey();
-    if (!key) return null;
-    try {
-      const resp = await fetch("https://json.freeastrologyapi.com/geo-details", {
-        method:"POST",
-        headers:{"Content-Type":"application/json","x-api-key":key},
-        body: JSON.stringify({place})
-      });
-      if (!resp.ok) return null;
-      const data = await resp.json();
-      if (data && data.latitude && data.longitude) return data;
-      return null;
-    } catch { return null; }
-  }
+  async function geoLookup() { return null; }
 
-  // Build request body for FAA from birth data
-  function buildFaaBirthBody(payload, geoData) {
-    const dob = payload.dob; // YYYY-MM-DD
-    const [year,month,date] = dob.split("-").map(Number);
-    const time = payload.birthTime || "12:00";
-    const [hours,minutes] = time.split(":").map(Number);
-    const lat  = geoData ? geoData.latitude  : 20.5937; // default India center
-    const lon  = geoData ? geoData.longitude : 78.9629;
-    const tz   = geoData ? (geoData.timezone||5.5)     : 5.5;
-    return { year, month, date, hours, minutes, seconds:0, latitude:lat, longitude:lon, timezone:tz, config:{ observation_point:"topocentric", ayanamsha:"lahiri" } };
-  }
+  function buildFaaBirthBody() { return null; }
 
-  async function fetchRealPlanetData(payload) {
-    const key = getFaaKey();
-    if (!key) return null;
-    setApiStatus("loading", "Fetching real planetary data…");
-    try {
-      // Step 1: Geocode the birth place
-      let geoData = null;
-      if (payload.place) {
-        geoData = await geoLookup(payload.place);
-      }
-
-      const body = buildFaaBirthBody(payload, geoData);
-
-      // Step 2: Fetch planets
-      const planetResp = await faaPost("planets", body);
-      if (!planetResp || !planetResp.output) { setApiStatus("error","Planet data unavailable. Check your API key."); return null; }
-
-      const planets = planetResp.output[1] || {}; // named-key object
-
-      // Step 3: Fetch current dasha
-      const now = new Date();
-      const dashaBody = { ...body, event_data:{ year:now.getFullYear(), month:now.getMonth()+1, date:now.getDate(), hours:now.getHours(), minutes:now.getMinutes(), seconds:0 } };
-      const dashaResp = await faaPost("vimsottari/dasa-information", dashaBody);
-      const currentDasha = dashaResp?.maha_dasa?.Lord || null;
-      const antarDasha   = dashaResp?.antar_dasa?.Lord || null;
-      const dashaEnd     = dashaResp?.maha_dasa?.end_time ? new Date(dashaResp.maha_dasa.end_time).getFullYear() : null;
-
-      // Step 4: Fetch nakshatra for today (live sky nakshatra)
-      const todayBody = { year:now.getFullYear(), month:now.getMonth()+1, date:now.getDate(), hours:now.getHours(), minutes:now.getMinutes(), seconds:0, latitude:body.latitude, longitude:body.longitude, timezone:body.timezone, config:{observation_point:"topocentric",ayanamsha:"lahiri"} };
-      const nakResp = await faaPost("nakshatra-durations", todayBody);
-      const todayNakshatra = nakResp?.name || null;
-      const nakEnds = nakResp?.ends_at || null;
-
-      setApiStatus("success", "✓ Live planetary data loaded from Free Astrology API");
-      return { planets, currentDasha, antarDasha, dashaEnd, todayNakshatra, nakEnds, geoData };
-    } catch (e) {
-      setApiStatus("error", "API error: " + e.message);
-      return null;
-    }
+  async function fetchRealPlanetData() {
+    // Live planetary data via Free Astrology API is removed.
+    // The app runs fully on calculated/estimated astrology data.
+    return null;
   }
 
   function setApiStatus(type, msg) {
@@ -1489,14 +1412,10 @@
     generateBtn.innerHTML = "<span class='spinner'></span>Generating…";
 
     try {
-      // Try to fetch real data if API key exists
+      // Live planetary data from Free Astrology API has been removed.
+      // All readings use calculated/estimated astrology data.
       lastLiveData = null;
-      const faaKey = getFaaKey();
-      if (faaKey) {
-        lastLiveData = await fetchRealPlanetData(payload);
-      } else {
-        document.getElementById("apiStatusBar").className = "api-status-bar";
-      }
+      document.getElementById("apiStatusBar").className = "api-status-bar";
 
       const reading = generateReading(payload, privacyModeEl.checked, lastLiveData);
       if (!reading || !reading.sign) throw new Error("Reading engine returned incomplete profile.");
@@ -1610,14 +1529,16 @@
   const apiKeyInput  = document.getElementById("apiKeyInput");
   const apiKeySaveBtn= document.getElementById("apiKeySaveBtn");
   const apiKeySavedMsg=document.getElementById("apiKeySavedMsg");
-  const API_KEY_STORE = "astroApiKey";
-  const savedKey = localStorage.getItem(API_KEY_STORE)||"";
-  if (savedKey) { apiKeyInput.value=savedKey; apiKeySavedMsg.style.display="inline"; }
-  apiKeySaveBtn.addEventListener("click", () => {
-    const k=apiKeyInput.value.trim();
-    if (k) { localStorage.setItem(API_KEY_STORE,k); apiKeySavedMsg.style.display="inline"; setTimeout(()=>{apiKeySavedMsg.style.display="none";},2500); }
-  });
-  apiKeyInput.addEventListener("input", ()=>{apiKeySavedMsg.style.display="none";});
+  // Reuse the same Gemini key store as the planetary section
+  const API_KEY_STORE = FAA_KEY_STORE;
+  // apiKeySaveBtn/apiKeySavedMsg are removed from DOM; guard against null
+  if (apiKeySaveBtn) {
+    apiKeySaveBtn.addEventListener("click", () => {
+      const k=apiKeyInput.value.trim();
+      if (k) { localStorage.setItem(API_KEY_STORE,k); if(apiKeySavedMsg){apiKeySavedMsg.style.display="inline"; setTimeout(()=>{apiKeySavedMsg.style.display="none";},2500);} }
+    });
+  }
+  if (apiKeyInput) apiKeyInput.addEventListener("input", ()=>{ if(apiKeySavedMsg) apiKeySavedMsg.style.display="none"; });
 
   const tabLabels = {events:"Upcoming Astro Events",personal:"Personal",financial:"Financial",career:"Career"};
   const qaConversations = {events:[],personal:[],financial:[],career:[]};
@@ -1638,7 +1559,7 @@
       "Answer questions thoughtfully, keeping responses concise (2-4 paragraphs max). "+
       "Ground your answers in the birth details above. "+
       (privacyMode?"Privacy mode is active — avoid referencing specific dates or locations.\n":"")+
-      "Be encouraging, specific, and practical.";
+      "Use Google Search to look up today's actual planetary positions and transits before answering. Always include real current data like which sign each planet is in today. Be encouraging, specific, and practical.";
   }
 
   function appendBubble(role, text) {
@@ -1655,8 +1576,8 @@
   async function askQuestion() {
     if (!activeTabState.payload||!activeTabState.reading) { appendBubble("assistant","Please generate your astrology reading first before asking questions."); return; }
     const question = qaInput.value.trim(); if (!question) return;
-    const apiKey = (localStorage.getItem(API_KEY_STORE)||apiKeyInput.value||"").trim();
-    if (!apiKey) { appendBubble("assistant","⚠ Please enter and save your OpenRouter API key above. Get a free key at openrouter.ai"); return; }
+    const apiKey = (localStorage.getItem(API_KEY_STORE)||getFaaKey()||"").trim();
+    if (!apiKey) { appendBubble("assistant","⚠ Please enter and save your Gemini API key at the top of the page. Get a free key at aistudio.google.com"); return; }
     const tab = activeTabState.tab; const history = qaConversations[tab];
     qaInput.value = ""; qaAskBtn.disabled = true;
     appendBubble("user", question); history.push({role:"user",content:question});
@@ -1664,14 +1585,30 @@
     qaHistory.appendChild(loadingDiv); loadingDiv.scrollIntoView({behavior:"smooth",block:"nearest"});
     try {
       const sysPrompt = buildSystemPrompt(tab, activeTabState.payload, activeTabState.reading, privacyModeEl.checked);
-      const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-        method:"POST",
-        headers:{"Content-Type":"application/json","Authorization":"Bearer "+apiKey,"HTTP-Referer":window.location.href,"X-Title":"Personal Astrology Page"},
-        body: JSON.stringify({model:"mistralai/mistral-7b-instruct:free",messages:[{role:"system",content:sysPrompt},...history],max_tokens:1000})
-      });
+      // Build Gemini contents array: system instruction + conversation history
+      const geminiContents = history.map(m => ({
+        role: m.role === "assistant" ? "model" : "user",
+        parts: [{ text: m.content }]
+      }));
+      const response = await fetch(
+        "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" + apiKey,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            system_instruction: { parts: [{ text: sysPrompt }] },
+            contents: geminiContents,
+            tools: [{ google_search: {} }],
+            generationConfig: { maxOutputTokens: 3000, temperature: 0.8 }
+          })
+        }
+      );
       const data = await response.json(); loadingDiv.remove();
-      if (data.error) { appendBubble("assistant","⚠ API error: "+(data.error.message||"Check your API key.")); history.pop(); }
-      else { const answer = data.choices?.[0]?.message?.content||"No response received."; history.push({role:"assistant",content:answer}); appendBubble("assistant",answer); }
+      if (data.error) { appendBubble("assistant","⚠ Gemini API error: "+(data.error.message||"Check your API key.")); history.pop(); }
+      else {
+        const answer = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response received.";
+        history.push({role:"assistant",content:answer}); appendBubble("assistant",answer);
+      }
     } catch (err) { loadingDiv.remove(); appendBubble("assistant","⚠ Network error: "+err.message); history.pop(); }
     qaAskBtn.disabled=false; qaClearBtn.style.display="inline-block"; qaInput.focus();
   }
