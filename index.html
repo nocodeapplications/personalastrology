@@ -500,10 +500,6 @@
 
       <div class="grid">
         <div>
-          <label for="name">Name</label>
-          <input id="name" type="text" placeholder="e.g. Aisha" />
-        </div>
-        <div>
           <label for="dob">Date of Birth (private)</label>
           <input id="dob" type="password" placeholder="YYYY-MM-DD or MM/DD/YYYY" />
         </div>
@@ -544,6 +540,7 @@
           <option value="year">Year</option>
           <option value="decade">Next Decade</option>
         </select>
+        <button id="printReportBtn" class="ghost" style="margin-left:auto">🖨 Print / Save Report</button>
       </div>
 
       <div class="tabs">
@@ -892,7 +889,7 @@
   }
   function getPlaceTone(p) { return p ? "Born in " + p + " — your birth location imprints cultural rhythms, seasonal energy, and social patterns that shape your instinctive worldview." : null; }
   function scoreAreas(payload, sign) {
-    const seed = toIntHash([payload.name,payload.dob,payload.birthTime,payload.place,sign].join("|"));
+    const seed = toIntHash([payload.dob,payload.birthTime,payload.place,sign].join("|"));
     const d = new Date(payload.dob+"T00:00:00");
     return {
       personal:  60+((seed%14)+(d.getDate()%10)-4),
@@ -1127,14 +1124,13 @@
     const lp = lifePathMeanings[lifePath] || lifePathMeanings[9];
     const tarot = tarotBirthCard(lifePath);
     const celtic = celticTree(dob);
-    const expNum = expressionNumber(payload.name);
+    const expNum = expressionNumber("");
     const pyTheme = personalYearThemes[personalYear] || personalYearThemes[9];
     const archetype = sign + " " + lp.title;
     const timeVibe = getTimeVibe(payload.birthTime);
     const placeTone = getPlaceTone(payload.place);
-    const name = payload.name || "You";
 
-    let text = name + ", here is your complete multi-tradition cosmic profile:\n\n";
+    let text = "Here is your complete multi-tradition cosmic profile:\n\n";
 
     // ── WESTERN ASTROLOGY ──────────────────────────────
     text += "✦ WESTERN ASTROLOGY\n";
@@ -1216,8 +1212,8 @@
   // TAB CONTENT BUILDERS
   // ─────────────────────────────────────────────────────────────────────────────
   function buildTabContent(tabName, rangeValue, payload, reading, privacyMode) {
-    const who = payload.name || "You";
-    const horizon = horizonLabels[rangeValue];
+    const who      = "You";
+    const horizon  = horizonLabels[rangeValue];
     const scores = scoreAreas(payload, reading.sign);
     const sign = reading.sign;
     const sd = reading.sd || signData[sign] || signData.Aries;
@@ -1319,7 +1315,6 @@
   let activeProfileId = "";
   let lastLiveData = null;
 
-  const nameEl          = document.getElementById("name");
   const dobEl           = document.getElementById("dob");
   const birthTimeEl     = document.getElementById("birthTime");
   const placeEl         = document.getElementById("place");
@@ -1361,12 +1356,12 @@
   const loadProfilesLocal   = () => { try { const r = localStorage.getItem(PROFILE_STORE_KEY); const p = r ? JSON.parse(r) : []; return Array.isArray(p)?p:[]; } catch { return []; } };
   const persistProfilesLocal= (p) => localStorage.setItem(PROFILE_STORE_KEY, JSON.stringify(p));
   const getFormPayload = () => ({
-    name: nameEl.value.trim(),
+    name: "",
     dob: normalizeDob(dobEl.value),
     birthTime: normalizeTime(birthTimeEl.value),
     place: placeEl.value.trim()
   });
-  const setFormPayload = (p) => { nameEl.value=p.name||""; dobEl.value=p.dob||""; birthTimeEl.value=p.birthTime||""; placeEl.value=p.place||""; };
+  const setFormPayload = (p) => { dobEl.value=p.dob||""; birthTimeEl.value=p.birthTime||""; placeEl.value=p.place||""; };
 
   function renderChips({ sign, lifePath, dominantElement, nakshatra, chSign, chEl, celtic }, privacyMode) {
     chipsEl.innerHTML = "";
@@ -1440,7 +1435,7 @@
   }
 
   function fillSample() {
-    setFormPayload({ name:"Riya", dob:"1996-08-17", birthTime:"06:40", place:"Mumbai, India" });
+    setFormPayload({ name:"", dob:"1996-08-17", birthTime:"06:40", place:"Mumbai, India" });
     onGenerate();
   }
 
@@ -1456,7 +1451,7 @@
   }
   function saveCurrentProfile() {
     const payload = getFormPayload();
-    if (!payload.name||!payload.dob) return setStatus("Name and DOB are required to save a profile.");
+    if (!payload.dob) return setStatus("Date of Birth is required to save a profile.");
     const profiles = loadProfilesLocal();
     if (activeProfileId) {
       const i = profiles.findIndex(p=>p.id===activeProfileId);
@@ -1544,12 +1539,11 @@
   const qaConversations = {events:[],personal:[],financial:[],career:[]};
 
   function buildSystemPrompt(tab, payload, reading, privacyMode) {
-    const name = payload.name||"the user";
     const dob  = privacyMode?"(hidden)":payload.dob;
     const time = privacyMode?"(hidden)":(payload.birthTime||"unknown");
     const place= privacyMode?"(hidden)":(payload.place||"unknown");
     return "You are a warm, insightful astrology assistant. You have access to the following birth details:\n"+
-      "- Name: "+name+"\n- Date of Birth: "+dob+"\n- Birth Time: "+time+"\n- Birth Place: "+place+
+      "- Date of Birth: "+dob+"\n- Birth Time: "+time+"\n- Birth Place: "+place+
       "\n- Zodiac Sign: "+reading.sign+"\n- Dominant Element: "+reading.dominantElement+
       "\n- Life Path Number: "+reading.lifePath+"\n- Season of Birth: "+reading.season+
       "\n- Nakshatra: "+(reading.nakshatra?.name||"unknown")+
@@ -1619,6 +1613,244 @@
   tabButtons.forEach(btn => {
     btn.addEventListener("click", () => { renderQaHistory(btn.dataset.tab); });
   });
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // PRINT / SAVE REPORT
+  // ─────────────────────────────────────────────────────────────────────────────
+  function buildPrintEventCards(payload, reading, rangeValue) {
+    const now = new Date();
+    let endDate = new Date(now);
+    if (rangeValue==="day")   endDate.setDate(now.getDate()+1);
+    else if (rangeValue==="week")  endDate.setDate(now.getDate()+7);
+    else if (rangeValue==="month") endDate.setMonth(now.getMonth()+1);
+    else if (rangeValue==="year")  endDate.setFullYear(now.getFullYear()+1);
+    else endDate.setFullYear(now.getFullYear()+10);
+    const sign = reading.sign;
+    const sd = reading.sd || signData[sign] || signData.Aries;
+    const nak = reading.nakshatra || {name:"Ashwini"};
+    const lp = reading.lp || lifePathMeanings[reading.lifePath] || lifePathMeanings[9];
+    const dasha = reading.dashaLord || "Jupiter";
+    const personalYear = reading.personalYear;
+    const pyTheme = personalYearThemes[personalYear] || personalYearThemes[9];
+    const eventsInRange = knownAstroEvents.filter(ev => {
+      const d = new Date(ev.date + "T00:00:00");
+      return d >= now && d <= endDate;
+    });
+    const cards = [];
+    eventsInRange.forEach(ev => {
+      const d = new Date(ev.date + "T00:00:00");
+      const dateStr = d.toLocaleDateString(undefined, {weekday:"short", month:"short", day:"numeric", year:d.getFullYear()!==now.getFullYear()?"numeric":undefined});
+      let personalNote = "";
+      if (ev.type==="full-moon"||ev.type==="new-moon") {
+        const moonSign = ev.title.match(/in (\w+)/)?.[1] || "";
+        const moonElement = elementBySign[moonSign] || "";
+        const userElement = elementBySign[sign] || "";
+        if (moonElement && moonElement===userElement) personalNote = " As a "+sign+" ("+userElement+" sign), this lunation resonates strongly with your chart.";
+        else if (moonSign===sign) personalNote = " This lunation falls in your own sign — exceptionally personal and powerful for you.";
+      } else if (ev.type==="retrograde") {
+        const planet = ev.title.split(" ")[0];
+        personalNote = " Your "+sign+" chart is "+(sd.ruler.includes(planet)?"directly impacted — extra caution with "+sd.ruler+"-ruled matters.":"influenced in communication and review processes.");
+      } else if (ev.type==="eclipse") {
+        personalNote = " Eclipses accelerate karmic timelines. For "+sign+", themes of "+sd.theme.split(".")[0].toLowerCase().replace("you are the ","").replace("you are a ","")+" may see sudden shifts.";
+      }
+      cards.push({ date: dateStr, rawDate: ev.date, type: ev.type, title: ev.title, desc: ev.desc + personalNote });
+    });
+    const [,bm,bd] = payload.dob.split("-").map(Number);
+    const powerDayThisMonth = new Date(now.getFullYear(), now.getMonth(), bd);
+    if (powerDayThisMonth >= now && powerDayThisMonth <= endDate) {
+      cards.push({ date: powerDayThisMonth.toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric"}), rawDate: powerDayThisMonth.toISOString().slice(0,10), type:"power-day", title:"✦ Personal Power Day (Birth Date Echo)", desc:"The "+bd+(bd===1||bd===21||bd===31?"st":bd===2||bd===22?"nd":bd===3||bd===23?"rd":"th")+" of each month resonates with your birth energy. Life Path "+reading.lifePath+" ("+lp.title+") qualities are amplified." });
+    }
+    if (rangeValue==="day"||rangeValue==="week") {
+      cards.push({ date:"Now through "+new Date(now.getTime()+2*24*3600000).toLocaleDateString(undefined,{month:"short",day:"numeric"}), rawDate:now.toISOString().slice(0,10), type:"nakshatra", title:"Birth Nakshatra Window — "+nak.name, desc:"Your birth star "+nak.name+" (deity: "+nak.deity+") carries the quality of: "+nak.quality+"." });
+    }
+    cards.push({ date:"Current Period", rawDate:now.toISOString().slice(0,10), type:"dasa", title:"Active Dasha Lord: "+dasha, desc:"Your Vimsottari Dasha is ruled by "+dasha+", emphasizing "+(dashaThemes[dasha]||"growth and transformation")+"." });
+    cards.sort((a,b) => a.rawDate.localeCompare(b.rawDate));
+    if (cards.length===0) return "<p>No major events found in this window. Try a wider range.</p>";
+    return cards.map(card => `<div class="event-card">
+      <div class="ev-date">${card.date}</div>
+      <span class="ev-type-badge">${getEventTypeLabel(card.type)}</span>
+      <div class="ev-title">${card.title}</div>
+      <div class="ev-desc">${card.desc}</div>
+    </div>`).join("");
+  }
+
+  function printReport() {
+    if (!activeTabState.payload || !activeTabState.reading) {
+      setStatus("Please generate your astrology reading first before printing.");
+      return;
+    }
+    const payload  = activeTabState.payload;
+    const reading  = activeTabState.reading;
+    const range    = rangeSelectEl.value;
+    const privacy  = privacyModeEl.checked;
+    const who      = "Your";
+    const nowStr   = new Date().toLocaleDateString(undefined, { weekday:"long", year:"numeric", month:"long", day:"numeric" });
+
+    // Build chips HTML
+    const chipsArr = privacy
+      ? ["☉ "+reading.sign, "# Life Path "+reading.lifePath, "✦ Privacy Mode"]
+      : ["☉ "+reading.sign, "# Life Path "+reading.lifePath, "✦ "+reading.dominantElement,
+         "★ "+(reading.nakshatra?reading.nakshatra.name:""), "🐉 "+reading.chSign+" / "+reading.chEl,
+         "🌿 "+(reading.celtic?reading.celtic.tree:"")];
+    const chipsHTML = chipsArr.filter(Boolean).map(c => `<span class="chip">${c}</span>`).join("");
+
+    // Build all tab contents
+    const tabs = ["personal","financial","career"];
+    const tabLabelsMap = {personal:"Personal", financial:"Financial", career:"Career"};
+    const tabSections = tabs.map(tab => {
+      const content = buildTabContent(tab, range, payload, reading, privacy);
+      // Build Q&A for this tab
+      const convo = qaConversations[tab] || [];
+      let qaHTML = "";
+      if (convo.length > 0) {
+        qaHTML = `<div class="qa-section-print">
+          <h3 class="qa-section-title">✦ Q&A — ${tabLabelsMap[tab]}</h3>
+          ${convo.filter(m=>m.role==="user"||m.role==="assistant").map(m=>`
+            <div class="qa-item ${m.role}">
+              <div class="qa-role">${m.role==="user"?"You asked:":"Astrology Assistant:"}</div>
+              <div class="qa-text">${m.content.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}</div>
+            </div>`).join("")}
+        </div>`;
+      }
+      return `<section class="tab-section">
+        <h2 class="tab-heading">${tabLabelsMap[tab]} Reading</h2>
+        <pre class="tab-body">${content.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</pre>
+        ${qaHTML}
+      </section>`;
+    }).join("");
+
+    // Q&A for events tab
+    const eventsConvo = qaConversations["events"] || [];
+    let eventsQaHTML = "";
+    if (eventsConvo.length > 0) {
+      eventsQaHTML = `<div class="qa-section-print">
+        <h3 class="qa-section-title">✦ Q&A — Upcoming Astro Events</h3>
+        ${eventsConvo.filter(m=>m.role==="user"||m.role==="assistant").map(m=>`
+          <div class="qa-item ${m.role}">
+            <div class="qa-role">${m.role==="user"?"You asked:":"Astrology Assistant:"}</div>
+            <div class="qa-text">${m.content.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\n/g,"<br>")}</div>
+          </div>`).join("")}
+      </div>`;
+    }
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>${who} — Astrology Report</title>
+  <style>
+    :root {
+      --bg: #f7f5ff;
+      --card: #ffffff;
+      --accent: #5f7dff;
+      --accent2: #7b5fc9;
+      --text: #1a1e40;
+      --muted: #5a6490;
+      --border: #d0d5f0;
+      --chip-bg: #ede9ff;
+      --chip-text: #3a2e7a;
+      --section-title: #4a3a8a;
+      --tab-accent: #6a4fc9;
+      --event-bg: #f2f0ff;
+      --qa-user-bg: #eef2ff;
+      --qa-ai-bg: #f5f0ff;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Georgia, serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.6; }
+    .report-wrap { max-width: 820px; margin: 0 auto; padding: 32px 28px 60px; }
+
+    /* Header */
+    .report-header { text-align: center; border-bottom: 2px solid var(--accent2); padding-bottom: 20px; margin-bottom: 28px; }
+    .report-header h1 { margin: 0 0 6px; font-size: 2rem; color: var(--accent2); letter-spacing: 0.5px; }
+    .report-header .subtitle { color: var(--muted); font-size: 0.9rem; margin: 0; }
+    .report-header .generated { color: var(--muted); font-size: 0.82rem; margin-top: 8px; }
+
+    /* Chips */
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; justify-content: center; }
+    .chip { padding: 5px 12px; border-radius: 999px; background: var(--chip-bg); color: var(--chip-text); font-size: 0.82rem; font-weight: 600; border: 1px solid #c8c0f0; }
+
+    /* Main reading */
+    .main-reading { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; margin-bottom: 28px; }
+    .main-reading h2 { margin: 0 0 12px; font-size: 1.1rem; color: var(--section-title); }
+    .main-reading pre { white-space: pre-wrap; font-family: inherit; font-size: 0.88rem; color: var(--text); margin: 0; line-height: 1.75; }
+
+    /* Events section */
+    .events-section { margin-bottom: 32px; }
+    .events-section h2 { font-size: 1.15rem; color: var(--tab-accent); border-left: 4px solid var(--tab-accent); padding-left: 10px; margin-bottom: 14px; }
+    .event-card { background: var(--event-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 10px; }
+    .ev-date { font-size: 0.78rem; color: var(--muted); font-weight: 600; margin-bottom: 3px; }
+    .ev-type-badge { display: inline-block; font-size: 0.72rem; padding: 2px 8px; border-radius: 999px; margin-bottom: 5px; font-weight: 700; background: var(--chip-bg); color: var(--chip-text); border: 1px solid #c8c0f0; }
+    .ev-title { font-weight: 700; font-size: 0.93rem; color: var(--text); }
+    .ev-desc { font-size: 0.85rem; color: var(--muted); margin-top: 3px; }
+
+    /* Tab sections */
+    .tab-section { margin-bottom: 34px; page-break-inside: avoid; }
+    .tab-heading { font-size: 1.2rem; color: var(--tab-accent); border-left: 4px solid var(--tab-accent); padding-left: 10px; margin-bottom: 14px; }
+    .tab-body { white-space: pre-wrap; font-family: inherit; font-size: 0.88rem; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 16px 18px; margin: 0 0 14px; line-height: 1.75; }
+
+    /* Q&A */
+    .qa-section-print { margin-top: 14px; }
+    .qa-section-title { font-size: 1rem; color: var(--accent2); margin: 0 0 10px; }
+    .qa-item { margin-bottom: 12px; border-radius: 10px; padding: 12px 14px; font-size: 0.88rem; }
+    .qa-item.user { background: var(--qa-user-bg); border: 1px solid #c8d0ff; }
+    .qa-item.assistant { background: var(--qa-ai-bg); border: 1px solid #d0c0f0; }
+    .qa-role { font-weight: 700; font-size: 0.8rem; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .qa-text { color: var(--text); line-height: 1.65; }
+
+    /* Footer */
+    .report-footer { text-align: center; color: var(--muted); font-size: 0.78rem; border-top: 1px solid var(--border); padding-top: 18px; margin-top: 40px; }
+
+    /* Print styles */
+    @media print {
+      body { background: white; }
+      .report-wrap { padding: 20px; }
+      .tab-section { page-break-inside: avoid; }
+      .event-card { page-break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+<div class="report-wrap">
+
+  <header class="report-header">
+    <h1>✦ ${who}'s Astrology Report</h1>
+    <p class="subtitle">Personal Cosmic Profile · Forecast Range: ${range.charAt(0).toUpperCase()+range.slice(1)}${privacy?" · Privacy Mode Active":""}</p>
+    <p class="generated">Generated on ${nowStr}</p>
+  </header>
+
+  <div class="chips">${chipsHTML}</div>
+
+  <div class="main-reading">
+    <h2>Cosmic Profile Overview</h2>
+    <pre>${reading.text.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</pre>
+  </div>
+
+  <div class="events-section">
+    <h2>🌟 Upcoming Astro Events</h2>
+    ${buildPrintEventCards(payload, reading, range)}
+    ${eventsQaHTML}
+  </div>
+
+  ${tabSections}
+
+  <footer class="report-footer">
+    <p>✦ Personal Astrology Page · This report is generated for personal reflection and entertainment purposes.</p>
+  </footer>
+</div>
+</body>
+</html>`;
+
+    const win = window.open("", "_blank", "width=900,height=800");
+    if (!win) { setStatus("Pop-up blocked. Please allow pop-ups for this page and try again."); return; }
+    win.document.write(html);
+    win.document.close();
+    win.focus();
+    // Small delay so styles render before print dialog
+    setTimeout(() => { win.print(); }, 600);
+  }
+
+  document.getElementById("printReportBtn").addEventListener("click", printReport);
   </script>
 </body>
 </html>
